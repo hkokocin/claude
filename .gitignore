@@ -1,0 +1,17 @@
+backups/
+cache/
+debug/
+file-history/
+history.jsonl
+paste-cache/
+plans/
+plugins/
+projects/
+settings.json
+shell-snapshots/
+stats-cache.json
+statsig/
+statusline.sh
+tasks/
+telemetry/
+todos/
