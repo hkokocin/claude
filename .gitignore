@@ -8,7 +8,6 @@ paste-cache/
 plans/
 plugins/
 projects/
-settings.json
 shell-snapshots/
 stats-cache.json
 statsig/

@@ -1,0 +1,72 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(fd:*)",
+      "Bash(rg:*)",
+      "Bash(poetry run:*)",
+      "Bash(git diff:*)",
+      "Bash(git show:*)",
+      "Bash(git log:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(terraform fmt:*)",
+      "Bash(terraform init:*)",
+      "Bash(terraform plan:*)",
+      "Bash(set -a && source .env && poetry run:*)"
+    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'REMINDER: Follow TDD. Tests before implementation. Use /test then /implement. Never change tests to make them pass.'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/opt/homebrew/Cellar/claude-notify/1.1.0/lib/claude-notify/core/notifier.sh notification"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/opt/homebrew/Cellar/claude-notify/1.1.0/lib/claude-notify/core/notifier.sh stop"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh",
+    "padding": 0
+  },
+  "enabledPlugins": {
+    "asana@claude-plugins-official": true,
+    "sentry@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "code-review@claude-plugins-official": true,
+    "terraform-code-generation@hashicorp": true,
+    "terraform-module-generation@hashicorp": true
+  },
+  "alwaysThinkingEnabled": true,
+  "autoApproveCommands": false
+}
