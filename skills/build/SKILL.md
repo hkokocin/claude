@@ -21,19 +21,16 @@ If there are no failing tests, stop and tell the user — there is nothing to im
 
 ## Step 1: Implement (GREEN)
 
-1. Read `agents/implement.md` (relative to `~/.claude/`).
-2. Build the subagent prompt by prepending the dynamic context:
+1. Build the subagent prompt with the dynamic context:
    - `## Failing Tests` — the test runner output showing which tests fail
    - `## Test Files` — the full content of each failing test file
-3. Append the body of `agents/implement.md` after the dynamic context.
-4. Launch a Task subagent (`general-purpose`) with the composed prompt. The subagent cannot see this skill or conversation history — all context must be in the prompt.
+2. Launch a Task subagent (`implement`) with the composed prompt. The subagent cannot see this skill or conversation history — all context must be in the prompt.
 
 **After the subagent returns:** Verify it reports all tests passing. If it reports failures, stop and report the issue.
 
 ## Step 2: Refactor
 
-1. Read `agents/refactor.md` (relative to `~/.claude/`).
-2. Launch a Task subagent (`general-purpose`) with the body of `agents/refactor.md` as the prompt.
+1. Launch a Task subagent (`refactor`) with a prompt summarizing the files that were created/modified in Step 1.
 
 **After the subagent returns:** Verify it reports all tests still passing.
 
