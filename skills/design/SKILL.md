@@ -57,6 +57,7 @@ Keep the happy path test name simple:
 Once the test plan is approved, write the tests.
 
 1. Write the tests exactly as planned, following existing project patterns.
+  - If tests cannot run because the entities to test are missing then create dummy entities (e.g. functions with `pass`, or pydantic models without validation)
 2. Run the tests and confirm they fail FOR THE RIGHT REASON (missing implementation, not broken tests).
 3. If any test fails for the wrong reason (import error, syntax error), fix it and re-run.
 4. Do NOT write or modify production code.

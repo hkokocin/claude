@@ -1,6 +1,10 @@
 {
   "permissions": {
+    "additionalDirectories": [
+      "~/docs"
+    ],
     "allow": [
+      "Read(~/docs/**)",
       "Bash(fd:*)",
       "Bash(rg:*)",
       "Bash(poetry run:*)",
@@ -11,6 +15,7 @@
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
       "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
       "Bash(terraform fmt:*)",
       "Bash(terraform init:*)",
       "Bash(terraform plan:*)",
