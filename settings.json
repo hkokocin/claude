@@ -1,24 +1,27 @@
 {
   "permissions": {
-    "additionalDirectories": [
-      "~/docs"
-    ],
+    "additionalDirectories": ["~/docs"],
     "allow": [
       "Read(~/docs/**)",
       "Bash(fd:*)",
       "Bash(rg:*)",
-      "Bash(poetry run:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(git branch:*)",
       "Bash(git diff:*)",
       "Bash(git show:*)",
       "Bash(git log:*)",
       "Bash(git rev-parse:*)",
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
-      "Bash(gh pr diff:*)",
-      "Bash(gh pr list:*)",
+      "Bash(pip index:*)",
+      "Bash(poetry run:*)",
+      "Bash(poetry add:*)",
+      "Bash(poetry install:*)",
       "Bash(terraform fmt:*)",
       "Bash(terraform init:*)",
       "Bash(terraform plan:*)",
+      "Bash(terraform validate:*)",
       "Bash(set -a && source .env && poetry run:*)"
     ],
     "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"]

@@ -5,6 +5,11 @@
 2. **KISS** — Prefer simple over clever. Obvious over elegant.
 3. **DRY** — Extract duplicated logic, but do not over-abstract prematurely.
 
+## Conventions
+- NEVER write docstrings in Python.
+- Comments explain WHY, never WHAT. Strive for self-documenting code with natural-language names.
+- Do not remove existing documentation.
+
 ## Structure
 - Pure functions for logic (no side effects, easy to test)
 - Classes for infrastructure (DB, cache, external services) with dependency injection
