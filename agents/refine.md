@@ -16,11 +16,15 @@ You receive in your prompt:
 
 ## Workflow
 
-1. Read API docs and project documentation for context.
-2. Analyze the requirements (and any prior Q&A) to build or refine the specification.
-3. Identify remaining open questions, ambiguities, or contradictions.
-4. For each open question, make up to 3 proposals to resolve it.
-5. Use extended thinking for complex decisions.
+1. **Ingest reference material.** The requirements may contain Asana URLs, file paths, or directory references. Read/fetch all of them:
+   - **Asana URLs** → use the Asana MCP tools (`asana_get_task`) to fetch task details (name, notes, custom fields).
+   - **File paths / directory references** (e.g. `@~/docs/project`, `~/specs/foo.md`) → use Glob to discover files, then Read to ingest them.
+   - **Other URLs** → use WebFetch if appropriate.
+2. Read API docs and project documentation in the codebase for additional context.
+3. Analyze the requirements (and any prior Q&A) to build or refine the specification.
+4. Identify remaining open questions, ambiguities, or contradictions.
+5. For each open question, make up to 3 proposals to resolve it.
+6. Use extended thinking for complex decisions.
 
 ## Output
 

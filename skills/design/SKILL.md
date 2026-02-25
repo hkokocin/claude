@@ -9,13 +9,24 @@ Orchestrate requirements clarification and test plan design. The main session st
 
 **CRITICAL: Stop on failure. Do NOT proceed to the next step if the current step fails.**
 
+## Step 0: Asana Token Validation (conditional)
+
+Check if `$ARGUMENTS` contains an Asana URL (matching `https://app.asana.com/...`).
+
+- **No Asana URL found** → skip to Step 1.
+- **Asana URL found** → validate the token by calling `asana_get_user` (with no parameters — returns the authenticated user).
+  - **Success** → proceed to Step 1.
+  - **Failure / auth error** → tell the user their Asana token is expired or invalid and ask them to refresh it in the Asana MCP server configuration. **Do NOT proceed** until the user confirms the token has been refreshed and a retry of `asana_get_user` succeeds.
+
 ## Step 1: Requirements Clarification
 
 Run a clarification loop using the `refine` subagent.
 
+**CRITICAL: Do NOT read spec files, fetch Asana task details, or otherwise ingest reference material yourself. Pass raw URLs and file paths to the refine subagent — it will read them. The main session stays lean.**
+
 ### First iteration
 1. Build the subagent prompt with:
-   - `## Requirements` — the raw requirements from `$ARGUMENTS` (include any URLs or context the user provided)
+   - `## Requirements` — the raw requirements from `$ARGUMENTS` (include any URLs, file paths, or context the user provided, exactly as-is)
 2. Launch a Task subagent (`refine`). The subagent cannot see this conversation — all context must be in the prompt.
 3. Present the subagent's **Spec Draft** and **Open Questions** to the user.
 

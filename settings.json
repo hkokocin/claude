@@ -22,7 +22,8 @@
       "Bash(terraform init:*)",
       "Bash(terraform plan:*)",
       "Bash(terraform validate:*)",
-      "Bash(set -a && source .env && poetry run:*)"
+      "Bash(set -a && source .env && poetry run:*)",
+      "mcp__plugin_asana_asana__*"
     ],
     "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"]
   },
