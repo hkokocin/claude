@@ -1,13 +1,11 @@
 ---
 name: design
-description: Interactive requirements clarification and test plan design via subagents. The approved specification and test plan are the handoff artifact to /build.
+description: Interactive requirements clarification and test plan design. The approved specification and test plan are the handoff artifact to /build.
 disable-model-invocation: true
 ---
 # Design Phase
 
-Orchestrate requirements clarification and test plan design. The main session stays lean — heavy analysis happens in subagents, you just relay questions and collect answers.
-
-**CRITICAL: Stop on failure. Do NOT proceed to the next step if the current step fails.**
+Clarify requirements and design a test plan. The specification and test plan are the handoff artifact — they must fully describe the target behaviour so `/build` can write tests and implement from them alone.
 
 ## Step 0: Asana Token Validation (conditional)
 
@@ -20,35 +18,48 @@ Check if `$ARGUMENTS` contains an Asana URL (matching `https://app.asana.com/...
 
 ## Step 1: Requirements Clarification
 
-Run a clarification loop using the `refine` subagent.
+Analyze the requirements from `$ARGUMENTS` and clarify with the user. Focus on WHAT, not HOW.
 
-**CRITICAL: Do NOT read spec files, fetch Asana task details, or otherwise ingest reference material yourself. Pass raw URLs and file paths to the refine subagent — it will read them. The main session stays lean.**
+1. Analyze the requirements. If a URL is provided, fetch it for context. Read API docs and project documentation for additional context.
+2. Run a clarification loop with the user until approved:
+   - Identify open questions, ambiguities, contradictions
+   - Make up to 3 proposals to resolve each issue
+   - Ask the user to choose or provide an alternative
+3. Use extended thinking for complex decisions.
+4. Summarize all requirements as a specification.
 
-### First iteration
-1. Build the subagent prompt with:
-   - `## Requirements` — the raw requirements from `$ARGUMENTS` (include any URLs, file paths, or context the user provided, exactly as-is)
-2. Launch a Task subagent (`refine`). The subagent cannot see this conversation — all context must be in the prompt.
-3. Present the subagent's **Spec Draft** and **Open Questions** to the user.
-
-### Subsequent iterations (while questions remain)
-1. Collect the user's answers.
-2. Build a new subagent prompt with:
-   - `## Requirements` — the original requirements
-   - `## Prior Q&A` — all questions and answers so far
-   - `## Current Spec Draft` — the latest spec draft
-3. Launch a new `refine` subagent with the composed prompt.
-4. Present the updated **Spec Draft** and **Open Questions** to the user.
-
-### Loop exit
-When the user approves the specification (either no open questions remain, or the user explicitly approves), proceed to Step 2.
+### Constraints
+- MUST focus on requirements (behaviour, not implementation)
+- MUST NOT read source code files except for API docs and project documentation
+- MUST NOT consider implementation details
+- Your task is NOT complete until the user has explicitly approved the requirements
 
 ## Step 2: Test Plan Design
 
-1. Build the subagent prompt with:
-   - `## Specification` — the approved specification from Step 1
-2. Launch a Task subagent (`test-planner`). The subagent cannot see this conversation — all context must be in the prompt.
-3. Present the **Test Plan** to the user for approval.
-4. If the user requests changes, incorporate feedback and relaunch the subagent.
+1. Study existing test patterns in the project (test structure, naming, factories, fixtures).
+2. Design test classes and methods following the testing standards below.
+3. Present the test plan to the user for approval.
+
+**CRITICAL: The specification and test plan will be the ONLY artifacts handed off to `/build`. Test names and structure must document the target behaviour completely. Someone reading only the test plan must understand every requirement.**
+
+### Testplan Standards
+
+Tests are documentation: the sum of all test names reads like a specification of the system.
+
+**Naming** — Test names describe behaviour, not implementation:
+```
+class TestGetUser:
+    def test_it_returns_user_data
+    def test_it_returns_404_if_user_not_found
+    def test_it_rejects_unauthenticated_requests
+```
+Test names describe requirements in a non-technical way.
+- DON'T: `test_it_returns_422_when_translations_list_is_empty`
+- DO: `test_it_rejects_products_without_translations`
+
+Keep the happy path test name simple:
+- DON'T: `test_it_creates_a_product_with_translations`
+- DO: `test_it_creates_a_product`
 
 ## Done
 

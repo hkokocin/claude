@@ -4,6 +4,9 @@
     "allow": [
       "Read(~/docs/**)",
       "Bash(fd:*)",
+      "Bash(docker compose:*)",
+      "Bash(docker logs:*)",
+      "Bash(docker ps:*)",
       "Bash(rg:*)",
       "Bash(gh pr diff:*)",
       "Bash(gh pr list:*)",
@@ -73,8 +76,8 @@
     "pyright-lsp@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
-    "terraform-code-generation@hashicorp": true,
-    "terraform-module-generation@hashicorp": true
+    "terraform-code-generation@hashicorp": false,
+    "terraform-module-generation@hashicorp": false
   },
   "alwaysThinkingEnabled": true,
   "autoApproveCommands": false

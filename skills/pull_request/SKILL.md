@@ -24,7 +24,8 @@ Package the current work into a branch, commit, push, and open a pull request.
 
 ## Step 3: Push & PR
 
-1. Push with `-u` to set upstream tracking. Do NOT use `--no-verify`.
+1. Push with `-u` to set upstream tracking. 
+   - this will trigger quality gates (`pre_push`). Do NOT use `--no-verify`.
 2. Check if a PR already exists for this branch (`gh pr view`).
    - **PR exists**: report the PR URL. The push already updated it.
    - **No PR**: create one with `gh pr create`:
