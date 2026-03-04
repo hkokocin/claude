@@ -26,7 +26,7 @@ Analyze the requirements from `$ARGUMENTS` and clarify with the user. Focus on W
    - Make up to 3 proposals to resolve each issue
    - Ask the user to choose or provide an alternative
 3. Use extended thinking for complex decisions.
-4. Summarize all requirements as a specification.
+4. Summarize all requirements as a specification for the test plan design.
 
 ### Constraints
 - MUST focus on requirements (behaviour, not implementation)
@@ -36,9 +36,8 @@ Analyze the requirements from `$ARGUMENTS` and clarify with the user. Focus on W
 
 ## Step 2: Test Plan Design
 
-1. Study existing test patterns in the project (test structure, naming, factories, fixtures).
-2. Design test classes and methods following the testing standards below.
-3. Present the test plan to the user for approval.
+1. Design test classes and methods following the testing standards below.
+2. Present the test plan to the user for approval.
 
 **CRITICAL: The specification and test plan will be the ONLY artifacts handed off to `/build`. Test names and structure must document the target behaviour completely. Someone reading only the test plan must understand every requirement.**
 

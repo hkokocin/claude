@@ -11,8 +11,8 @@ projects/
 shell-snapshots/
 stats-cache.json
 statsig/
-statusline.sh
 tasks/
 telemetry/
 todos/
 .DS_STORE
+.credentials.json
