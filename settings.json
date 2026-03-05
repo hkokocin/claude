@@ -40,6 +40,15 @@
             "command": "echo 'REMINDER: Follow TDD. Tests before implementation. Use /test then /implement. Never change tests to make them pass.'"
           }
         ]
+      },
+      {
+        "matcher": "clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/commit-on-clear.sh"
+          }
+        ]
       }
     ],
     "Notification": [

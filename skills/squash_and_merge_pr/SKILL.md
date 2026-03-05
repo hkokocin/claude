@@ -26,12 +26,7 @@ Squash-merge the current branch's PR into main with a clean, release-note-qualit
 The commit message must read like a release note entry.
 
 1. Ingest the changes made in the PR
-2. Determine the **commit type**: `Feature` (new behaviour), `Fix` (bug fix), or `Chore` (refactor, config, docs, tests).
-3. Draft the **title**: `<Type>: <concise imperative description>` (e.g. `Feature: Add SSO login via SAML`).
-4. Draft the **body**: 0 to 5 bullet points covering the most significant requirements implemented.
-   - Only include bullet points that are genuinely significant. If fewer than 5 are significant, use fewer. An empty body is fine for small changes.
-   - Write from a product/user perspective, not technical details.
-   - Exception: document architectural decisions that impact other (future) parts of the project.
+2. Follow @shared/commit_message.md
 
 ## Step 4: User Approval
 

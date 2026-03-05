@@ -14,6 +14,4 @@ This repo IS the ~/.claude config directory.
 - If the user confirms, approves, or sounds happy with a change (e.g. "looks good", "perfect", "nice"), treat that as task completion and commit.
 
 ## Commit message format
-- Title: `<Type>: <concise imperative description>` where Type is `Feature`, `Fix`, or `Chore`.
-- Body: 0–5 bullet points covering the most significant changes, written from a user/product perspective.
-- End with `Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>`.
+Follow @shared/commit_message.md

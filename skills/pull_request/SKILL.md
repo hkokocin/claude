@@ -20,7 +20,7 @@ Package the current work into a branch, commit, push, and open a pull request.
 ## Step 2: Commit
 
 1. Stage all changed and new files. Exclude secrets (`.env`, credentials).
-2. Commit with message: `<Type>: <concise imperative description>` (e.g. `Feature: Add user authentication endpoint`). 
+2. Commit message following @shared/commit_message.md
 
 ## Step 3: Push & PR
 
