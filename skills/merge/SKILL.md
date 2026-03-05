@@ -11,7 +11,7 @@ Merge the latest version of `origin/main` into the current feature branch. Refus
 ### Step 1: Merge
 
 1. Fetch origin and merge `origin/main` into the current branch.
-2. If no conflicts: skip to Step 3.
+2. If no conflicts: commit the merge and stop. Do NOT run tests.
 
 ### Step 2: Analyse Conflicts
 
@@ -20,7 +20,7 @@ Merge the latest version of `origin/main` into the current feature branch. Refus
 3. For each group, recommend a resolution (ours, theirs, or combination) and explain why in domain language.
 4. **Wait for approval** before resolving.
 
-### Step 3: Finalise
+### Step 3: Finalise (only after conflict resolution)
 
 1. Resolve conflicts per the approved plan.
 2. Run quality gates: linter, type checker, full test suite. Fix issues.

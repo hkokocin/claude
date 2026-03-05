@@ -30,7 +30,7 @@ added=0
 removed=0
 if git rev-parse --git-dir > /dev/null 2>&1; then
   branch=$(git branch --show-current 2>/dev/null)
-  base=$(git merge-base "${branch}" main 2>/dev/null || echo "main")
+  base=$(git merge-base HEAD origin/main 2>/dev/null || echo "origin/main")
   diff_stat=$(git diff --numstat "$base" HEAD 2>/dev/null)
   if [ -n "$diff_stat" ]; then
     added=$(echo "$diff_stat" | awk '{ s += $1 } END { print s+0 }')
@@ -39,14 +39,14 @@ if git rev-parse --git-dir > /dev/null 2>&1; then
 fi
 
 if [ -n "$branch" ]; then
-  printf '%b[%s]%b %s %b+%d%b %b-%d%b | %b%s%b %d%%\n' \
+  printf '%b[%s]%b %s %b+%d%b %b-%d%b | 󰄉  %b%s%b %d%%\n' \
     "$YELLOW" "$model" "$RESET" \
     "$branch" \
     "$GREEN" "$added" "$RESET" \
     "$RED" "$removed" "$RESET" \
     "$BAR_COLOR" "$BAR" "$RESET" "$pct"
 else
-  printf '%b[%s]%b %b%s%b %d%%\n' \
+  printf '%b[%s]%b 󰄉 %b%s%b %d%%\n' \
     "$YELLOW" "$model" "$RESET" \
     "$BAR_COLOR" "$BAR" "$RESET" "$pct"
 fi
