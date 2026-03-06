@@ -1,6 +1,5 @@
 {
   "permissions": {
-    "additionalDirectories": ["~/docs"],
     "allow": [
       "Read(~/docs/**)",
       "Bash(fd:*)",
@@ -28,7 +27,14 @@
       "Bash(set -a && source .env && poetry run:*)",
       "mcp__plugin_asana_asana__*"
     ],
-    "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"]
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(terraform apply:*),"
+    ],
+    "additionalDirectories": [
+      "~/docs"
+    ]
   },
   "hooks": {
     "SessionStart": [
