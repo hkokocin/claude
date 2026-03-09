@@ -23,8 +23,9 @@ Merge the latest version of `origin/main` into the current feature branch. Refus
 ### Step 3: Finalise (only after conflict resolution)
 
 1. Resolve conflicts per the approved plan.
-2. Run quality gates: linter, type checker, full test suite. Fix issues.
-3. Commit the merge.
+2. Review all involved files and ensure that the final merged code is coherent and consistent. Make any necessary adjustments to ensure the code works together as intended.
+3. Run quality gates: linter, type checker, full test suite. Fix issues.
+4. Commit the merge.
 
 ## Constraints
 - NEVER force-push or rewrite history.
