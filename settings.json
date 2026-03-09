@@ -3,6 +3,7 @@
     "allow": [
       "Read(~/docs/**)",
       "Read(~/.claude/shared/**)",
+      "Read(~/projects/testing/curl/**)",
       "Bash(fd:*)",
       "Bash(docker compose:*)",
       "Bash(docker logs:*)",
@@ -35,7 +36,8 @@
     ],
     "additionalDirectories": [
       "~/docs",
-      "~/.claude/shared"
+      "~/.claude/shared",
+      "~/projects/testing/curl"
     ]
   },
   "hooks": {
