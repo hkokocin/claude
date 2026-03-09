@@ -2,6 +2,7 @@
   "permissions": {
     "allow": [
       "Read(~/docs/**)",
+      "Read(~/.claude/shared/**)",
       "Bash(fd:*)",
       "Bash(docker compose:*)",
       "Bash(docker logs:*)",
@@ -33,7 +34,8 @@
       "Bash(terraform apply:*),"
     ],
     "additionalDirectories": [
-      "~/docs"
+      "~/docs",
+      "~/.claude/shared"
     ]
   },
   "hooks": {
