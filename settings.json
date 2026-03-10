@@ -29,11 +29,7 @@
       "Bash(set -a && source .env && poetry run:*)",
       "mcp__plugin_asana_asana__*"
     ],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Bash(terraform apply:*),"
-    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"],
     "additionalDirectories": [
       "~/docs",
       "~/.claude/shared",
@@ -47,16 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'REMINDER: Follow TDD. Tests before implementation. Use /test then /implement. Never change tests to make them pass.'"
-          }
-        ]
-      },
-      {
-        "matcher": "clear",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/commit-on-clear.sh"
+            "command": "echo 'REMINDER: Follow TDD.'"
           }
         ]
       }
