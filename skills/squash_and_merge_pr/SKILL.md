@@ -8,9 +8,9 @@ Squash-merge the current branch's PR into main with a clean, release-note-qualit
 
 ## Step 1: Check preconditions are met Identify the PR
 
-* check if the branch can be merged. If not tell the user why (e.g. merge conficts, missing approval)
-1. Run `gh pr view --json number,title,body,headRefName,baseRefName` to get the current branch's PR.
-2. If no PR exists for this branch, stop and tell the user.
+1. check if the branch can be merged. If not tell the user why (e.g. merge conficts, missing approval)
+2. Run `gh pr view --json number,title,body,headRefName,baseRefName` to get the current branch's PR.
+3. If no PR exists for this branch, stop and tell the user.
 
 ## Step 2: Check Mergeability
 

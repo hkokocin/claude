@@ -13,5 +13,6 @@ description: Process review comments and feedback.
 * For questions that require a response and comments we disagree with prepare a response but do NOT post it - it is my responsibility to reply to comments. 
 * Implement the approved actions one after the other. 
 * Create a commit for each code change made in response to a comment.
-* After processing the comments resolve the conversation it belongs to.
+* After processing the comments resolve the conversation (DON'T hide the comment).
 * Do NOT push. Leave that to the user.
+

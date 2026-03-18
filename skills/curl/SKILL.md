@@ -41,6 +41,7 @@ One file per resource group (e.g. `treatments.sh`, `surveys.sh`). Create subdirs
 - Each command starts with a `### comment` describing the call
 - One blank line before the `###`, one blank line after `| jq`
 - Always pipe to `jq` (`jq .` for full output, or a filter expression)
+- Include all query parameters, comment out optional ones
 - GET query params: use `-G` + `--data-urlencode` (readable & properly encoded)
 - POST/PUT/PATCH bodies: use `--data '{...}'` with `-H "Content-Type: application/json"`
 - Quote all variable interpolations: `"${HOST}"`, `"${AUTH_TOKEN}"`
@@ -56,6 +57,7 @@ curl -X GET "${HOST}/v3/treatments" \
     -G \
     --data-urlencode "page_size=20" \
     --data-urlencode "crop_id=COTTON" \
+    # --data-urlencode "is_optional=true" \
 | jq .
 ```
 

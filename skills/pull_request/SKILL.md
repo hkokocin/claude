@@ -26,6 +26,7 @@ Package the current work into a branch, commit, push, and open a pull request.
 
 1. Push with `-u` to set upstream tracking. 
    - this will trigger quality gates (`pre_push`). Do NOT use `--no-verify`.
+   - this will run all tests which currently take up to 2 minutes. Set your task timeout to 5 minutes to avoid premature failure.
 2. Check if a PR already exists for this branch (`gh pr view`).
    - **PR exists**: report the PR URL. The push already updated it.
    - **No PR**: create one with `gh pr create`:
@@ -38,7 +39,8 @@ Package the current work into a branch, commit, push, and open a pull request.
        ## Decisions
        <Bullet list of notable implementation decisions or trade-offs. Omit section if none.>
        ```
-3. Return the PR URL to the user.
+3. Create PR as draft if it does not yet exist.
+4. Return the PR URL to the user.
 
 ## Constraints
 - NEVER commit `.env` files or secrets.
