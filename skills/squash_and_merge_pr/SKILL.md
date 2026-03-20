@@ -1,5 +1,5 @@
 ---
-name: squash_and_merge_pr
+name: squash_and_merge_pr [l]
 description: Squash-merge a PR with a release-note-quality commit message. Checks mergeability, drafts a prefixed title with key requirements, and waits for user approval before merging.
 ---
 # Squash and Merge PR
@@ -28,12 +28,7 @@ The commit message must read like a release note entry.
 1. Ingest the changes made in the PR
 2. Follow @shared/commit_message.md
 
-## Step 4: User Approval
-
-1. Present the drafted title and body to the user.
-2. **Wait for explicit approval** before proceeding. Accept edits.
-
-## Step 5: Merge
+## Step 4: Merge
 
 1. Squash-merge using: `gh pr merge --squash --subject "<title>" --body "<body>"`
 2. Confirm the merge succeeded and report the merge commit.
@@ -41,7 +36,6 @@ The commit message must read like a release note entry.
 4. Do NOT switch branches or pull locally.
 
 ## Constraints
-- NEVER merge without user approval of the commit message.
 - NEVER force-merge or bypass checks.
 - NEVER delete branches.
 - On error, stop and report.
