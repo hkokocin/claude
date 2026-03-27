@@ -32,7 +32,11 @@
       "Bash(set -a && source .env && poetry run:*)",
       "mcp__plugin_asana_asana__*"
     ],
-    "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Bash(terraform apply:*),"
+    ],
     "additionalDirectories": [
       "~/docs",
       "~/.claude/shared",
@@ -89,5 +93,6 @@
     "terraform-module-generation@hashicorp": false
   },
   "alwaysThinkingEnabled": true,
-  "autoApproveCommands": false
+  "autoApproveCommands": false,
+  "effortLevel": "high"
 }
