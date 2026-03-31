@@ -14,7 +14,6 @@ check_cmd claude "https://code.claude.com/docs/en/getting-started"
 
 # --- Environment ---
 : "${ASANA_PAT:?Set ASANA_PAT to your Asana Personal Access Token}"
-: "${ASANA_PROJECT_GID:?Set ASANA_PROJECT_GID to the project GID to watch}"
 
 # --- Dependencies ---
 if [[ ! -d "$SKILL_DIR/node_modules" ]]; then
@@ -23,11 +22,9 @@ if [[ ! -d "$SKILL_DIR/node_modules" ]]; then
 fi
 
 # --- Launch ---
-echo "Starting Asana Watch channel..."
-echo "  Project: $ASANA_PROJECT_GID"
-[[ -n "${ASANA_USER_GID:-}" ]] && echo "  User filter: $ASANA_USER_GID"
+echo "Starting Asana Watch channel (My Tasks)..."
 echo ""
 
+cd "$SKILL_DIR"
 exec claude \
-  --dangerously-load-development-channels server:asana-webhook \
-  --mcp-config "$SKILL_DIR/.mcp.json"
+  --dangerously-load-development-channels server:asana-webhook

@@ -7,14 +7,9 @@ disable-model-invocation: true
 
 Clarify requirements and design a test plan. The specification and test plan are the handoff artifact — they must fully describe the target behaviour so `/build` can write tests and implement from them alone.
 
-## Step 0: Asana Token Validation (conditional)
+## Step 0: Pre Flight Checks
 
-Check if `$ARGUMENTS` contains an Asana URL (matching `https://app.asana.com/...`).
-
-- **No Asana URL found** → skip to Step 1.
-- **Asana URL found** → validate the token by calling `asana_get_user` (with no parameters — returns the authenticated user).
-  - **Success** → proceed to Step 1.
-  - **Failure / auth error** → tell the user their Asana token is expired or invalid and ask them to refresh it in the Asana MCP server configuration. **Do NOT proceed** until the user confirms the token has been refreshed and a retry of `asana_get_user` succeeds.
+* check if the asana ticket is assigned to me. If not assign it.
 
 ## Step 1: Requirements Clarification
 

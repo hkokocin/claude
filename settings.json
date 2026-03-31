@@ -14,6 +14,7 @@
       "Bash(gh pr list:*)",
       "Bash(gh pr checks:*)",
       "Bash(gh pr view:*)",
+      "Bash(gh api repo:*)",
       "Bash(git branch:*)",
       "Bash(git diff:*)",
       "Bash(git fetch:*)",
@@ -32,11 +33,7 @@
       "Bash(set -a && source .env && poetry run:*)",
       "mcp__plugin_asana_asana__*"
     ],
-    "deny": [
-      "Read(./.env)",
-      "Read(./.env.*)",
-      "Bash(terraform apply:*),"
-    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)", "Bash(terraform apply:*),"],
     "additionalDirectories": [
       "~/docs",
       "~/.claude/shared",
