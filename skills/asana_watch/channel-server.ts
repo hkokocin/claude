@@ -5,16 +5,10 @@ import { createHmac } from "node:crypto";
 
 const PORT = Number(process.env.ASANA_WEBHOOK_PORT) || 8788;
 const ASANA_PAT = process.env.ASANA_PAT;
-const ASANA_PROJECT_GID = process.env.ASANA_PROJECT_GID;
-const ASANA_USER_GID = process.env.ASANA_USER_GID;
 const ASANA_BASE = "https://app.asana.com/api/1.0";
 
 if (!ASANA_PAT) {
   console.error("FATAL: ASANA_PAT is required");
-  process.exit(1);
-}
-if (!ASANA_PROJECT_GID) {
-  console.error("FATAL: ASANA_PROJECT_GID is required");
   process.exit(1);
 }
 
@@ -24,7 +18,11 @@ let tunnelUrl: string | null = null;
 let cloudflaredProc: Subprocess | null = null;
 let shuttingDown = false;
 
-const debounceMap = new Map<string, number>();
+interface PendingBatch {
+  events: any[];
+  timer: ReturnType<typeof setTimeout>;
+}
+const pendingMap = new Map<string, PendingBatch>();
 const DEBOUNCE_MS = 2000;
 
 function log(msg: string) {
@@ -72,21 +70,15 @@ function getSectionName(task: any): string {
   return "unknown";
 }
 
-function formatEvent(event: any, task: any): string {
-  const section = getSectionName(task);
-  const assignee = task.assignee?.name || "unassigned";
-  const notes = task.notes
-    ? task.notes.substring(0, 300) + (task.notes.length > 300 ? "..." : "")
-    : "(no description)";
-  return [
-    `Task: ${task.name}`,
-    `Action: ${event.action}`,
-    `Section: ${section}`,
-    `Assignee: ${assignee}`,
-    `Completed: ${task.completed}`,
-    `URL: ${task.permalink_url}`,
-    `Description: ${notes}`,
-  ].join("\n");
+async function getStoryDetails(storyGid: string) {
+  const fields = "gid,text,type,resource_subtype,created_by,created_by.name,target,target.gid";
+  const res = await asanaFetch(`/stories/${storyGid}?opt_fields=${fields}`);
+  if (!res.ok) {
+    log(`Failed to fetch story ${storyGid}: ${res.status}`);
+    return null;
+  }
+  const json = await res.json();
+  return json.data;
 }
 
 function verifySignature(body: string, signature: string): boolean {
@@ -95,12 +87,29 @@ function verifySignature(body: string, signature: string): boolean {
   return computed === signature;
 }
 
-function shouldDebounce(taskGid: string): boolean {
-  const now = Date.now();
-  const last = debounceMap.get(taskGid);
-  if (last && now - last < DEBOUNCE_MS) return true;
-  debounceMap.set(taskGid, now);
-  return false;
+function accumulateEvent(
+  key: string,
+  event: any,
+  flush: (events: any[]) => void
+) {
+  const pending = pendingMap.get(key);
+  if (pending) {
+    pending.events.push(event);
+    clearTimeout(pending.timer);
+    pending.timer = setTimeout(() => {
+      pendingMap.delete(key);
+      flush(pending.events);
+    }, DEBOUNCE_MS);
+  } else {
+    const entry: PendingBatch = {
+      events: [event],
+      timer: setTimeout(() => {
+        pendingMap.delete(key);
+        flush(entry.events);
+      }, DEBOUNCE_MS),
+    };
+    pendingMap.set(key, entry);
+  }
 }
 
 // --- MCP Server ---
@@ -111,7 +120,9 @@ const mcp = new Server(
     capabilities: { experimental: { "claude/channel": {} } },
     instructions: [
       'Asana project events arrive as <channel source="asana-webhook" ...> tags.',
-      "Each event includes attributes: event_type, task_gid, task_name, section, assignee, completed.",
+      "Meta attributes: event_type, task_gid, task_name, section, assignee, completed.",
+      "The channel body is JSON with raw Asana webhook events and fetched task data: { events: [...], task: {...} }.",
+      "Each event object includes resource, action, and change (with field name) from the Asana webhook payload.",
       "Read ~/.claude/skills/asana_watch/SKILL.md for the playbook that maps events to actions.",
       "Use the Asana MCP tools (asana_get_task, asana_create_task_story, asana_update_task) to interact with Asana.",
       "This is a one-way channel: act on events, do not reply through the channel.",
@@ -163,36 +174,72 @@ Bun.serve({
 
       for (const event of events) {
         if (!event.resource?.gid) continue;
-        if (event.resource.resource_type !== "task") continue;
-        if (shouldDebounce(event.resource.gid)) {
-          log(`Debounced event for task ${event.resource.gid}`);
+        const resourceType = event.resource.resource_type;
+
+        if (resourceType === "story") {
+          accumulateEvent(`story:${event.resource.gid}`, event, async (batchedEvents) => {
+            const story = await getStoryDetails(batchedEvents[0].resource.gid);
+            if (!story) return;
+            if (story.resource_subtype !== "comment_added") return;
+
+            const taskGid = story.target?.gid || batchedEvents[0].parent?.gid;
+            if (!taskGid) return;
+
+            const task = await getTaskDetails(taskGid);
+            if (!task) return;
+            if (userGid && task.assignee?.gid !== userGid) return;
+
+            const section = getSectionName(task);
+            log(`Story: comment on "${task.name}" by ${story.created_by?.name}`);
+
+            await mcp.notification({
+              method: "notifications/claude/channel",
+              params: {
+                content: JSON.stringify({ events: batchedEvents, story, task }, null, 2),
+                meta: {
+                  event_type: `comment_${batchedEvents[0].action}`,
+                  task_gid: taskGid,
+                  task_name: task.name,
+                  section,
+                  assignee: task.assignee?.name || "unassigned",
+                  completed: String(task.completed),
+                },
+              },
+            });
+          });
           continue;
         }
 
-        const task = await getTaskDetails(event.resource.gid);
-        if (!task) continue;
+        if (resourceType !== "task") continue;
 
-        if (ASANA_USER_GID && task.assignee?.gid !== ASANA_USER_GID) {
-          continue;
-        }
+        accumulateEvent(`task:${event.resource.gid}`, event, async (batchedEvents) => {
+          const taskGid = batchedEvents[0].resource.gid;
+          const task = await getTaskDetails(taskGid);
+          if (!task) return;
+          if (userGid && task.assignee?.gid !== userGid) return;
 
-        const section = getSectionName(task);
-        const content = formatEvent(event, task);
-        log(`Event: ${event.action} on "${task.name}" in "${section}"`);
+          const section = getSectionName(task);
+          const actions = [...new Set(batchedEvents.map((e: any) => e.action))];
+          const changedFields = batchedEvents
+            .map((e: any) => e.change?.field)
+            .filter(Boolean);
 
-        await mcp.notification({
-          method: "notifications/claude/channel",
-          params: {
-            content,
-            meta: {
-              event_type: event.action,
-              task_gid: event.resource.gid,
-              task_name: task.name,
-              section,
-              assignee: task.assignee?.name || "unassigned",
-              completed: String(task.completed),
+          log(`Events: [${actions}] on "${task.name}" in "${section}" (fields: ${changedFields.join(", ") || "n/a"})`);
+
+          await mcp.notification({
+            method: "notifications/claude/channel",
+            params: {
+              content: JSON.stringify({ events: batchedEvents, task }, null, 2),
+              meta: {
+                event_type: actions.join(","),
+                task_gid: taskGid,
+                task_name: task.name,
+                section,
+                assignee: task.assignee?.name || "unassigned",
+                completed: String(task.completed),
+              },
             },
-          },
+          });
         });
       }
 
@@ -244,20 +291,32 @@ async function startTunnel(): Promise<string> {
   });
 }
 
-// --- Webhook Lifecycle ---
+// --- Auto-discovery ---
 
-async function getWorkspaceGid(): Promise<string> {
-  const res = await asanaFetch(
-    `/projects/${ASANA_PROJECT_GID}?opt_fields=workspace,workspace.gid`
+let userGid: string | null = null;
+let workspaceGid: string | null = null;
+let taskListGid: string | null = null;
+
+async function discoverUserAndTaskList() {
+  const meRes = await asanaFetch("/users/me?opt_fields=gid,name,workspaces,workspaces.name");
+  if (!meRes.ok) throw new Error(`Failed to fetch user: ${meRes.status}`);
+  const me = (await meRes.json()).data;
+  userGid = me.gid;
+  workspaceGid = me.workspaces[0].gid;
+  log(`User: ${me.name} (${userGid}) in workspace ${me.workspaces[0].name}`);
+
+  const tlRes = await asanaFetch(
+    `/users/${userGid}/user_task_list?workspace=${workspaceGid}&opt_fields=gid`
   );
-  const json = await res.json();
-  return json.data.workspace.gid;
+  if (!tlRes.ok) throw new Error(`Failed to fetch task list: ${tlRes.status}`);
+  taskListGid = (await tlRes.json()).data.gid;
+  log(`Task list: ${taskListGid}`);
 }
 
-async function cleanupStaleWebhooks(workspaceGid: string) {
-  const res = await asanaFetch(
-    `/webhooks?workspace=${workspaceGid}&resource=${ASANA_PROJECT_GID}`
-  );
+// --- Webhook Lifecycle ---
+
+async function cleanupStaleWebhooks() {
+  const res = await asanaFetch(`/webhooks?workspace=${workspaceGid}`);
   if (!res.ok) {
     log(`Failed to list webhooks: ${res.status}`);
     return;
@@ -273,33 +332,76 @@ async function cleanupStaleWebhooks(workspaceGid: string) {
 
 async function registerWebhook(publicUrl: string): Promise<string> {
   const target = `${publicUrl}/asana-webhook`;
-  log(`Registering webhook -> ${target}`);
-  const res = await asanaFetch("/webhooks", {
-    method: "POST",
-    body: JSON.stringify({
-      data: {
-        resource: ASANA_PROJECT_GID,
-        target,
-        filters: [
-          {
-            resource_type: "task",
-            action: "changed",
-            fields: ["assignee", "memberships", "completed"],
-          },
-          {
-            resource_type: "task",
-            action: "added",
-          },
-        ],
-      },
-    }),
-  });
-  if (!res.ok) {
+  const maxAttempts = 10;
+  const delayMs = 5000;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    log(`Registering webhook (attempt ${attempt}/${maxAttempts}) -> ${target}`);
+    const res = await asanaFetch("/webhooks", {
+      method: "POST",
+      body: JSON.stringify({
+        data: {
+          resource: taskListGid,
+          target,
+          filters: [
+            {
+              resource_type: "task",
+              action: "changed",
+              fields: [
+                "assignee",
+                "memberships",
+                "completed",
+                "tags",
+                "notes",
+                "due_on",
+                "name",
+              ],
+            },
+            {
+              resource_type: "task",
+              action: "added",
+            },
+            {
+              resource_type: "task",
+              action: "deleted",
+            },
+            {
+              resource_type: "task",
+              action: "removed",
+            },
+            {
+              resource_type: "task",
+              action: "undeleted",
+            },
+            {
+              resource_type: "story",
+              action: "added",
+            },
+            {
+              resource_type: "story",
+              action: "changed",
+            },
+            {
+              resource_type: "story",
+              action: "removed",
+            },
+          ],
+        },
+      }),
+    });
+    if (res.ok) {
+      const json = await res.json();
+      return json.data.gid;
+    }
     const text = await res.text();
+    if (attempt < maxAttempts && (text.includes("ENOTFOUND") || text.includes("unable to connect"))) {
+      log(`Tunnel not yet routable, waiting ${delayMs / 1000}s...`);
+      await Bun.sleep(delayMs);
+      continue;
+    }
     throw new Error(`Webhook registration failed (${res.status}): ${text}`);
   }
-  const json = await res.json();
-  return json.data.gid;
+  throw new Error("Webhook registration failed after all attempts");
 }
 
 async function deleteWebhook() {
@@ -335,15 +437,16 @@ async function main() {
   await mcp.connect(new StdioServerTransport());
   log("MCP connected");
 
+  await discoverUserAndTaskList();
+
   tunnelUrl = await startTunnel();
   log(`Tunnel ready: ${tunnelUrl}`);
 
-  const workspaceGid = await getWorkspaceGid();
-  await cleanupStaleWebhooks(workspaceGid);
+  await cleanupStaleWebhooks();
 
   webhookGid = await registerWebhook(tunnelUrl);
   log(`Webhook registered: ${webhookGid}`);
-  log(`Watching project ${ASANA_PROJECT_GID} via ${tunnelUrl}`);
+  log(`Watching My Tasks via ${tunnelUrl}`);
 }
 
 main().catch((err) => {
