@@ -16,3 +16,5 @@ telemetry/
 todos/
 .DS_STORE
 .credentials.json
+sessions
+node_modules/
