@@ -14,5 +14,5 @@ description: Process review comments and feedback.
 * Implement the approved actions one after the other. 
 * Create a commit for each code change made in response to a comment.
 * After processing the comments resolve the conversation (DON'T hide the comment).
-* Do NOT push. Leave that to the user.
+* Push the changes after all comments have been processed.
 
