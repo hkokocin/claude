@@ -1,6 +1,6 @@
 ---
 name: squash_and_merge_pr [l]
-description: Squash-merge a PR with a release-note-quality commit message. Checks mergeability, drafts a prefixed title with key requirements, and waits for user approval before merging.
+description: Squash-merge a PR with a release-note-quality commit message. Checks mergeability, drafts a prefixed title with key requirements, and merges automatically.
 ---
 # Squash and Merge PR
 
