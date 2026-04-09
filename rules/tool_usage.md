@@ -1,3 +1,3 @@
 # Tool Usage
 
-* Do not chain tool calls if not strictly necessary. Complex tool calls cause interruptions because the sandbox will not allow them even if all individual parts of the chain are allowed.
+* Prefer separate Bash tool calls over chaining with `&&` or `;`. The sandbox blocks chained commands even when each individual command is allowed separately. Only chain when the commands genuinely need to share shell state (e.g. `source .env && poetry run pytest`).
