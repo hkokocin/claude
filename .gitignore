@@ -18,3 +18,4 @@ todos/
 .credentials.json
 sessions
 node_modules/
+image-cache/
