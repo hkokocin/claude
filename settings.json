@@ -38,6 +38,7 @@
       "Bash(poetry lock:*)",
       "Bash(poetry show:*)",
       "Bash(poetry version:*)",
+      "Bash(source .env && poetry run:*)",
       "Bash(terraform fmt:*)",
       "Bash(terraform init:*)",
       "Bash(terraform output:*)",
@@ -53,10 +54,6 @@
       "Read(**/.env)",
       "Read(**/.env.*)",
       "Bash(terraform apply:*)",
-      "Bash(gh pr close:*)",
-      "Bash(gh pr merge:*)",
-      "Bash(gh issue close:*)",
-      "Bash(gh issue delete:*)",
       "Bash(gh repo delete:*)"
     ],
     "additionalDirectories": [

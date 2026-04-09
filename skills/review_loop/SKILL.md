@@ -20,7 +20,7 @@ Use `/loop 2m` to repeat the following cycle. Stop the loop after 30 minutes tot
 
 1. Fetch unresolved review comments: `gh api repos/{owner}/{repo}/pulls/{number}/comments --jq '[.[] | select(.position != null or .line != null)]'`
 2. Also check for PR review comments via `gh pr view {number} --comments`
-3. **No comments found** → stop the loop. Report "No review comments found."
+3. **No comments found** → stop the loop if at least 10 minutes have passed since the last push or the start of the loop. Automated reviewers need time to post.
 4. **Comments found** → proceed to Step 3.
 
 ## Step 3: Process comments
