@@ -14,13 +14,41 @@ Generate an Excalidraw diagram that visualises the architecture or components re
 4. **Generate** -- Write a valid `.excalidraw` JSON file to the project root (or a path specified in `$ARGUMENTS`). Follow the format spec in `@excalidraw_format.md`.
 5. **Report** -- Print the file path and a one-line summary of what was diagrammed.
 
+## Default Style
+
+All elements use these defaults unless overridden:
+
+| Property | Value | Notes |
+|---|---|---|
+| `fontFamily` | `2` (Helvetica) | Clean, readable sans-serif |
+| `roughness` | `1` | Hand-drawn feel |
+| `fontSize` | `20` | Minimum 16 for readability |
+| `strokeWidth` | `2` | |
+| `fillStyle` | `"solid"` | |
+
+### Bound text defaults
+
+| Property | Value | Notes |
+|---|---|---|
+| `verticalAlign` | `"middle"` | Always vertically centred |
+| `textAlign` | `"left"` | Default for most shapes |
+
+### Simulated padding for left-aligned text
+
+Excalidraw has only 5px built-in padding (`BOUND_TEXT_PADDING`). To give left-aligned text comfortable breathing room, apply these sizing rules:
+
+- **Shape width** = text width + 60px (30px padding each side)
+- **Shape height** = text height + 40px (20px padding top/bottom)
+- For multi-line text, calculate height from `lines * fontSize * lineHeight + 40`
+
+This oversizes the container relative to the text, creating visual padding since Excalidraw centres text within the available space after its 5px inset.
+
 ## Constraints
 
 - Output MUST be a valid `.excalidraw` file that opens in https://excalidraw.com or the VS Code extension.
 - Use simple shapes: rectangles for services/modules, diamonds for decisions, ellipses for data stores, arrows for relationships.
 - Every shape MUST have a bound text label.
 - Keep diagrams readable: max ~15 elements, font size >= 16, adequate spacing (>= 40px gap).
-- Use the hand-drawn style defaults (roughness: 1, fontFamily: 5).
 - Use colour sparingly to group related elements (pick from the default palette below).
 - Arrow labels should describe the relationship (e.g. "calls", "reads from", "publishes to").
 

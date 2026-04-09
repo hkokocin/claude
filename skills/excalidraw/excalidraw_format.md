@@ -76,7 +76,7 @@ No additional properties beyond base. Use `roundness: { "type": 2 }` for these.
   // ...base properties...
   "type": "text",
   "fontSize": 20,                   // default 20
-  "fontFamily": 5,                  // see Font Family IDs below
+  "fontFamily": 2,                  // see Font Family IDs below (project default: Helvetica)
   "text": "Hello",                  // rendered text (with line breaks)
   "originalText": "Hello",          // original text before wrapping
   "textAlign": "center",            // "left" | "center" | "right"
@@ -87,7 +87,7 @@ No additional properties beyond base. Use `roundness: { "type": 2 }` for these.
 }
 ```
 
-**Bound text**: Set `containerId` to the parent shape's ID. The parent's `boundElements` must include `{ "id": "<text-id>", "type": "text" }`. When bound, set `textAlign: "center"` and `verticalAlign: "middle"`.
+**Bound text**: Set `containerId` to the parent shape's ID. The parent's `boundElements` must include `{ "id": "<text-id>", "type": "text" }`. When bound, always set `verticalAlign: "middle"`. Use `textAlign: "left"` by default (or `"center"` for short labels). To compensate for Excalidraw's minimal 5px built-in padding, make the container shape wider/taller than the text needs — see the sizing rules in SKILL.md.
 
 ### `"arrow"`
 
@@ -176,9 +176,9 @@ ER diagram cardinality: `"cardinality_one"` | `"cardinality_many"` | `"cardinali
 | ID | Name |
 |----|------|
 | 1 | Virgil |
-| 2 | Helvetica |
+| 2 | Helvetica (project default) |
 | 3 | Cascadia |
-| 5 | Excalifont (default) |
+| 5 | Excalifont |
 | 6 | Nunito |
 | 7 | Lilita One |
 | 8 | Comic Shanns |
@@ -266,7 +266,7 @@ A rectangle with bound text and an arrow pointing to an ellipse:
       "locked": false,
       "roundness": null,
       "fontSize": 20,
-      "fontFamily": 5,
+      "fontFamily": 2,
       "text": "Service A",
       "originalText": "Service A",
       "textAlign": "center",
@@ -376,7 +376,7 @@ A rectangle with bound text and an arrow pointing to an ellipse:
       "locked": false,
       "roundness": null,
       "fontSize": 20,
-      "fontFamily": 5,
+      "fontFamily": 2,
       "text": "Database",
       "originalText": "Database",
       "textAlign": "center",
