@@ -12,7 +12,8 @@ Generate an Excalidraw diagram that visualises the architecture or components re
 2. **Explore** -- Read the relevant source files to understand relationships (imports, calls, data flow). Keep exploration focused.
 3. **Design the diagram** -- Decide on layout, shapes, labels, and arrows. Prefer left-to-right or top-to-bottom flow. Group related elements.
 4. **Generate** -- Write a valid `.excalidraw` JSON file to the project root (or a path specified in `$ARGUMENTS`). Follow the format spec in `@excalidraw_format.md`.
-5. **Report** -- Print the file path and a one-line summary of what was diagrammed.
+5. **Render & verify** -- Render the diagram to PNG and visually verify it. See the Rendering section below.
+6. **Report** -- Print the file path and a one-line summary of what was diagrammed.
 
 ## Default Style
 
@@ -61,6 +62,42 @@ Use these for `backgroundColor` when grouping:
 - `#ffc9c9` -- red (errors / external services)
 - `#d0bfff` -- purple (shared / libraries)
 - `"transparent"` -- default / unimportant
+
+## Rendering
+
+Render the diagram to PNG for visual verification via a two-step pipeline:
+
+1. Kroki (localhost:8000) converts `.excalidraw` -> SVG (exact, uses excalidraw's own renderer)
+2. `resvg` converts SVG -> PNG (fast, no font issues)
+
+```bash
+curl -sf -X POST http://localhost:8000/excalidraw/svg \
+  -H "Content-Type: text/plain" \
+  --data-binary @diagram.excalidraw \
+  -o diagram.svg \
+  && resvg diagram.svg diagram.png
+```
+
+**Important**: Use `Content-Type: text/plain` with `--data-binary`. Kroki's excalidraw plugin supports **only SVG output**, not PNG (that's why we need `resvg`).
+
+After rendering:
+1. Read the PNG with the Read tool to inspect the result.
+2. Check: Are shapes visible? Is text readable and not overlapping? Is spacing adequate? Do containers fit their text?
+3. If something is off, fix the `.excalidraw` JSON, re-render, and re-check.
+4. Repeat until the diagram looks correct.
+
+### Prerequisites
+
+- `resvg` must be installed (`brew install resvg`).
+- Kroki must be running on localhost:8000. If `curl` fails, warn the user and skip rendering. To start Kroki:
+
+  ```bash
+  docker network create kroki-net 2>/dev/null
+  docker run -d --name kroki-excalidraw --network kroki-net yuzutech/kroki-excalidraw
+  docker run -d --name kroki --network kroki-net -p 8000:8000 -e KROKI_EXCALIDRAW_HOST=kroki-excalidraw yuzutech/kroki
+  ```
+
+  If the containers already exist but are stopped, just `docker start kroki kroki-excalidraw`.
 
 ## Updating the Format Spec
 
