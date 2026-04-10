@@ -12,8 +12,7 @@ Generate an Excalidraw diagram that visualises the architecture or components re
 2. **Explore** -- Read the relevant source files to understand relationships (imports, calls, data flow). Keep exploration focused.
 3. **Design the diagram** -- Decide on layout, shapes, labels, and arrows. Prefer left-to-right or top-to-bottom flow. Group related elements.
 4. **Generate** -- Write a valid `.excalidraw` JSON file to the project root (or a path specified in `$ARGUMENTS`). Follow the format spec in `@excalidraw_format.md`.
-5. **Render & verify** -- Render the diagram to PNG and visually verify it. See the Rendering section below.
-6. **Report** -- Print the file path and a one-line summary of what was diagrammed.
+5. **Report** -- Print the file path and a one-line summary of what was diagrammed.
 
 ## Default Style
 
@@ -92,49 +91,18 @@ Use these for `backgroundColor` when grouping:
 - `#d0bfff` -- purple (shared / libraries)
 - `"transparent"` -- default / unimportant
 
-## Rendering
+## Common Pitfalls
 
-Render the diagram to PNG for visual verification via a two-step pipeline:
+Before finalizing the diagram, walk through this list mentally:
 
-1. Kroki (localhost:8000) converts `.excalidraw` -> SVG (exact, uses excalidraw's own renderer)
-2. `resvg` converts SVG -> PNG (fast, no font issues)
-
-```bash
-curl -sf -X POST http://localhost:8000/excalidraw/svg \
-  -H "Content-Type: text/plain" \
-  --data-binary @diagram.excalidraw \
-  -o diagram.svg \
-  && resvg diagram.svg diagram.png
-```
-
-**Important**: Use `Content-Type: text/plain` with `--data-binary`. Kroki's excalidraw plugin supports **only SVG output**, not PNG (that's why we need `resvg`).
-
-After rendering, read the PNG with the Read tool and run through this checklist:
-
-| Failure | How it looks in the PNG | Fix |
-|---|---|---|
-| Text clipping at shape edge | Last character(s) touch or cross the border | Increase shape width using the formula above |
-| Text wraps unexpectedly onto a new line | Text is on 2+ lines when you wrote 1 | Increase shape width; the autoResize may have wrapped it |
-| Shapes overlap | Two shapes visibly touch or their outlines cross | Increase spacing; re-layout on the grid |
-| Arrow label sits on top of a shape | Label text mixed with a shape's fill/border | Move the label into a shape instead, or lengthen the arrow |
-| Arrow crosses unrelated shapes | A straight arrow passes through a third shape | Route around it (use elbow arrow `elbowed: true`) or move shapes |
-| Ellipse/diamond text clipped | Text fits in a rectangle of the same size but not the ellipse | Apply the 1.42x (ellipse) / 2.0x (diamond) multiplier |
-| Font looks wrong (hand-drawn) | Letters have uneven strokes | `fontFamily` is not 2; set it on every text element |
-
-Fix the `.excalidraw` JSON, re-render, and re-check. Repeat until the diagram is clean.
-
-### Prerequisites
-
-- `resvg` must be installed (`brew install resvg`).
-- Kroki must be running on localhost:8000. If `curl` fails, warn the user and skip rendering. To start Kroki:
-
-  ```bash
-  docker network create kroki-net 2>/dev/null
-  docker run -d --name kroki-excalidraw --network kroki-net yuzutech/kroki-excalidraw
-  docker run -d --name kroki --network kroki-net -p 8000:8000 -e KROKI_EXCALIDRAW_HOST=kroki-excalidraw yuzutech/kroki
-  ```
-
-  If the containers already exist but are stopped, just `docker start kroki kroki-excalidraw`.
+| Pitfall | Fix |
+|---|---|
+| Text wider than its container | Apply the sizing formula; bump char_width to 0.7 for ALL CAPS |
+| Ellipse/diamond text clipped | Apply the 1.42x (ellipse) or 2.0x (diamond) multiplier |
+| Shapes overlap | Verify bounding boxes with the 60px gap rule |
+| Arrow label lands on another shape | Move the label into a source/target shape, or lengthen the arrow |
+| Straight arrow crosses an unrelated shape | Use `elbowed: true` or re-route |
+| Hand-drawn font instead of clean | `fontFamily` must be `2` on every text element |
 
 ## Updating the Format Spec
 
