@@ -21,6 +21,7 @@
       "Bash(gh release:*)",
       "Bash(gh repo view:*)",
       "Bash(gh run:*)",
+      "Bash(gh search:*)",
       "Bash(gh workflow:*)",
       "Bash(git branch:*)",
       "Bash(git diff:*)",
@@ -114,6 +115,7 @@
     "terraform-module-generation@hashicorp": false
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
   "autoApproveCommands": false,
-  "effortLevel": "high"
+  "model": "opus[1m]"
 }
