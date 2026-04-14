@@ -106,15 +106,22 @@ Summarise the topics discussed — don't list every message verbatim.
 
 ## Step 4: Identify Blockers
 
+Only Asana tasks count as blockers. PRs are never blockers.
+
 | Signal | Source | Label |
 |---|---|---|
-| PR open > 3 days, no review | GitHub (`createdAt`, no `reviewDecision`) | Awaiting review |
-| PR with `CHANGES_REQUESTED` | GitHub (`reviewDecision`) | Changes requested |
-| Review requested for me > 2 days ago | GitHub (pending reviews, `createdAt`) | Blocking others |
-| Task in "Blocked" section or tag | Asana | Blocked task |
+| Task in "Blocked" section or tag | Asana | Blocked |
 | Task past `due_on` | Asana | Overdue |
 
 ## Step 5: Format Output
+
+**Tone:** Focus on the *task/topic*, not the tool action. Describe *what* was worked on, not *how* the work was tracked.
+
+- Say "finished implementation of X" not "merged PR X"
+- Say "investigated X" not "opened issue X"
+- Say "reviewed X" not "approved PR X"
+- Say "started working on X" not "opened PR X"
+- Use PR/task links as references, but lead with the work itself
 
 Present the standup in this format:
 
@@ -123,24 +130,20 @@ Present the standup in this format:
 
 ## What I did yesterday
 ### [Topic/Story Name]
-- Completed: "Task title" (link)
-- Merged PR: "PR title" (link)
-- Discussed in #channel: summary of key points
+- Finished implementation of feature X (PR-link, task-link)
+- Investigated issue with Y (task-link)
+- Discussed Z with team in #channel: summary
 
 ### Other
-- Committed: "commit message" in repo-name
-- Reviewed PR: "PR title" (link)
+- Reviewed implementation of W (PR-link)
 
 ## What I will do today
-- [ ] Continue: "Unfinished task" (link) — due DATE
-- [ ] Address review on: "PR title" (link)
-- [ ] Review PR: "PR title" (link) — requested N days ago
+- [ ] Continue working on: "Task title" (link) — due DATE
+- [ ] Address feedback on: "Task title" (link)
 
 ## Blockers
-- **Awaiting review**: PR "title" (link) — open N days
-- **Changes requested**: PR "title" (link)
-- **Blocked**: Asana task "title" (link)
-- **Overdue**: Asana task "title" (link) — due DATE
+- **Blocked**: "Task title" (link) — reason
+- **Overdue**: "Task title" (link) — due DATE
 ```
 
 If a section is empty, include it with "None" so the standup format is always complete.
