@@ -51,7 +51,8 @@
       "Bash(terraform state list:*)",
       "Bash(terraform validate:*)",
       "Bash(set -a && source .env && poetry run:*)",
-      "mcp__plugin_asana_asana__*"
+      "mcp__plugin_asana_asana__*",
+      "Bash(curl:*)"
     ],
     "deny": [
       "Read(**/.env)",
