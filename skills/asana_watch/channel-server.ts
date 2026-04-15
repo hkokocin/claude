@@ -44,7 +44,7 @@ const pendingMap = new Map<string, PendingBatch>();
 const DEBOUNCE_MS = 2000;
 
 function log(msg: string) {
-  console.error(`[webhook-channel] ${msg}`);
+  console.error(`[task-manager] ${msg}`);
 }
 
 // --- Asana API ---
@@ -174,11 +174,11 @@ function accumulateEvent(
 // --- MCP Server ---
 
 const mcp = new Server(
-  { name: "webhook-channel", version: "0.2.0" },
+  { name: "task-manager", version: "0.2.0" },
   {
     capabilities: { experimental: { "claude/channel": {} } },
     instructions: [
-      'Events arrive as <channel source="webhook-channel" ...> tags.',
+      'Events arrive as <channel source="task-manager" ...> tags.',
       'Asana events have meta source="asana". GitHub events have meta source="github".',
       "Asana meta: event_type, task_gid, task_name, section, assignee, completed.",
       "GitHub meta: event_type (e.g. pull_request.opened), repo, sender, plus issue_number/pr_number when applicable.",

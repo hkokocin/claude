@@ -33,4 +33,4 @@ echo ""
 
 cd "$SKILL_DIR"
 exec claude \
-  --dangerously-load-development-channels server:webhook-channel
+  --dangerously-load-development-channels server:task-manager
