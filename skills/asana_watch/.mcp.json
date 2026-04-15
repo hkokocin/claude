@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "asana-webhook": {
+    "webhook-channel": {
       "command": "/Users/hendrik/.claude/skills/asana_watch/start-server.sh",
       "args": []
     }

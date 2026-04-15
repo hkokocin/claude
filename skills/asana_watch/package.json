@@ -1,5 +1,5 @@
 {
-  "name": "asana-watch-channel",
+  "name": "webhook-channel",
   "version": "0.1.0",
   "type": "module",
   "scripts": {

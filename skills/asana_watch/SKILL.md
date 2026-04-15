@@ -1,19 +1,23 @@
 ---
 name: asana-watch
-description: "Reactive event handler: watches My Tasks via webhook, summarises events, and orchestrates async refinements."
+description: "Reactive event handler: watches Asana My Tasks and GitHub repos via webhooks, summarises events, and orchestrates async refinements."
 ---
-# Asana Watch Playbook
+# Event Watch Playbook
 
-Watches all tasks assigned to you. Events arrive as `<channel>` tags with attributes:
-`event_type`, `task_gid`, `task_name`, `section`, `assignee`, `completed`.
+Events arrive as `<channel>` tags with a `source` meta field: `"asana"` or `"github"`.
 
+---
+
+## Asana Events
+
+Asana events have meta: `source`, `event_type`, `task_gid`, `task_name`, `section`, `assignee`, `completed`.
 Comment events (`event_type: comment_added`) include `story.text` with the comment body.
 
-## Ignore Self-Comments
+### Ignore Self-Comments
 
 If a comment's `story.text` starts with `**[Claude]**`, skip ALL processing. This is a bot-posted comment.
 
-## On Comment: `@claude refine`
+### On Comment: `@claude refine`
 
 When a comment contains `@claude refine` (case-insensitive) and is NOT a self-comment:
 
@@ -34,7 +38,7 @@ When a comment contains `@claude refine` (case-insensitive) and is NOT a self-co
    ```
 7. When the worker exits, the first round of questions has been posted.
 
-## On Comment: Answer to Active Refinement
+### On Comment: Answer to Active Refinement
 
 When a comment arrives on a task AND is NOT a self-comment:
 
@@ -48,7 +52,7 @@ When a comment arrives on a task AND is NOT a self-comment:
    ```
 4. If the state file has been deleted by the worker, the refinement is complete. Log it.
 
-## On Every Event (default)
+### On Every Asana Event (default)
 
 For events that don't match the rules above:
 
@@ -56,4 +60,20 @@ For events that don't match the rules above:
    - Task name
    - What changed (section move, assignment, completion, etc.)
    - Current section and project
+2. Do NOT take any further action unless explicitly asked.
+
+---
+
+## GitHub Events
+
+GitHub events have meta: `source`, `event_type` (e.g. `pull_request.opened`), `repo`, `sender`, plus `issue_number`/`issue_title` or `pr_number`/`pr_title` when applicable.
+
+The channel body is the full GitHub webhook payload (JSON).
+
+### On Every GitHub Event (default)
+
+1. Print a short, human-readable summary:
+   - Event type and action (e.g. "PR opened", "issue comment created")
+   - Repository name
+   - Relevant details (PR/issue title, sender)
 2. Do NOT take any further action unless explicitly asked.
