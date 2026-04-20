@@ -28,7 +28,7 @@ if [[ ! -d "$SKILL_DIR/node_modules" ]]; then
 fi
 
 # --- Launch ---
-echo "Starting Event Watch channel (Asana + GitHub)..."
+echo "Starting Task Manager (Asana + GitHub)..."
 echo ""
 
 cd "$SKILL_DIR"

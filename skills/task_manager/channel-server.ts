@@ -35,6 +35,7 @@ let shuttingDown = false;
 
 const githubWebhookSecret = randomBytes(32).toString("hex");
 const githubHookIds = new Map<string, number>();
+let githubUsername: string | null = null;
 
 interface PendingBatch {
   events: any[];
@@ -182,7 +183,7 @@ const mcp = new Server(
       'Asana events have meta source="asana". GitHub events have meta source="github".',
       "Asana meta: event_type, task_gid, task_name, section, assignee, completed.",
       "GitHub meta: event_type (e.g. pull_request.opened), repo, sender, plus issue_number/pr_number when applicable.",
-      "Read ~/.claude/skills/asana_watch/SKILL.md for the playbook that maps events to actions.",
+      "Read ~/.claude/skills/task_manager/SKILL.md for the playbook that maps events to actions.",
       "Use the Asana MCP tools for Asana interactions, and gh CLI for GitHub interactions.",
       "This is a one-way channel: act on events, do not reply through the channel.",
     ].join(" "),
@@ -373,6 +374,9 @@ Bun.serve({
       if (payload.pull_request) {
         meta.pr_number = String(payload.pull_request.number);
         meta.pr_title = payload.pull_request.title;
+      }
+      if (githubUsername) {
+        meta.viewer = githubUsername;
       }
 
       await mcp.notification({
@@ -621,6 +625,45 @@ async function deleteGitHubWebhook(repo: string, hookId: number) {
   }
 }
 
+// --- GitHub User Discovery ---
+
+async function discoverGitHubUser() {
+  if (GITHUB_WATCH_REPOS.length === 0) return;
+  try {
+    const user = await ghApi("/user");
+    githubUsername = user.login;
+    log(`GitHub user: ${githubUsername}`);
+  } catch (e) {
+    log(`Failed to discover GitHub user: ${e}`);
+  }
+}
+
+// --- Daily Standup Timer ---
+
+function scheduleDailyStandup() {
+  let lastTriggered: string | null = null;
+
+  setInterval(async () => {
+    const now = new Date();
+    const today = now.toISOString().split("T")[0];
+
+    if (now.getHours() === 9 && now.getMinutes() === 30 && lastTriggered !== today) {
+      lastTriggered = today;
+      log("Triggering daily standup");
+      await mcp.notification({
+        method: "notifications/claude/channel",
+        params: {
+          content: JSON.stringify({ trigger: "daily_standup", date: today }),
+          meta: {
+            source: "system",
+            event_type: "daily_standup",
+          },
+        },
+      });
+    }
+  }, 30_000);
+}
+
 // --- Cleanup ---
 
 async function shutdown() {
@@ -666,6 +709,10 @@ async function main() {
     githubHookIds.set(repo, hookId);
     log(`GitHub webhook registered: ${repo} -> ${hookId}`);
   }
+
+  // Identity & timers
+  await discoverGitHubUser();
+  scheduleDailyStandup();
 
   log(`Watching My Tasks via ${tunnelUrl}`);
   if (GITHUB_WATCH_REPOS.length > 0) {

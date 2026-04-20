@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "task-manager": {
+      "command": "/Users/hendrik/.claude/skills/task_manager/start-server.sh",
+      "args": []
+    }
+  }
+}

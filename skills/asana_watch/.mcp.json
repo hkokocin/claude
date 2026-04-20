@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "task-manager": {
-      "command": "/Users/hendrik/.claude/skills/asana_watch/start-server.sh",
-      "args": []
-    }
-  }
-}
