@@ -27,6 +27,7 @@ The commit message must read like a release note entry.
 
 1. Ingest the changes made in the PR
 2. Follow @shared/commit_message.md
+3. Append the PR number to the title in parentheses, e.g. `Feature: Add SSO login via SAML (#144)`.
 
 ## Step 4: Merge
 
