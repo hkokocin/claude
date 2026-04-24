@@ -12,6 +12,7 @@ Events arrive through the task-manager channel as `<channel>` tags with a `sourc
 
 ## Key Behaviours
 
+- **Log** every significant event to stdout in the format defined in SKILL.md → "Event Logging" (icon + event type + number, indented summary, blank line between entries). This is the primary user-visible output.
 - **Track** all Asana task updates assigned to the user.
 - **Sync** GitHub PRs with related Asana tasks (link PRs, post status updates).
 - **Create** Asana tasks when the user drops new work or when PR reviews are requested.

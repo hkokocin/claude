@@ -21,6 +21,69 @@ Skip any Asana comment where `story.text` starts with `**[Claude]**`.
 
 ---
 
+## Event Logging
+
+Every significant event MUST be logged to stdout in this exact format:
+
+```
+<icon> <Event Type> #<number>
+  <one-line summary>
+
+
+```
+
+- Icon + event type + `#<number>` on the first line (single space separators)
+- Summary on the second line, indented with two spaces, one line only, ≤ 80 chars
+- Terminate with two newlines (one blank line between entries)
+
+### Icons
+
+- GitHub:  (``, nf-fa-github)
+- Asana:  (``, nf-fa-tasks)
+
+### Events to Log
+
+| Source | Event Type | Trigger |
+|--------|------------|---------|
+| GitHub | `PR Opened` | `pull_request.opened` |
+| GitHub | `PR Updated` | `pull_request.synchronize` (only if significant) |
+| GitHub | `PR Merged` | `pull_request.closed` with `merged=true` |
+| GitHub | `PR Closed` | `pull_request.closed` with `merged=false` |
+| GitHub | `Review Requested` | `pull_request.review_requested` for viewer |
+| GitHub | `Review Submitted` | `pull_request_review.submitted` |
+| GitHub | `PR Comment` | `issue_comment.created` on a PR |
+| Asana | `Task Assigned` | task assigned to viewer |
+| Asana | `Task Moved` | section change on viewer's task |
+| Asana | `Task Completed` | task marked complete |
+| Asana | `Task Created` | new task created for viewer |
+| Asana | `Due Date Changed` | due date set/changed |
+| Asana | `Comment` | non-self comment on viewer's task |
+
+### Examples
+
+```
+ PR Opened #123
+  Add dark mode toggle to settings page
+
+
+ Review Requested #456
+  Auth refactor — rotate-keys branch
+
+
+ Task Moved #1234567890
+  Ship onboarding flow: In Progress → Review
+
+
+ Task Completed #1234567891
+  Fix timezone bug in daily digest
+
+
+```
+
+Log BEFORE taking any follow-up action (linking, creating tasks, updating todo.md). The log line is the primary user-visible output; follow-up actions are side effects.
+
+---
+
 ## 1. Task Tracking
 
 ### On Asana Task Update
