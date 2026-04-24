@@ -60,6 +60,7 @@
       "Bash(terraform apply:*)",
       "Bash(gh repo delete:*)"
     ],
+    "defaultMode": "auto",
     "additionalDirectories": [
       "~/docs",
       "~/.claude/shared",
@@ -117,6 +118,7 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "skipAutoPermissionPrompt": true,
   "autoApproveCommands": false,
-  "model": "opus[1m]"
+  "editorMode": "vim"
 }
