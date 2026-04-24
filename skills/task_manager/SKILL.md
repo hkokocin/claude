@@ -1,5 +1,5 @@
 ---
-name: asana-watch
+name: task-manager
 description: "Workflow manager: keeps Asana tasks, GitHub PRs, and local todo.md in sync. Handles task creation, PR reviews, priority sorting, and daily standups."
 ---
 # Task Manager Playbook
