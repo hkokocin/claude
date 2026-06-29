@@ -1,156 +1,89 @@
 ---
 name: daily-sync
-description: Generate a daily standup summary from Asana, GitHub, and Mattermost.
+description: Generate a daily standup summary from Claude conversations supported by data from Asana, GitHub, and Google Calendar.
 ---
+
 # Daily Sync
 
-Generate a standup summary by pulling activity from Asana, GitHub, and Mattermost.
+## Step 1: Date range
 
-## Step 1: Determine Date Range
+"Yesterday" = 10:00 yesterday to 10:00 today. On Monday, start 10:00 last Friday.
 
-Compute the SINCE date. On Monday, cover the whole weekend (last Friday). Otherwise, use yesterday.
+## Step 2: Gather data (query all sources in parallel)
 
-```bash
-if [ "$(date +%u)" -eq 1 ]; then
-  SINCE=$(date -v-3d +%Y-%m-%d)
-else
-  SINCE=$(date -v-1d +%Y-%m-%d)
-fi
-TODAY=$(date +%Y-%m-%d)
-```
+* Claude conversations — the main source.
+* GitHub activity of "hkokocin": pull requests (own or reviewed), deployment actions.
+* Asana: tasks in the "my tasks" board and tasks finished by me.
+* Google Calendar meetings — exclude the daily sync and any event with no participants but me.
 
-Store SINCE and TODAY for use in all subsequent queries.
+## Step 3: Compile the summary
 
-## Step 2: Gather Data
-
-Query all three sources **in parallel** using separate tool calls in a single turn.
-
-### GitHub (gh CLI)
-
-Run these commands (all use `--json` for structured output):
-
-1. **My commits:**
-   ```
-   gh search commits --author=hkokocin --committer-date='>SINCE' --limit 50 --json repository,sha,commit
-   ```
-
-2. **PRs I authored (recently active):**
-   ```
-   gh search prs --author=hkokocin --updated='>SINCE' --limit 20 --json title,state,url,repository,updatedAt,reviewDecision
-   ```
-
-3. **Pending review requests for me:**
-   ```
-   gh search prs --review-requested=hkokocin --state=open --limit 20 --json title,url,repository,createdAt
-   ```
-
-4. **PRs I reviewed:**
-   ```
-   gh search prs --reviewed-by=hkokocin --updated='>SINCE' --limit 20 --json title,state,url,repository
-   ```
-
-### Asana (MCP tools)
-
-Use the Asana MCP tools. If authentication is needed, prompt the user.
-
-1. **Tasks completed since SINCE:**
-   Use `asana_search_tasks` with `completed_on.after=SINCE` and `assignee.any=me`.
-   Request fields: `name`, `permalink_url`, `completed_at`, `memberships.project.name`, `memberships.section.name`, `notes`.
-
-2. **My incomplete tasks (for "today" section):**
-   Use `asana_search_tasks` with `assignee.any=me`, `completed=false`, sorted by `due_on`.
-   Request fields: `name`, `permalink_url`, `due_on`, `memberships.project.name`, `memberships.section.name`, `tags.name`, `notes`.
-
-3. **Blocker detection:** From the incomplete tasks, flag any that:
-   - Are in a section whose name contains "blocked" (case-insensitive)
-   - Have a tag whose name contains "blocked" (case-insensitive)
-   - Are past their `due_on` date
-
-### Mattermost (REST API)
-
-Read config from `~/.claude/skills/daily_sync/config.json`. The PAT is in the env var named by `token_env_var`.
-
-If the config file is missing or the env var is unset, **skip Mattermost** and note it in the output.
-
-When configured:
-
-1. **Get my user info:**
-   ```
-   curl -s -H "Authorization: Bearer $PAT" "$SERVER/api/v4/users/me"
-   ```
-
-2. **Get my team memberships:**
-   ```
-   curl -s -H "Authorization: Bearer $PAT" "$SERVER/api/v4/users/{user_id}/teams"
-   ```
-
-3. **Search my posts since SINCE** (for each team):
-   ```
-   curl -s -H "Authorization: Bearer $PAT" -X POST "$SERVER/api/v4/teams/{team_id}/posts/search" \
-     -d '{"terms": "from:{username}", "is_or_search": false, "time_zone_offset": 0, "after_date": "SINCE_AS_UNIX_MS", "before_date": "TODAY_AS_UNIX_MS"}'
-   ```
-
-4. **Get channel names** for any channels referenced in the posts:
-   ```
-   curl -s -H "Authorization: Bearer $PAT" "$SERVER/api/v4/channels/{channel_id}"
-   ```
-
-Summarise the topics discussed — don't list every message verbatim.
-
-## Step 3: Cross-Reference & Group
-
-1. Extract GitHub PR URLs (`github.com/.*/pull/\d+`) from Asana task `notes` fields.
-2. Extract Asana task URLs from GitHub PR descriptions.
-3. Group related items into **topics/stories** — e.g. if an Asana task links to a PR, present them together.
-4. Items that don't cross-reference go into an "Other" group.
-
-## Step 4: Identify Blockers
-
-Only Asana tasks count as blockers. PRs are never blockers.
-
-| Signal | Source | Label |
-|---|---|---|
-| Task in "Blocked" section or tag | Asana | Blocked |
-| Task past `due_on` | Asana | Overdue |
-
-## Step 5: Format Output
-
-**Tone:** Focus on the *task/topic*, not the tool action. Describe *what* was worked on, not *how* the work was tracked.
-
-- Say "finished implementation of X" not "merged PR X"
-- Say "investigated X" not "opened issue X"
-- Say "reviewed X" not "approved PR X"
-- Say "started working on X" not "opened PR X"
-- Use PR/task links as references, but lead with the work itself
-
-Present the standup in this format:
+Print exactly this shape to chat:
 
 ```
-# Daily Standup — YYYY-MM-DD
+YESTERDAY:
+* [TASK_STATE] [PROJECT] <title> (DEVELOPMENT_STATE)
+* [PROJECT] <title>
+  * [X] Get survey by id (PROD)
+* [MEETING] <title>
 
-## What I did yesterday
-### [Topic/Story Name]
-- Finished implementation of feature X (PR-link, task-link)
-- Investigated issue with Y (task-link)
-- Discussed Z with team in #channel: summary
+TODAY:
+* <[TASK_STATE] title> (DEVELOPMENT_STATE)
 
-### Other
-- Reviewed implementation of W (PR-link)
-
-## What I will do today
-- [ ] Continue working on: "Task title" (link) — due DATE
-- [ ] Address feedback on: "Task title" (link)
-
-## Blockers
-- **Blocked**: "Task title" (link) — reason
-- **Overdue**: "Task title" (link) — due DATE
+BLOCKERS:
+* [TASK_STATE] <title> (DEVELOPMENT_STATE)
 ```
 
-If a section is empty, include it with "None" so the standup format is always complete.
+**Sections**
+* YESTERDAY: one bullet per meaningful session, past tense, ordered by team relevance (your judgment).
+* TODAY: synthesize next actions from WIP signals — uncommitted changes, unpushed branches, open PRs without merges, sessions that ended mid-task, open todos. Phrase action-oriented ("Open PR for the X refactor").
+* BLOCKERS: unresolved external dependencies — failing CI on an open PR, waiting on review, missing access, decisions owed by someone else. Be blunt. Open PRs alone are not blockers. Omit if none.
+* Omit any section with no bullets.
 
-## Constraints
+**Meetings**
+* Append meetings at the end of YESTERDAY and TODAY with the `[MEETING]` prefix.
+* Exclude the "Daily Backend Sync".
 
-- **Read-only** — never modify tasks, PRs, or posts.
-- Never log, print, or expose credentials or tokens.
-- If a source fails or is unavailable, report the error inline and continue with remaining sources.
-- Keep the output concise — summarise Mattermost discussions, don't quote every message.
+**Bullets**
+* One bullet per task, prefixed with `[repo]` (e.g. `* [Groundhog] Added targetings CRUD endpoints`). Group work on the same project together.
+* Keep them short and scannable. Describe outcomes with concrete verbs — no transcripts, no hedging ("worked on improving"). Strip noise (side questions, quick research).
+* Topic first; deployments and similar go last.
+* If an Asana task exists, use its title. For a subtask, make the parent task the root bullet and the task a sub-bullet (only go up one level).
+
+**TASK_STATE checkbox**
+* `[ ]` Todo · `[O]` Doing · `[X]` Done
+
+**DEVELOPMENT_STATE** — append to each bullet except parent tasks:
+* `(IMPL)` being implemented; no PR or draft PR
+* `(PR)` implementation done; non-draft PR exists
+* `(DEV)` deployed to dev
+* `(PROD)` deployed to prod
+
+### Sample
+
+```
+YESTERDAY:
+* [Groundhog] Provide groundhog admin endpoints
+  * [X] Get survey by id (PROD)
+  * [X] Delete survey (DEV)
+  * [X] Implemented "Update Survey: restrict edits that change results for existing responses" (PR)
+  * [O] Implemented "Targetings CRUD" (IMPL)
+* [Ape] Don't fail requests if cache is unavailable
+
+TODAY:
+* [Groundhog] Provide groundhog admin endpoints
+  * [O] Finish "Targetings CRUD"
+  * [ ] Switch to auto generating ids
+  * [ ] Create the scheduler for the translation sync
+* [Ape] Don't fail requests if cache is unavailable
+* [Deploys] Land the three scheduled-deploy workflow changes and the Dingo consumer.
+* [MEETING] Development Framework — Timo demoing a skills-based dev workflow to discuss adopting (10:15)
+* [MEETING] 1:1 with Timothe (11:00)
+
+BLOCKERS:
+* Six pull requests are open and waiting on review (Groundhog targetings, Ape cache fix, three deploy-workflow changes, Dingo scheduled deploy) — nothing merges until those are looked at.
+```
+
+## Step 4: Archive
+
+Write the same markdown to `~/Documents/notes/standup/<YYYY-MM-DD>.md` (create the directory if missing, overwrite today's file).
