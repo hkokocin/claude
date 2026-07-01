@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Re-project the repo into ~/.claude after every commit.
+exec "$(git rev-parse --show-toplevel)/sync.sh"

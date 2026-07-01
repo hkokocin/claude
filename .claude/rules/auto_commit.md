@@ -1,6 +1,9 @@
 # Auto-commit for config repo
 
-This repo IS the ~/.claude config directory.
+This repo holds the Claude config and is projected into `~/.claude` via
+symlinks by `sync.sh` (run automatically by the `post-commit` hook). Edit
+entities here, in their category subdirectories; never edit the symlinks under
+`~/.claude` directly. New or moved entities become live after the next commit.
 
 ## On task start (including after /clear)
 - Run `git status` to check for uncommitted changes.
