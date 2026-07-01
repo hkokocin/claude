@@ -19,3 +19,6 @@ todos/
 sessions
 node_modules/
 image-cache/
+.last-cleanup
+.last-update-result.json
+ide/
