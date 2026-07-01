@@ -37,14 +37,11 @@ The specification and test plan from `/design` fully describe the target behavio
 
 ## Step 3: Refactor
 
-1. Launch a Task subagent (`refactor`) with a prompt summarizing the files that were created/modified in Steps 1 and 2.
+1. Launch a Task subagent running the /review
+2. Implement obvious improvements and fixes
+3. Run questionable ones by the user
 
-**After the subagent returns:** Verify it reports all tests still passing.
+## Step 4: Finish
 
-## Step 4: Report Results
-
-Summarize to the user:
-- **RED**: test files created and failure reasons
-- **GREEN**: files created/modified and test results
-- **REFACTOR**: improvements applied (or "none needed")
-- Final test suite status
+* /commit
+* /pull_request

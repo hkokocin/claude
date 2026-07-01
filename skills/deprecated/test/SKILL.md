@@ -27,6 +27,7 @@ class TestGetUser:
     def test_it_returns_404_if_user_not_found
     def test_it_rejects_unauthenticated_requests
 ```
+
 Test names descibe requirements in a non technical way.
 * DON'T: `test_it_returns_422_when_translations_list_is_empty`
 * DO: `test_it_rejects_products_without_translations`
@@ -34,7 +35,6 @@ Keep the happy path test name simple:
 * DON'T: `test_it_creates_a_product_with_translations`
 * DO: `test_it_creates_a_product`
 
-```
 ## Data Management
 - One assertion per test: each test verifies exactly one behaviour.
 - Asserted data = explicit in the test body.

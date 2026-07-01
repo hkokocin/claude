@@ -61,8 +61,6 @@ Keep the happy path test name simple:
 - DON'T: `test_it_creates_a_product_with_translations`
 - DO: `test_it_creates_a_product`
 
-**Scope** — prefer one happy-path test that asserts the entire response model over many granular per-field tests. Don't add a test whose assertion the happy-path test already covers.
-
 ## Done
 
 Once both the specification and test plan are approved, report readiness for `/build`.
