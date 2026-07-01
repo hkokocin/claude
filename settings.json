@@ -118,7 +118,8 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
   "autoApproveCommands": false,
-  "editorMode": "vim"
+  "tui": "fullscreen"
 }
