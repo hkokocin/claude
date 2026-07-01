@@ -52,12 +52,16 @@ BLOCKERS:
 
 **TASK_STATE checkbox**
 * `[ ]` Todo · `[O]` Doing · `[X]` Done
+* A subtask is done when its PR is merged
+* A root task is done when its deployed to production
 
 **DEVELOPMENT_STATE** — append to each bullet except parent tasks:
 * `(IMPL)` being implemented; no PR or draft PR
 * `(PR)` implementation done; non-draft PR exists
 * `(DEV)` deployed to dev
 * `(PROD)` deployed to prod
+* Merged PRs are automatically deployed to dev.
+* Check GitHub actions to find out if Deploy to Prod happened for a task.
 
 ### Sample
 
@@ -68,15 +72,14 @@ YESTERDAY:
   * [X] Delete survey (DEV)
   * [X] Implemented "Update Survey: restrict edits that change results for existing responses" (PR)
   * [O] Implemented "Targetings CRUD" (IMPL)
-* [Ape] Don't fail requests if cache is unavailable
+* [X] [Ape] Don't fail requests if cache is unavailable
 
 TODAY:
 * [Groundhog] Provide groundhog admin endpoints
   * [O] Finish "Targetings CRUD"
   * [ ] Switch to auto generating ids
   * [ ] Create the scheduler for the translation sync
-* [Ape] Don't fail requests if cache is unavailable
-* [Deploys] Land the three scheduled-deploy workflow changes and the Dingo consumer.
+* [ ] [Ape] Don't fail requests if cache is unavailable
 * [MEETING] Development Framework — Timo demoing a skills-based dev workflow to discuss adopting (10:15)
 * [MEETING] 1:1 with Timothe (11:00)
 

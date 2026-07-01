@@ -1,6 +1,0 @@
-{
-  "mattermost": {
-    "server_url": "https://chat.peat-cloud.com",
-    "token_env_var": "MATTERMOST_PAT"
-  }
-}
