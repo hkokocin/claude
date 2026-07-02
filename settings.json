@@ -118,8 +118,9 @@
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "tui": "fullscreen",
   "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
   "autoApproveCommands": false,
-  "tui": "fullscreen"
+  "model": "claude-fable-5[1m]"
 }
