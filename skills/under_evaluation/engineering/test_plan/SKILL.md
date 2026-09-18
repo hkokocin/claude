@@ -52,7 +52,8 @@ Keep the happy path test name simple:
 - Prefer one happy-path test that asserts the entire response model over many granular per-field tests.
 - Group by feature: one test class per endpoint/feature/component.
 - Test at the right level: API behaviour at API level, service logic at service level.
-- Don't test logging.
+- Make sure not to duplicate existing tests. If existing requirements change existing test needs to be changed. Those changes have to be part of the test plan.
+- Don't test logging, configuration.
 
 ## Done
 

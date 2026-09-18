@@ -15,4 +15,4 @@
 - Pure functions for logic (no side effects, easy to test)
 - Classes for infrastructure (DB, cache, external services) with dependency injection
 - Separate layers: API → Service → Repository → Database
-
+- In every dir group all code that belongs together within the same dir into one file. E.g. Don't put helper functions in their own file.

@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT": "10000"
+  },
   "permissions": {
     "allow": [
       "Read(~/docs/**)",
@@ -51,7 +54,6 @@
       "Bash(terraform state list:*)",
       "Bash(terraform validate:*)",
       "Bash(set -a && source .env && poetry run:*)",
-      "mcp__plugin_asana_asana__*",
       "Bash(curl:*)"
     ],
     "deny": [
@@ -67,6 +69,7 @@
       "~/projects/testing/curl"
     ]
   },
+  "model": "fable[1m]",
   "hooks": {
     "SessionStart": [
       {
@@ -114,13 +117,14 @@
     "github@claude-plugins-official": true,
     "code-review@claude-plugins-official": true,
     "terraform-code-generation@hashicorp": false,
-    "terraform-module-generation@hashicorp": false
+    "terraform-module-generation@hashicorp": false,
+    "figma@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
   "tui": "fullscreen",
   "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
-  "autoApproveCommands": false,
-  "model": "claude-fable-5[1m]"
+  "autoApproveCommands": false
 }
