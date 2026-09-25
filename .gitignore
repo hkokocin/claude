@@ -22,3 +22,5 @@ image-cache/
 .last-cleanup
 .last-update-result.json
 ide/
+state/
+skills/synced/
