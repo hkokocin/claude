@@ -127,5 +127,34 @@
   "theme": "dark",
   "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
-  "autoApproveCommands": false
+  "autoApproveCommands": false,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: PUBLIC — hkokocin/claude (github.com) — any push here is publishing; content ported from outside this repo is not this repo's own work",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: main (default); no protected branches or rulesets listed via gh",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine or CI runner with open internet",
+      "**Source control**: The trusted repo (hkokocin/claude on github.com) and its remote(s) only (no additional orgs configured)",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar; note `.credentials.json` is gitignored in this repo — treat as a sensitive local file, not for commit",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: mixed personal and work use across machines sharing this config; the config itself lives in ~/projects/tools/claude and is synced into ~/.claude via a git post-commit hook (sync.sh)",
+      "**Trusted repo**: hkokocin/claude (github.com:hkokocin/claude.git), working directory ~/projects/tools/claude — PUBLIC, so only this repo's own work belongs here; confidential material should not be committed or pushed to it",
+      "**Org-specific CLIs**: None configured",
+      "Routine under ~/projects/tools/claude/ prefix: editing config entities under .claude/ category subdirectories and committing via the repo's own auto-commit convention"
+    ]
+  }
 }
