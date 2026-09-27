@@ -23,7 +23,11 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 atui spawn <project> <task-id> "<task>"
 ```
 
-* `<project>`: the Project's name as the `projects` tool knows it (the directory name, e.g. `dingo`).
+* `<project>`: the name of a configured Project of the `projects` tool (zde). `projects` is a zsh function your shell doesn't have, so list them with
+  ```
+  zsh -c 'source ~/projects/tools/zde/tools/projects/projects.sh && projects list'
+  ```
+  It prints each Project's name, Modules and directory. Only configured Projects can get Agents (their Modules make up the Agent's session); if the one the user means is missing, tell them instead of guessing.
 * `<task-id>`: a short lowercase slug (`fix-login-redirect`); it becomes the branch name and must not exist as a branch yet.
 * `<task>`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main`, so make the Task self-contained: goal, relevant context and links, what "done" means, and which skill to start with (e.g. `/refinement`) if the user named one. Don't describe the communication protocol - atui puts the Briefing in front of every Task.
 
