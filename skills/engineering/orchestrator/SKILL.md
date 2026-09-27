@@ -31,7 +31,15 @@ atui spawn <project> <task-id> "<task>"
 * `<task-id>`: a short lowercase slug (`fix-login-redirect`); it becomes the branch name and must not exist as a branch yet.
 * `<task>`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main`, so make the Task self-contained: goal, relevant context and links, what "done" means, and which skill to start with (e.g. `/refinement`) if the user named one. Don't describe the communication protocol - atui puts the Briefing in front of every Task.
 
-Before spawning, agree on project, Task Id and Task with the user unless they were given explicitly. A failing spawn prints the reason (e.g. the branch exists); report it instead of retrying blindly.
+Work out project, Task Id and Task yourself and spawn, then tell the user in one line what you spawned (`<project>/<task-id>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn prints the reason (e.g. the branch exists); report it instead of retrying blindly.
+
+## Spawning from a link
+
+Most of the time the user just drops a link: a GitHub issue or pull request, an Asana task, a Sentry issue, a doc. Then:
+1. **Read it** to learn what it's about: use the tools you have for them (e.g. an Asana or Sentry MCP), otherwise fetch the page.
+2. **Find the Project**: match what they mention (repository, service or product names) against the configured Projects.
+3. **Pick the Task Id** from the title: a short slug of 2-4 words (`fix-login-redirect`), not the ticket number alone.
+4. **Write the Task**: always include the link itself, so the Agent reads the full source, plus a short summary of what you read and anything the user added.
 
 Each Agent gets its own worktree (`~/.worktrees/<project>/<task-id>`) and its own tmux session `<project>/<task-id>`. The user opens it by pressing enter on the Agent in the Agent List.
 
