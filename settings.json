@@ -81,28 +81,6 @@
           }
         ]
       }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/opt/homebrew/Cellar/claude-notify/1.1.0/lib/claude-notify/core/notifier.sh notification"
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/opt/homebrew/Cellar/claude-notify/1.1.0/lib/claude-notify/core/notifier.sh stop"
-          }
-        ]
-      }
     ]
   },
   "statusLine": {
