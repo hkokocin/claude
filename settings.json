@@ -6,8 +6,10 @@
     "allow": [
       "Read(~/docs/**)",
       "Read(~/.claude/shared/**)",
-      "Read(~/projects/testing/curl/**)",
+      "Read(~/projects/**)",
       "Bash(cat:*)",
+      "Bash(cd:*)",
+      "Bash(curl:*)",
       "Bash(fd:*)",
       "Bash(docker compose:*)",
       "Bash(docker images:*)",
@@ -53,8 +55,7 @@
       "Bash(terraform show:*)",
       "Bash(terraform state list:*)",
       "Bash(terraform validate:*)",
-      "Bash(set -a && source .env && poetry run:*)",
-      "Bash(curl:*)"
+      "Bash(set -a && source .env && poetry run:*)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -107,6 +108,18 @@
   "skipAutoPermissionPrompt": true,
   "autoApproveCommands": false,
   "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(poetry install:*)",
+      "Bash(poetry add:*)",
+      "Bash(make test:*)",
+      "Bash(make lint:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(aws * --profile *prod*)",
+      "Bash(git push --force:*)"
+    ],
     "environment": [
       "### Org-wide",
       "**Organization**: None configured",
