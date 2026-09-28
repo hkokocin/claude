@@ -11,3 +11,7 @@
   * Evaluate if the decisions made / insights gained have implication on downstream items and adapt those accordingly.
   * Present the next item
 * Don't jump into action after each items is resolved. Collect the user responses first to minimise roundtrips during implementation.
+
+## Effort and estimates
+* Never estimate work in human coding time (hours, days). An agent writes the code.
+* When asked "how complex" or "is it worth it", describe the complexity of the result: lines, moving parts, async steps, tests, risks. That is the only cost that matters.
