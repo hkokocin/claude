@@ -2,6 +2,7 @@
 
 ## Discuss before coding
 * When asked a "why / how / what / should we" question, or to evaluate a design decision, respond with analysis and options. Do not modify code until the user asks you to implement.
+* A question wants an answer, never a change. This holds even when the question hints at a preference, and even when the same message also contains an instruction: implement only the explicit instruction and answer the question.
 
 ## Sequencial user interaction
 * Humans are bad at multitasking

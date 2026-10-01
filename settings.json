@@ -70,7 +70,7 @@
       "~/projects/testing/curl"
     ]
   },
-  "model": "claude-opus-5-5",
+  "model": "claude-fable-5-1",
   "hooks": {
     "SessionStart": [
       {
@@ -106,7 +106,6 @@
   "theme": "dark",
   "editorMode": "vim",
   "skipAutoPermissionPrompt": true,
-  "autoApproveCommands": false,
   "autoMode": {
     "allow": [
       "$defaults",
@@ -147,5 +146,6 @@
       "**Org-specific CLIs**: None configured",
       "Routine under ~/projects/tools/claude/ prefix: editing config entities under .claude/ category subdirectories and committing via the repo's own auto-commit convention"
     ]
-  }
+  },
+  "autoApproveCommands": false
 }
