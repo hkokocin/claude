@@ -109,6 +109,7 @@
   "autoMode": {
     "allow": [
       "$defaults",
+      "Merging a pull request with `gh pr merge --squash --admin` is allowed once the user has approved the PR in this session (e.g. 'approved', 'merge it'): the user's in-session approval is the human review, and --admin bypasses only GitHub's required-review rule on purpose. CI checks must be green; using --admin to bypass failing or pending checks stays blocked.",
       "Bash(poetry install:*)",
       "Bash(poetry add:*)",
       "Bash(make test:*)",
