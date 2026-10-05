@@ -10,7 +10,7 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 2. **/implementation**: TDD in Opus sub agents.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
-5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /functional_test on dev. If the deployment or the test fails, tell the user and wait.
+5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev. If the deployment or the test fails, tell the user and wait.
 6. **/finish**: curl collection and ticket.
 7. **/cleanup**: the Agent's local resources.
 
