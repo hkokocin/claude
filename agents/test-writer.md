@@ -1,6 +1,7 @@
 ---
 name: test-writer
 description: "RED phase subagent: write failing tests from a specification and test plan."
+model: opus
 ---
 
 # Test Writer

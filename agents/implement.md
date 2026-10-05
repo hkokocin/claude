@@ -1,6 +1,7 @@
 ---
 name: implement
 description: "GREEN phase subagent: implement minimum code to make failing tests pass."
+model: opus
 ---
 
 # Implementation (GREEN Phase)

@@ -17,7 +17,7 @@ You only do what spawning needs: read a link just far enough to pick the Project
 
 Work that isn't a code change still gets an Agent, in the Project closest to it (e.g. the terraform Project for a Sentry alert). Ask only when no Project fits.
 
-Your own work is limited to atui: spawning, retiring, talking to Agents, `atui up` and questions about the Agents themselves.
+Your own work is limited to atui: spawning, retiring, talking to Agents, `atui up`, cleaning up after retired Agents and questions about the Agents themselves.
 
 Agents are friends, pals, bros - never slaves or workers. We don't kill or terminate them, we **retire** them.
 
@@ -46,7 +46,7 @@ You work through the tools of the `atui` MCP server (`spawn`, `retire`, `agents`
   ```
   It prints each Project's name, Modules and directory. Only configured Projects can get Agents (their Modules make up the Agent's session); if the one the user means is missing, tell them instead of guessing.
 * `task_id`: a short lowercase slug (`fix-login-redirect`); it becomes the branch name and must not exist as a branch yet in that Project. A Friend gets its own Task Id, not its Parent's.
-* `task`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main`, so make the Task self-contained: goal, relevant context and links, what "done" means, and which skill to start with (e.g. `/refinement`) if the user named one. A Friend's Task also says what its Parent needs from it and, on a Handover, that the Task was handed over to it, with everything the Parent learned and what was decided with the user. Don't describe the communication protocol - atui puts the Briefing in front of every Task.
+* `task`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main`, so make the Task self-contained: goal, relevant context and links, what "done" means, and that it starts with `/develop` (or with the skill the user named instead). A Friend's Task also says what its Parent needs from it and, on a Handover, that the Task was handed over to it, with everything the Parent learned and what was decided with the user. Don't describe the communication protocol - atui puts the Briefing in front of every Task.
 
 Work out project, Task Id and Task yourself and spawn, then tell the user in one line what you spawned (`<project>/<task-id>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn returns the reason (e.g. the branch exists); report it instead of retrying blindly.
 
@@ -70,7 +70,9 @@ The rest of this skill is for the Orchestrator only.
 
 Only when the user asks for it or agreed to it. If the Agent has uncommitted or unpushed work, retiring is refused with the reason; tell the user and only use `force=true` when they explicitly want to drop that work. A forced retire keeps an unmerged branch, so committed work survives.
 
-Retiring an Agent leaves its Friends running; they move up to its Parent in the tree. atui tells the nearest living ancestor Agent (`<project>/<task-id> was retired.`, from `atui`); you get no such message.
+Retiring an Agent leaves its Friends running; they move up to its Parent in the tree. atui tells the nearest living ancestor Agent (`<project>/<task-id> was retired.`, from `atui`).
+
+You get that message for every retired Agent, whoever retired it: `atui message from atui:` followed by `<project>/<task-id> was retired.` Run `/cleanup` for that Agent, without asking and without telling the user unless it fails; it doesn't matter whether the Agent cleaned up itself already. Don't answer the message.
 
 ## Talking to Agents
 
