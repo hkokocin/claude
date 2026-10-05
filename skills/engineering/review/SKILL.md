@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review and test a change automatically until it is clean - draft PR, one Copilot review, two-axis reviews and functional tests in Opus sub agents, at most 3 rounds.
+description: Review and test a change automatically until it is clean - draft PR, one Copilot review, two-axis reviews and acceptance tests in Opus sub agents, at most 3 rounds.
 ---
 # Review
 
