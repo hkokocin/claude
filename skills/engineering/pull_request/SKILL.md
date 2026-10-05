@@ -30,16 +30,10 @@ Package the current work into a commit, push it, and open a pull request.
    - **PR exists**: report the PR URL. The push already updated it.
    - **No PR**: create one with `gh pr create`:
      - **Title**: the commit message
-     - **Body**:
-       ```
-       ## Summary
-       <1-3 sentences explaining what this change does and why>
-
-       ## Decisions
-       <Bullet list of notable implementation decisions or trade-offs. Omit section if none.>
-       ```
+     - **Body**: the link to the Task's ticket first (a Friend's subtask, otherwise the ticket itself; omit without one), then the bullets of @shared/commit_message.md, then a `## Decisions` section only for real trade-offs.
 3. Create PR as draft if it does not yet exist.
-4. Return the PR URL to the user.
+4. Attach the PR link to the ticket (/ticket).
+5. Return the PR URL to the user.
 
 ## Constraints
 - NEVER commit `.env` files or secrets.
