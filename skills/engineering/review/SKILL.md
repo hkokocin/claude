@@ -9,7 +9,7 @@ description: Review and test a change automatically until it is clean - draft PR
    * request a Copilot review: only this once per pull request, the monthly credits don't allow more
    * /two_axis_review against the merge-base with `origin/main`; the spec is the ticket
    * **testing** in an Opus sub agent (below)
-3. Fix the findings worth fixing with /implementation. Copilot comments go through /review_comments without asking for approval. Nits are not worth fixing.
+3. Fix the findings worth fixing with /implementation. Copilot comments go through /review_comments without asking for approval.
 4. **Next rounds**: /two_axis_review and testing again, without Copilot. Stop once a round finds nothing worth fixing, after 3 rounds at most.
 5. Push, mark the pull request ready, and sum up the important changes; whatever is still open goes to the user in /user_review.
 
