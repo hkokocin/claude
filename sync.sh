@@ -14,9 +14,13 @@
 #   standalone (CLAUDE.md, settings.json, statusline.sh)
 #                         -> $TARGET/<name>              -> repo file
 #
-# Only symlinks are created, and only dangling symlinks are pruned. Real files
-# and real directories in $TARGET (runtime state, settings.local.json, ...) are
-# never touched. Basename collisions within a collection abort the run.
+# Entities inside a `deprecated` directory are not synced, and links that still
+# point into one are pruned.
+#
+# Only symlinks are created, and only dangling or deprecated symlinks are
+# pruned. Real files and real directories in $TARGET (runtime state,
+# settings.local.json, ...) are never touched. Basename collisions within a
+# collection abort the run.
 #
 # Compatible with bash 3.2 and BSD (macOS) find.
 
@@ -42,9 +46,9 @@ link() {
   printf '  link %s -> %s\n' "$dst" "$src"
 }
 
-# nearest dirs containing SKILL.md, without descending into a match
+# nearest dirs containing SKILL.md, without descending into a match or a deprecated dir
 leaf_dirs() {
-  find "$1" -type d -exec sh -c 'test -e "$1/SKILL.md"' _ {} \; -prune -print
+  find "$1" -type d -name deprecated -prune -o -type d -exec sh -c 'test -e "$1/SKILL.md"' _ {} \; -prune -print
 }
 
 assert_no_collisions() {
@@ -69,7 +73,7 @@ sync_file_collection() {
   coll="$1"; root="$REPO/$coll"
   [ -d "$root" ] || return 0
   printf '[%s] (file-based)\n' "$coll"
-  files="$(find "$root" -type f ! -name '.DS_Store' -print)"
+  files="$(find "$root" -type d -name deprecated -prune -o -type f ! -name '.DS_Store' -print)"
   assert_no_collisions "$coll" "$(printf '%s\n' "$files" | sed '/^$/d' | while read -r f; do basename "$f"; done)"
   printf '%s\n' "$files" | sed '/^$/d' | while read -r f; do
     link "$f" "$TARGET/$coll/$(basename "$f")"
@@ -83,13 +87,14 @@ sync_standalone() {
   link "$REPO/$name" "$TARGET/$name"
 }
 
-# remove only dangling symlinks under managed collection dirs; this reclaims
-# links left behind by a delete, rename, or re-categorization.
+# remove only dangling or deprecated symlinks under managed collection dirs;
+# this reclaims links left behind by a delete, rename, re-categorization or
+# deprecation.
 prune_collection() {
   coll="$1"; dir="$TARGET/$coll"
   [ -d "$dir" ] || return 0
   find "$dir" -maxdepth 1 -type l | while read -r lnk; do
-    if [ ! -e "$lnk" ]; then
+    if [ ! -e "$lnk" ] || case "$(readlink "$lnk")" in */deprecated/*) true ;; *) false ;; esac; then
       printf '  prune %s\n' "$lnk"
       rm "$lnk"
     fi
