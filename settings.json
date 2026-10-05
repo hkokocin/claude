@@ -3,6 +3,7 @@
     "CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT": "10000",
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus"
   },
+  "attribution": { "commit": "", "pr": "" },
   "permissions": {
     "allow": [
       "Read(~/docs/**)",
