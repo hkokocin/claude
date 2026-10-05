@@ -1,9 +1,19 @@
 # Auto-commit for config repo
 
 This repo holds the Claude config and is projected into `~/.claude` via
-symlinks by `sync.sh` (run automatically by the `post-commit` hook). Edit
-entities here, in their category subdirectories; never edit the symlinks under
-`~/.claude` directly. New or moved entities become live after the next commit.
+symlinks by `sync.sh`. Edit entities here, in their category subdirectories;
+never edit the symlinks under `~/.claude` directly. New or moved entities
+become live after the next sync.
+
+## Sync after a change was implemented
+- Sync only from the main checkout `~/projects/tools/claude`, never from a
+  worktree: `sync.sh` links `~/.claude` to the checkout it runs in, and a
+  worktree's links dangle once it is removed.
+- Working in the main checkout: run `./sync.sh` after committing.
+- Working in a worktree (atui Agents): once the change is on `main`, run
+  `git -C ~/projects/tools/claude pull --ff-only && ~/projects/tools/claude/sync.sh`.
+  If the pull fails (e.g. uncommitted changes there), tell the user instead of
+  forcing it.
 
 ## On task start (including after /clear)
 - Run `git status` to check for uncommitted changes.
