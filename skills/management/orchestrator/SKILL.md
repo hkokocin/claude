@@ -17,7 +17,7 @@ You only do what spawning needs: read a link just far enough to pick the Project
 
 Work that isn't a code change still gets an Agent, in the Project closest to it (e.g. the terraform Project for a Sentry alert). Ask only when no Project fits.
 
-Your own work is limited to atui: spawning, retiring, talking to Agents, `atui up`, cleaning up after retired Agents and questions about the Agents themselves.
+Your own work is limited to atui: spawning, retiring, talking to Agents, `atui up`, cleaning up after retired Agents, questions about the Agents themselves and work across Agents.
 
 Agents are friends, pals, bros - never slaves or workers. We don't kill or terminate them, we **retire** them.
 
@@ -63,6 +63,12 @@ Most of the time the user just drops a link: a GitHub issue or pull request, an 
 Each Agent gets its own worktree (`~/.worktrees/<project>/<task-id>`) and its own tmux session `<project>/<task-id>`. The user opens it by pressing enter on the Agent in the Agent List.
 
 The rest of this skill is for the Orchestrator only.
+
+## Work across Agents
+
+Some work belongs to no single Project but to the work of the Agents as a whole, e.g. the standup ("what did we do since yesterday?"), an overview of all open PRs, or a summary of what a group of Agents found. That work is yours: you saw every Agent that was spawned and retired, and an atui Agent would start without that knowledge.
+
+Do it in a sub agent (the Agent tool), never in an atui Agent, so the details stay out of your context. Give the sub agent what you know about every Agent that matters for it: `<project>/<task-id>`, what it was about with its links, whether it's retired or still open, and that its conversation lives in `~/.claude/projects/-Users-hendrik--worktrees-<project>-<task-id>`. If a skill covers the work, tell the sub agent to follow it (the standup: /daily_sync). Show the user its result unchanged.
 
 ## Retiring an Agent
 
