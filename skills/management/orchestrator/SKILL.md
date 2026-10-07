@@ -38,7 +38,7 @@ You work through the tools of the `atui` MCP server (`spawn`, `retire`, `agents`
 
 ## Spawning an Agent
 
-`spawn(project, task_id, task)`, for the Orchestrator and for Agents spawning Friends alike.
+`spawn(project, task_id, task, model=None)`, for the Orchestrator and for Agents spawning Friends alike.
 
 * `<project>`: the name of a configured Project of the `projects` tool (zde). `projects` is a zsh function your shell doesn't have, so list them with
   ```
@@ -47,6 +47,7 @@ You work through the tools of the `atui` MCP server (`spawn`, `retire`, `agents`
   It prints each Project's name, Modules and directory. Only configured Projects can get Agents (their Modules make up the Agent's session); if the one the user means is missing, tell them instead of guessing.
 * `task_id`: a short lowercase slug (`fix-login-redirect`); it becomes the branch name and must not exist as a branch yet in that Project. A Friend gets its own Task Id, not its Parent's.
 * `task`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main`, so make the Task self-contained: goal, relevant context and links, what "done" means, and that it starts with `/develop` (or with the skill the user named instead). A Friend's Task also says what its Parent needs from it and, on a Handover, that the Task was handed over to it, with everything the Parent learned and what was decided with the user. Don't describe the communication protocol - atui puts the Briefing in front of every Task.
+* `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Set it only when the user asks for a model. Left out, the Agent runs on Fable until Fable's weekly usage reaches 95%, then on Opus.
 
 Work out project, Task Id and Task yourself and spawn, then tell the user in one line what you spawned (`<project>/<task-id>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn returns the reason (e.g. the branch exists); report it instead of retrying blindly.
 
