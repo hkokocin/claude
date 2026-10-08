@@ -12,10 +12,9 @@ Package the current work into a commit, push it, and open a pull request.
    - The **task description** (what was implemented/fixed/changed)
    - The **commit type**: `Feature` (new behaviour), `Fix` (bug fix), or `Chore` (refactor, config, docs, tests)
    - Key **decisions** made during implementation
-2. With a Task: file its Specification as /task describes (`docs/tasks/<Branch>.md`), also when the pull request exists and the Specification changed since.
-3. Run `git status`. If there are no changes (staged, unstaged, or untracked), stop — nothing to push.
-4. Stay on the current branch. An atui Agent already works on its Task's Branch; never rename it or move the work to another branch.
-5. Only on `main` (a session started by hand): fetch origin and create `<type>/<short-slug>` (e.g. `feature/user-auth`) from `origin/main` with `--no-track`.
+2. Run `git status`. If there are no changes (staged, unstaged, or untracked), stop — nothing to push.
+3. Stay on the current branch. An atui Agent already works on its Task's Branch; never rename it or move the work to another branch.
+4. Only on `main` (a session started by hand): fetch origin and create `<type>/<short-slug>` (e.g. `feature/user-auth`) from `origin/main` with `--no-track`.
 
 ## Step 2: Commit
 
