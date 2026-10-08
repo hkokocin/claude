@@ -28,6 +28,7 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 * **Task Id**: the number of a Task within its Project; `<project>/<number>` identifies it everywhere. The Service assigns it when the Task is created.
 * **Branch**: the git branch of a Task's work, `<number>-<slug of the title>`, named at Spawn and recorded on the Task.
 * **Specification**: the Task's markdown: a TL;DR for humans, then the specification for Agents. The Agent reads it first.
+* **Instructions**: what the spawner hands the new Agent next to its Task at Spawn: where to start, what the spawner needs from it, or that the Task was handed over. Neither the requirements (Specification) nor the communication protocol (Briefing). The Briefing shows them, and the Spawn on the Task's stream records them.
 * **Artifact**: something attached to a Task, e.g. its pull request, a design or the ticket it came from.
 * **Phase**: where an Agent's Task stands in its workflow (refinement, implementation, ...), reported by the Agent.
 * **Activity**: whether an Agent is working or waiting on the user, and why (approval, question, done). atui observes it; nobody reports it.
@@ -44,7 +45,7 @@ You work through the tools of the `atui` MCP server: `spawn`, `retire`, `agents`
 
 An Agent works on a Task, so spawning is two calls, for the Orchestrator and for Agents spawning Friends alike:
 1. `create_task(project, title, specification)` returns `Created <project>/<number>: <title>.` An Agent leaves out `parent`, so its Friend's Task becomes a Subtask of its own Task; the Orchestrator creates a top-level Task.
-2. `spawn(task="<project>/<number>", model=None)`. The Service derives the Branch from the title; the Agent is named by its Task.
+2. `spawn(task="<project>/<number>", model=None, instructions=None)`. The Service derives the Branch from the title; the Agent is named by its Task.
 
 * `project`: the name of a configured Project of the `projects` tool (zde). `projects` is a zsh function your shell doesn't have, so list them with
   ```
@@ -52,16 +53,17 @@ An Agent works on a Task, so spawning is two calls, for the Orchestrator and for
   ```
   It prints each Project's name, Modules and directory. Only configured Projects can get Agents (their Modules make up the Agent's session); if the one the user means is missing, tell them instead of guessing.
 * `title`: what the Task is about in a few words (`Fix login redirect`); its slug names the Branch.
-* `specification`: what the Agent shall do. The Agent starts cold in a fresh worktree of the latest `main` and reads it first, so make it self-contained: goal, relevant context and links, what "done" means, and that it starts with `/develop` (or with the skill the user named instead). A Friend's Specification also says what its Parent needs from it and, on a Handover, that the Task was handed over to it, with everything the Parent learned and what was decided with the user. Don't describe the communication protocol - atui puts the Briefing in front of every Task. /refinement replaces the Specification with the approved one later.
+* `specification`: the requirements only. The Agent starts cold in a fresh worktree of the latest `main` and reads it first, so make it self-contained: goal, relevant context and links, what "done" means. On a Handover it also holds everything the Parent learned and what was decided with the user. /refinement replaces the Specification with the approved one later.
+* `instructions`: the Instructions, shown in the Briefing under `Instructions from <spawner>:`. Always give them, at least where to start: `Start with /develop.`, the skill the user named, or a later step. For a Friend add what its Parent needs from it, and on a Handover that the Task was handed over.
 * `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Set it only when the user asks for a model. Left out, the Agent runs on Fable until Fable's weekly usage reaches 95%, then on Opus.
 
-A Task that already exists (e.g. a Subtask from a breakdown, or a Task whose Agent was retired) is only spawned. A Task has one living Agent at a time.
+A Task that already exists (e.g. a Subtask from a breakdown, or a Task whose Agent was retired) is only spawned, with Instructions that say where its work stands. A Task has one living Agent at a time.
 
 Work out project, title and Specification yourself, create the Task and spawn, then tell the user in one line what you spawned (`<project>/<number>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn returns the reason; report it instead of retrying blindly.
 
 Never ask for a report back. The Agent presents its results and asks its questions to the user in its own session and waits there; the user sees it waiting in the Agent List and reacts in that session. The conversation about a Task never runs through you. A Friend messages its Parent on its own when its work is done or something the Parent depends on changes (its Briefing says so); the Orchestrator gets no such messages.
 
-**Handover** (Agents only): create the Subtask in the other Project (`create_task(<other project>, title, specification)`) with the Task, everything learned and that it was handed over, spawn a Friend on it, set your own Task to `cancelled` (`update_task(status="cancelled")`) and call `request_retire()` without waiting for the user.
+**Handover** (Agents only): create the Subtask in the other Project (`create_task(<other project>, title, specification)`) with the Task and everything learned, spawn a Friend on it with Instructions that say the Task was handed over to it and where to start, set your own Task to `cancelled` (`update_task(status="cancelled")`) and call `request_retire()` without waiting for the user.
 
 ## Spawning from a link
 
@@ -70,7 +72,7 @@ Most of the time the user just drops a link: a GitHub issue or pull request, an 
 2. **Find the Project**: match what they mention (repository, service or product names) against the configured Projects.
 3. **Create the Task**: the title in a few words, and a Specification with a short summary of what you read, anything the user added and the link itself, so the Agent reads the full source.
 4. **Attach the link** to the new Task before spawning: `attach(type, url, title, task="<project>/<number>")`, with the type of its source: `asana`, `github`, `sentry`, `figma`, `google-doc`, otherwise `other`.
-5. **Spawn** on the Task.
+5. **Spawn** on the Task, with Instructions (see Spawning an Agent).
 
 Each Agent gets its own worktree (`~/.worktrees/<project>/<number>-<slug>`) and its own tmux session `<project>/<number>-<slug>`. The user opens it by pressing enter on the Agent in the Agent List.
 

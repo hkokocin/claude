@@ -19,11 +19,11 @@ Then wait until the user tells you that you may go.
 ## Breakdown into Subtasks
 
 When /refinement broke the Task down, you don't run steps 2-6 yourself. For each Subtask, one at a time:
-1. Spawn a Friend on its Subtask, which /refinement created with the approved specification: `spawn("<project>/<number>")`. With the first Friend, set your own Task to `implementation` (/task).
-2. Wait for its message that its change passed the dev test, then spawn the Friend for the next Subtask.
+1. Spawn a Friend on its Subtask, which /refinement created with the approved specification, and tell it in its Instructions where to start and what you need: `spawn("<project>/<number>", instructions="The Specification is approved; start /develop at /implementation. Send me (<parent project>/<number>) one message when your change passed the dev test: the commit and anything I should know.")`. Where there is no dev test, say "is merged" instead. With the first Friend, set your own Task to `implementation` (/task).
+2. Wait for its message that its change passed the dev test (or is merged, where there is none), then spawn the Friend for the next Subtask.
 
-After the last Friend's change passed the dev test, run /finish for the Parent Task, then /cleanup.
+After the last Friend's change passed the dev test (or is merged), run /finish for the Parent Task, then /cleanup.
 
 ## Starting later
 
-A Task whose Specification says it is approved (/task, e.g. a Friend's Subtask from a breakdown) starts at /implementation. A Friend sends its Parent a message once its change passed the dev test, then goes on with /finish.
+An Agent starts where the Instructions in its Briefing say (e.g. a Friend's Subtask from a breakdown starts at /implementation); without Instructions it starts at /refinement. A Friend sends its Parent the message its Instructions ask for, then goes on with /finish.
