@@ -44,4 +44,4 @@ The Specification is filed into the repo with the work it describes (ADR 0006 of
 mkdir -p docs/tasks && curl -sf http://127.0.0.1:8000/tasks/<project>/<number> | jq -r .task.specification.markdown > docs/tasks/<Branch>.md
 ```
 
-If git ignores the file, tell the user instead of forcing it. /pull_request files it before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.
+If git ignores the file (PEAT-AI repos get no Task files), leave it uncommitted and never force it. /pull_request files it before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.
