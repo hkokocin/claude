@@ -13,7 +13,7 @@ The Specification is markdown on the Task (`update_task(specification=…)`). Re
 1. **TL;DR** first: 2-4 sentences for human readers.
 2. **Specification** below it: the requirements, written for Agents.
 
-Nothing else: where to start, what the Parent needs and a Handover go into the spawner's instructions (/orchestrator).
+Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
 With a breakdown, each Subtask holds its own TL;DR and specification, and the Parent Task keeps only the TL;DR.
 
