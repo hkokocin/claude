@@ -11,7 +11,9 @@ The Task is the atui Task the Agent was spawned on (`task()` shows it, with its 
 The Specification is markdown on the Task (`update_task(specification=…)`). Replace it as a whole; don't keep requirements anywhere else that might contradict it.
 
 1. **TL;DR** first: 2-4 sentences for human readers.
-2. **Specification** below it: the approved requirements, written for Agents. Once the user approved it, one line under the TL;DR says so and tells the Agent where to start: `Approved by the user on <date>; start /develop at /implementation.`
+2. **Specification** below it: the requirements, written for Agents.
+
+Nothing else: where to start, what the Parent needs and a Handover go into the spawner's instructions (/orchestrator).
 
 With a breakdown, each Subtask holds its own TL;DR and specification, and the Parent Task keeps only the TL;DR.
 
