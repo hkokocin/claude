@@ -36,4 +36,10 @@ Attach every Artifact to the Task as soon as it exists: `attach(type, url, title
 
 ## Filing the Specification
 
-The Specification is filed into the repo with the work it describes (ADR 0006 of atui): write it unchanged to `docs/tasks/<Branch>.md` (the Branch is `<number>-<slug>`, `task()` shows it) and commit it on the Branch. /pull_request does so before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.
+The Specification is filed into the repo with the work it describes (ADR 0006 of atui): write it unchanged to `docs/tasks/<Branch>.md` (the Branch is `<number>-<slug>`, `task()` shows it) and commit it on the Branch:
+
+```
+mkdir -p docs/tasks && curl -sf http://127.0.0.1:8000/tasks/<project>/<number> | jq -r .task.specification.markdown > docs/tasks/<Branch>.md
+```
+
+/pull_request does so before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.
