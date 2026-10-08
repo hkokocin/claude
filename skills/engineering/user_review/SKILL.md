@@ -10,4 +10,4 @@ description: Let the user try the change on a locally running instance and merge
    * a branch that brings migrations never touches dev: it runs against the Agent's own database (/agent_database), seeded with some data
 3. Tell the user: the URL, the curl file for backend work, what to try, what /review left open, and which database it runs on.
 4. Wait for the user's approval. Changes they ask for go through /implementation and a local /acceptance_test again.
-5. On approval: file the Specification again if it changed since the last push (/task), /squash_and_merge_pr, then stop the app.
+5. On approval: file the Specification (/task) if it changed since the last push, or in a repo without pull requests, /squash_and_merge_pr, then stop the app.

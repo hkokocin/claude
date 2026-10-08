@@ -4,7 +4,7 @@ description: How the dev process keeps its atui Task up to date - layout of the 
 ---
 # Task
 
-The Task is the atui Task the Agent was spawned on (`task()` shows it, with its Branch, Artifacts and Subtasks); a Friend's Task is its Subtask. All of it goes through the tools of the `atui` MCP server, which default to the Agent's own Task. Without a Task (e.g. a session started by hand), skip everything here.
+The Task is the atui Task the Agent was spawned on (`task()` shows it, with its Branch, Artifacts and Subtasks); a Friend's Task is its Subtask. It goes through the tools of the `atui` MCP server, which default to the Agent's own Task; only filing reads the Specification from the Service directly, to get it unchanged. Without a Task (e.g. a session started by hand), skip everything here.
 
 ## Specification
 
@@ -42,4 +42,4 @@ The Specification is filed into the repo with the work it describes (ADR 0006 of
 mkdir -p docs/tasks && curl -sf http://127.0.0.1:8000/tasks/<project>/<number> | jq -r .task.specification.markdown > docs/tasks/<Branch>.md
 ```
 
-/pull_request does so before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.
+If git ignores the file, tell the user instead of forcing it. /pull_request files it before it opens the pull request, and again whenever the Specification changed since, so the file merges with the work. In a repo without pull requests, write it before merging to main.

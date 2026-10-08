@@ -31,7 +31,7 @@ Package the current work into a commit, push it, and open a pull request.
    - **PR exists**: report the PR URL. The push already updated it.
    - **No PR**: create one with `gh pr create`:
      - **Title**: the commit message
-     - **Body**: the Task by its identity first (`Task: atui/12`; omit without a Task), then the bullets of @shared/commit_message.md, then a `## Decisions` section only for real trade-offs.
+     - **Body**: the Task Id first (`Task: atui/12`; omit without a Task), then the bullets of @shared/commit_message.md, then a `## Decisions` section only for real trade-offs.
 3. Create PR as draft if it does not yet exist.
 4. Attach the PR to the Task with type `github` (/task).
 5. Return the PR URL to the user.

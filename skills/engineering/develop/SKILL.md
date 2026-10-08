@@ -6,7 +6,7 @@ description: The dev process for a Task, from refinement to cleanup. The default
 
 Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task up to date as /task describes.
 
-1. **/refinement**: specification, approved by the user. It may break the Task down into subtasks.
+1. **/refinement**: specification, approved by the user. It may break the Task down into Subtasks.
 2. **/implementation**: TDD in Opus sub agents.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
@@ -16,11 +16,11 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 
 Then wait until the user tells you that you may go.
 
-## Breakdown into subtasks
+## Breakdown into Subtasks
 
-When /refinement broke the Task down, you don't run steps 2-6 yourself. For each subtask, one at a time:
+When /refinement broke the Task down, you don't run steps 2-6 yourself. For each Subtask, one at a time:
 1. Spawn a Friend on its Subtask, which /refinement created with the approved specification: `spawn("<project>/<number>")`. With the first Friend, set your own Task to `implementation` (/task).
-2. Wait for its message that its change passed the dev test, then spawn the Friend for the next subtask.
+2. Wait for its message that its change passed the dev test, then spawn the Friend for the next Subtask.
 
 After the last Friend's change passed the dev test, run /finish for the Parent Task, then /cleanup.
 
