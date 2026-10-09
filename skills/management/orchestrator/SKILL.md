@@ -55,7 +55,7 @@ An Agent works on a Task, so spawning is two calls, for the Orchestrator and for
 * `title`: what the Task is about in a few words (`Fix login redirect`); its slug names the Branch.
 * `specification`: the requirements only. The Agent starts cold in a fresh worktree of the latest `main` and reads it first, so make it self-contained: goal, relevant context and links, what "done" means. On a Handover it also holds everything the Parent learned and what was decided with the user. /refinement replaces the Specification with the approved one later.
 * `instructions`: the Instructions, shown in the Briefing under `Instructions from <spawner>:`. Always give them, at least where to start: `Start with /develop.`, the skill the user named, or a later step. For a Friend add what its Parent needs from it, and on a Handover that the Task was handed over.
-* `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Set it only when the user asks for a model. Left out, the Agent runs on Fable until Fable's weekly usage reaches 95%, then on Opus.
+* `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Spawn on `opus`, unless the user asks for another model; Fable only when they ask for it.
 
 A Task that already exists (e.g. a Subtask from a breakdown, or a Task whose Agent was retired) is only spawned, with Instructions that say where its work stands. A Task has one living Agent at a time.
 

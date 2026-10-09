@@ -14,3 +14,12 @@ Run a `/grilling` session, using the `/domain-modeling` skill. A simple Task may
 * Once the session is finished propose whether the adr is worth keeping or if the insights should be written to the Task's Specification only.
 * If we keep the adr then mention it in the Task's Specification.
 * Replace the Specification as a whole. Don't just add a note that might disagree with it or hide requirements.
+
+## Tier
+
+End by rating the Task; the tier decides model, sub agents and review depth of the later steps (/develop):
+* `small`: one clear change, no new domain concept, no migration, no new endpoint or screen (a bug fix, a config change, a field or validation, a text change).
+* `medium`: a feature within existing patterns: a new endpoint, screen, table or migration, but no new architecture and no breakdown.
+* `large`: new concepts or architecture, several components, needs an ADR, or a breakdown. A Parent with a breakdown is always `large`; each Subtask gets its own rating.
+
+When in doubt, one tier up. Present the rating with the Specification; the user approves or overrides it. Store it on the Task with `set_property(key="tier", value="<tier>")`, and on each Subtask right after creating it (`set_property(key="tier", value="<tier>", task="<project>/<number>")`).
