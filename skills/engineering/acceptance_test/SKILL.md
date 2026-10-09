@@ -4,7 +4,7 @@ description: Test the changed behaviour of a running app from the outside - curl
 ---
 # Acceptance Test
 
-Run it in an Opus sub agent. It tests the behaviour changed on the branch (or by the merged pull request), against a target:
+Where it runs depends on the Task's tier (/develop): `small` in the main conversation, without the monkeytest; `medium` in a sub agent with `model: "sonnet"`; `large` in a sub agent with `model: "opus"`. It tests the behaviour changed on the branch (or by the merged pull request), against a target:
 * **local**: the app started locally against the Agent's own database (/agent_database)
 * **dev**: the deployed dev environment
 
@@ -12,6 +12,6 @@ Test:
 * backend: with curl; write the requests into the collection with /curl as you go
 * frontend: in a real browser (chrome-devtools)
 * the known use cases from the specification
-* local only: a /monkeytest of the changed endpoints. On dev it is skipped, since it would leave junk in data others use; data the test creates on dev is removed again.
+* local only, not for `small`: a /monkeytest of the changed endpoints. On dev it is skipped, since it would leave junk in data others use; data the test creates on dev is removed again.
 
 Report what failed, with the request or steps to reproduce it.

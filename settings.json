@@ -83,6 +83,24 @@
             "command": "echo 'REMINDER: Follow TDD.'"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/usage_review_trigger.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/usage_review_trigger.sh"
+          }
+        ]
       }
     ]
   },

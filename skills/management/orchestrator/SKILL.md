@@ -33,8 +33,8 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 * **Phase**: where an Agent's Task stands in its workflow (refinement, implementation, ...), reported by the Agent.
 * **Activity**: whether an Agent is working or waiting on the user, and why (approval, question, done). atui observes it; nobody reports it.
 * **Parent**: who an Agent reports to: the living Agent of its Task's Parent Task, else the Orchestrator. It follows from the Task tree; once a Parent is retired, its place is taken by its nearest living ancestor.
-* **Friend**: an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task. Friends may spawn Friends of their own.
-* **Handover**: an Agent that finds its Task belongs to another Project creates a Subtask there with its Task and everything it learned, spawns a Friend on it, sets its own Task to `cancelled` and retires itself without asking the user. An Agent whose Task was handed over asks the user before handing it over again.
+* **Friend**: an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task. The user never talks to a Friend: its Parent refines with the user, presents the Friend's pull request and merges it (/atui). Friends may spawn Friends of their own.
+* **Handover**: an Agent that finds its Task belongs to another Project hands it to a Friend there and retires itself (/atui).
 * **Agent List**: the list next to you in the command center. It shows every Agent with Phase, Activity and times as a tree: Friends indented below their Parent, waiting Agents first on each level.
 
 ## Your tools
@@ -55,15 +55,15 @@ An Agent works on a Task, so spawning is two calls, for the Orchestrator and for
 * `title`: what the Task is about in a few words (`Fix login redirect`); its slug names the Branch.
 * `specification`: the requirements only. The Agent starts cold in a fresh worktree of the latest `main` and reads it first, so make it self-contained: goal, relevant context and links, what "done" means. On a Handover it also holds everything the Parent learned and what was decided with the user. /refinement replaces the Specification with the approved one later.
 * `instructions`: the Instructions, shown in the Briefing under `Instructions from <spawner>:`. Always give them, at least where to start: `Start with /develop.`, the skill the user named, or a later step. For a Friend add what its Parent needs from it, and on a Handover that the Task was handed over.
-* `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Set it only when the user asks for a model. Left out, the Agent runs on Fable until Fable's weekly usage reaches 95%, then on Opus.
+* `model`: `fable`, `opus` or `sonnet`; anything else fails the spawn. Spawn on `opus`, unless the user asks for another model; Fable only when they ask for it.
 
 A Task that already exists (e.g. a Subtask from a breakdown, or a Task whose Agent was retired) is only spawned, with Instructions that say where its work stands. A Task has one living Agent at a time.
 
 Work out project, title and Specification yourself, create the Task and spawn, then tell the user in one line what you spawned (`<project>/<number>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn returns the reason; report it instead of retrying blindly.
 
-Never ask for a report back. The Agent presents its results and asks its questions to the user in its own session and waits there; the user sees it waiting in the Agent List and reacts in that session. The conversation about a Task never runs through you. A Friend messages its Parent on its own when its work is done or something the Parent depends on changes (its Briefing says so); the Orchestrator gets no such messages.
+The Orchestrator never asks for a report back. The Agent presents its results and asks its questions to the user in its own session and waits there; the user sees it waiting in the Agent List and reacts in that session. The conversation about a Task never runs through you. A Parent does get its Friend's one Message: the Friend sends it once its pull request is ready for the user review, and then only answers the Parent's Messages (/atui, Friends); the Orchestrator gets no such messages.
 
-**Handover** (Agents only): create the Subtask in the other Project (`create_task(<other project>, title, specification)`) with the Task and everything learned, spawn a Friend on it with Instructions that say the Task was handed over to it and where to start, set your own Task to `cancelled` (`update_task(status="cancelled")`) and call `request_retire()` without waiting for the user.
+**Friends, Handover and work in other Projects** (Agents only): see /atui.
 
 ## Spawning from a link
 
@@ -125,3 +125,7 @@ Run `atui up` yourself when:
 * a spawn or retire fails because the Daemon did not run it in time, or the user reports that Agents don't change their Activity (the Daemon isn't running).
 
 If `atui up` itself fails (e.g. Docker isn't running), tell the user what it printed.
+
+## Usage review
+
+When the line of the usage review trigger appears in your session ("The weekly usage runs ahead of the week: …"), do what the line says: create the Task and spawn the Agent on it.
