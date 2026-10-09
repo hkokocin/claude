@@ -19,7 +19,7 @@ The conversation about the Task happens in the Agent's own session: present resu
 
 ## TL;DR and Specification
 
-Both live on the Task, never in the repo, set with `update_task(tldr=…, specification=…)` or at `create_task(project, title, tldr, specification)`:
+Both live on the Task, never in the repo, set with `update_task(tldr=…, specification=…)`, or when creating the Task with `create_task(project, title, tldr, specification)`:
 
 * **TL;DR**: 2-4 sentences for human readers, the `tldr` field of the Task; `task()` shows it above the Specification.
 * **Specification**: the requirements, written for Agents, as markdown. Replace it as a whole; don't keep requirements anywhere else that might contradict it.
