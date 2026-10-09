@@ -8,18 +8,35 @@
 #
 # For checking the condition by hand:
 #   USAGE_REVIEW_USAGE_JSON  the usage API response to use instead of the API
-#   USAGE_REVIEW_NOW         the current time, ISO 8601 (e.g. 2026-10-07T16:00:00Z)
+#   USAGE_REVIEW_NOW         the current time, ISO 8601 with a time zone (e.g. 2026-10-07T16:00:00Z)
 
 [ "${ATUI_ROLE:-}" = "orchestrator" ] || exit 0
 
-STATE="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/usage_review_trigger.state"
+CONFIG="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+STATE="$CONFIG/usage_review_trigger.state"
+
+# prints the arguments' times as seconds since the epoch, the current time for an empty one
+epoch() {
+  USAGE_REVIEW_NOW="${USAGE_REVIEW_NOW:-}" python3 -c '
+import os, sys
+from datetime import datetime, timezone
+for time in sys.argv[1:] or [os.environ["USAGE_REVIEW_NOW"]]:
+    print(datetime.fromisoformat(time.replace("Z", "+00:00")).timestamp() if time else datetime.now(timezone.utc).timestamp())
+' "$@"
+}
+
+# once fired, nothing to do until the window it fired for has reset
+fired_for="$(cat "$STATE" 2>/dev/null)"
+if [ -n "$fired_for" ] && [ -z "${USAGE_REVIEW_USAGE_JSON:-}" ]; then
+  python3 -c 'import sys; sys.exit(0 if float(sys.argv[1]) < float(sys.argv[2]) else 1)' "$(epoch)" "$(epoch "$fired_for")" 2>/dev/null && exit 0
+fi
 
 usage="${USAGE_REVIEW_USAGE_JSON:-}"
 if [ -z "$usage" ]; then
   if [ "$(uname)" = "Darwin" ]; then
     credentials="$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null)"
   else
-    credentials="$(cat "$HOME/.claude/.credentials.json" 2>/dev/null)"
+    credentials="$(cat "$CONFIG/.credentials.json" 2>/dev/null)"
   fi
   token="$(printf '%s' "$credentials" | python3 -c 'import json, sys; print(json.load(sys.stdin)["claudeAiOauth"]["accessToken"])' 2>/dev/null)" || exit 0
   usage="$(curl -sf --max-time 5 https://api.anthropic.com/api/oauth/usage -H "Authorization: Bearer $token" -H "anthropic-beta: oauth-2025-04-20" 2>/dev/null)" || exit 0
@@ -30,16 +47,19 @@ ahead="$(printf '%s' "$usage" | USAGE_REVIEW_NOW="${USAGE_REVIEW_NOW:-}" python3
 import json, os, sys
 from datetime import datetime, timedelta, timezone
 
+def parse(time):
+    return datetime.fromisoformat(time.replace("Z", "+00:00"))
+
 now = os.environ["USAGE_REVIEW_NOW"]
-now = datetime.fromisoformat(now) if now else datetime.now(timezone.utc)
+now = parse(now) if now else datetime.now(timezone.utc)
 for limit in json.load(sys.stdin)["limits"]:
     if limit["kind"] == "weekly_all":
-        elapsed = timedelta(days=7) - (datetime.fromisoformat(limit["resets_at"]) - now)
+        elapsed = timedelta(days=7) - (parse(limit["resets_at"]) - now)
         if limit["percent"] >= 50 and elapsed < timedelta(days=3.5):
             print(limit["resets_at"])
 ' 2>/dev/null)" || exit 0
 
 [ -n "$ahead" ] || exit 0
-[ "$(cat "$STATE" 2>/dev/null)" = "$ahead" ] && exit 0
-printf '%s\n' "$ahead" > "$STATE"
+[ "$fired_for" = "$ahead" ] && exit 0
+printf '%s\n' "$ahead" 2>/dev/null > "$STATE" || exit 0
 echo "The weekly usage runs ahead of the week: create a Task \"Usage review\" in the claude Project and spawn an Agent on it with the Instructions \"Start with /usage_review\"."

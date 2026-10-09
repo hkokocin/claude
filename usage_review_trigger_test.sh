@@ -7,14 +7,21 @@ set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 failures=0
 
-# usage JSON with weekly_all at <percent>, resetting at 2026-10-12T16:00:00Z
+# usage JSON with weekly_all at <percent>, resetting at <resets_at> (default 2026-10-12T16:00Z)
 usage() {
-  printf '{"limits":[{"kind":"session","percent":90,"resets_at":"2026-10-09T15:50:00+00:00"},{"kind":"weekly_all","percent":%s,"resets_at":"2026-10-12T16:00:00.328034+00:00"}]}' "$1"
+  printf '{"limits":[{"kind":"session","percent":90,"resets_at":"2026-10-09T15:50:00+00:00"},{"kind":"weekly_all","percent":%s,"resets_at":"%s"}]}' "$1" "${2:-2026-10-12T16:00:00.328034+00:00}"
 }
 
-# the window started 2026-10-05T16:00Z: day 2 is 2026-10-07, day 5 is 2026-10-10
+# the window started 2026-10-05T16:00Z: day 2 is 2026-10-07, day 5 is 2026-10-10, half of it 2026-10-09T04:00Z
 DAY_2="2026-10-07T16:00:00Z"
 DAY_5="2026-10-10T16:00:00Z"
+BEFORE_HALF="2026-10-09T03:59:00Z"
+AFTER_HALF="2026-10-09T04:00:01Z"
+NEXT_WINDOW_RESETS_AT="2026-10-19T16:00:00Z"
+NEXT_WINDOW_DAY_2="2026-10-14T16:00:00Z"
+
+configs=""
+trap 'rm -rf $configs' EXIT
 
 run() {
   ATUI_ROLE="$1" USAGE_REVIEW_USAGE_JSON="$2" USAGE_REVIEW_NOW="$3" CLAUDE_CONFIG_DIR="$config" "$HERE/usage_review_trigger.sh"
@@ -30,7 +37,7 @@ check() {
   fi
 }
 
-fresh() { config="$(mktemp -d)"; }
+fresh() { config="$(mktemp -d)"; configs="$configs $config"; }
 
 fresh
 out="$(run orchestrator "$(usage 50)" "$DAY_2")"
@@ -38,6 +45,14 @@ case "$out" in *"Usage review"*"Start with /usage_review"*) fired=yes ;; *) fire
 check "fires at 50 percent on day 2" yes "$fired"
 check "fires with one line" 1 "$(printf '%s' "$out" | grep -c .)"
 check "stays silent for the same window twice" "" "$(run orchestrator "$(usage 60)" "$DAY_2")"
+
+check "fires again in the next window" yes "$(run orchestrator "$(usage 50 "$NEXT_WINDOW_RESETS_AT")" "$NEXT_WINDOW_DAY_2" | grep -q "Usage review" && echo yes || echo no)"
+
+fresh
+check "fires just before half of the window" yes "$(run orchestrator "$(usage 50)" "$BEFORE_HALF" | grep -q "Usage review" && echo yes || echo no)"
+
+fresh
+check "stays silent just after half of the window" "" "$(run orchestrator "$(usage 50)" "$AFTER_HALF")"
 
 fresh
 check "stays silent at 50 percent on day 5" "" "$(run orchestrator "$(usage 50)" "$DAY_5")"

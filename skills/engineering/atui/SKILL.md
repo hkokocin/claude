@@ -1,6 +1,6 @@
 ---
 name: atui
-description: How an atui Agent works with its Task - the conversation, Messages, the Specification, the status per step, Artifacts, Asana, the Stream, Friends and Handover. Used by the /develop steps.
+description: How an atui Agent works with its Task - the conversation, Messages, the Specification, the status per step, Artifacts, Asana, the Stream, Friends and Handover. Used by the /develop steps and by every Agent that spawns a Friend.
 ---
 # atui
 
@@ -79,14 +79,14 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 **The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and posts them on the Subtask as decisions. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then. The steps are in /develop.
 
-**The Friend** runs /implementation and /review, starts the app for the user review and sends its Parent one Message with all the user needs to try the change (/develop). Then it waits for Messages from its Parent. It never talks to the user, and the user never talks to it.
+**The Friend** runs /implementation and /review, keeps the curl collection current, starts the app for the user review in its own tmux `app` window and sends its Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on (/develop). Then it waits for Messages from its Parent and answers them. It never talks to the user, and the user never talks to it.
 
 **Retire** only your own Friends, with `retire(agent)`, and only when the user asked for it or agreed to it; in the Friends flow the user's approval of the pull request is that agreement.
 
 ## Handover
 
-An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, specification)`) with its Task and everything it learned, spawns a Friend on it with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
+An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
 
 ## Work in other Projects
 
-If the Task needs work in another Project as well, create a Subtask there for that part, spawn a Friend on it and keep working on your own part. The Friend follows the Friends flow above: it sends you its one Message, and atui tells you when it is retired. Never ask it for reports.
+If the Task needs work in another Project as well, create a Subtask there for that part, spawn a Friend on it on Opus and keep working on your own part. The Friend follows the Friends flow above: it sends you its one Message and you retire it after the merge. Never ask it for reports.
