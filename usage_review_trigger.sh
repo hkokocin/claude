@@ -22,12 +22,12 @@ import os, sys
 from datetime import datetime, timezone
 for time in sys.argv[1:] or [os.environ["USAGE_REVIEW_NOW"]]:
     print(datetime.fromisoformat(time.replace("Z", "+00:00")).timestamp() if time else datetime.now(timezone.utc).timestamp())
-' "$@"
+' "$@" 2>/dev/null
 }
 
 # once fired, nothing to do until the window it fired for has reset
 fired_for="$(cat "$STATE" 2>/dev/null)"
-if [ -n "$fired_for" ] && [ -z "${USAGE_REVIEW_USAGE_JSON:-}" ]; then
+if [ -n "$fired_for" ]; then
   python3 -c 'import sys; sys.exit(0 if float(sys.argv[1]) < float(sys.argv[2]) else 1)' "$(epoch)" "$(epoch "$fired_for")" 2>/dev/null && exit 0
 fi
 

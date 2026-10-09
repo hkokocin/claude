@@ -10,7 +10,7 @@ Do the reading in sub agents, so the transcripts stay out of your context; give 
 
 * **Window**: the current weekly window, from its `resets_at` minus 7 days until now. `resets_at` of the `weekly_all` limit comes from the usage API, read as `~/.claude/usage_review_trigger.sh` does.
 * **Transcripts**: `~/.claude/projects/<dir>/<session>.jsonl`, the sub agents' in `<session>/subagents/agent-*.jsonl` (`isSidechain: true`). Per assistant message of the window (`timestamp`): `message.model` and the tokens in `message.usage`: `input_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`, `output_tokens`.
-* **Task**: the directory is the session's working directory with `/` and `.` replaced by `-`; for an Agent that is its worktree `~/.worktrees/<project>/<number>-<slug>`. Match it against the Branches of `tasks(open=False)` to get the Task `<project>/<number>`. Other directories (the Orchestrator, sessions started by hand) count as "no Task".
+* **Task**: the directory is the session's working directory with every character other than a letter or digit replaced by `-`; for an Agent that is its worktree `~/.worktrees/<project>/<number>-<slug>`. Match it against the Branches of `tasks(open=False)` to get the Task `<project>/<number>`. Other directories (the Orchestrator, sessions started by hand) count as "no Task".
 * **History**: `task()` of each Task for its `tier` property and Subtasks, `audit()` for when it entered which Phase. A message belongs to the step (Phase) the Task was in at its `timestamp`.
 
 ## 2. Report
