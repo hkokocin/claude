@@ -12,7 +12,7 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 4. **/user_review**: the user tries it; merge on approval.
 5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev. If the deployment or the test fails, tell the user, post it on the Task and wait.
 6. **/finish**: curl collection and Task status. A Friend then sends its Parent the Message its Instructions ask for; never before /finish, because the Parent may retire it as soon as the Message arrives.
-7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well, so a Friend retired right after its Message loses nothing.
+7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well.
 
 Then wait until the user tells you that you may go.
 
@@ -26,4 +26,4 @@ After the last Friend's change passed the dev test (or is merged), run /finish f
 
 ## Starting later
 
-An Agent starts where the Instructions in its Briefing say (e.g. a Friend's Subtask from a breakdown starts at /implementation); without Instructions it starts at /refinement. A Friend sends its Parent its Message after /finish (step 6).
+An Agent starts where the Instructions in its Briefing say (e.g. a Friend's Subtask from a breakdown starts at /implementation); without Instructions it starts at /refinement.
