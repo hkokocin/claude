@@ -28,7 +28,7 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 * **Task Id**: the number of a Task within its Project; `<project>/<number>` identifies it everywhere. The Service assigns it when the Task is created.
 * **Branch**: the git branch of a Task's work, `<number>-<slug of the title>`, named at Spawn and recorded on the Task.
 * **Specification**: the Task's markdown: a TL;DR for humans, then the specification for Agents. The Agent reads it first.
-* **Instructions**: what the spawner hands the new Agent next to its Task at Spawn: where to start, what the spawner needs from it, or that the Task was handed over. Neither the requirements (Specification) nor the communication protocol (Briefing). The Briefing shows them, and the Spawn on the Task's stream records them.
+* **Instructions**: what the spawner hands the new Agent next to its Task at Spawn: where to start, what the spawner needs from it, or that the Task was handed over. Neither the requirements (Specification) nor how to work with atui (the /atui skill and the tool descriptions). The Briefing shows them, and the Spawn on the Task's stream records them.
 * **Artifact**: something attached to a Task, e.g. its pull request, a design or the ticket it came from.
 * **Phase**: where an Agent's Task stands in its workflow (refinement, implementation, ...), reported by the Agent.
 * **Activity**: whether an Agent is working or waiting on the user, and why (approval, question, done). atui observes it; nobody reports it.

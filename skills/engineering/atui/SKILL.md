@@ -41,9 +41,9 @@ Set the Task's status at the start of each step (`update_task(status=…)`):
 | /user_review | `review` |
 | /finish | `on-dev` |
 
-`done` is the user's call. A handed-over Task is set to `cancelled` (see Handover).
+`done` is the user's call, except in repos without a dev system (the user's own, owner `hkokocin`): there the merge to main finishes the Task, and whoever merged it sets `done`. A handed-over Task is set to `cancelled` (see Handover).
 
-A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and to `on-dev` after the dev test (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test.
+A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and to `on-dev` after the dev test (or `done` where there is no dev system) (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test.
 
 ## Artifacts
 
@@ -77,7 +77,7 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 **When**: `small` and `medium` Tasks are implemented in the Agent's own conversation. A `large` Task is always implemented by a Friend: one for the whole Task, or one per Subtask of a breakdown. Every Subtask is worked by a Friend. Work in another repo is always a Subtask (see Work in other Projects).
 
-**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and posts them on the Subtask as decisions. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then. The steps are in /develop.
+**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and posts them on the Subtask as decisions. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` (`done` where there is no dev system) and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then. The steps are in /develop.
 
 **The Friend** runs /implementation and /review, keeps the curl collection current, starts the app for the user review in its own tmux `app` window and sends its Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on (/develop). Then it waits for Messages from its Parent and answers them. It never talks to the user, and the user never talks to it.
 
