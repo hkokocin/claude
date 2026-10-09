@@ -1,6 +1,6 @@
 ---
 name: task
-description: How the dev process keeps its atui Task up to date - layout of the Specification, the status per step and Artifacts. Used by the /develop steps.
+description: How the dev process keeps its atui Task up to date - layout of the Specification, the status per step, Artifacts and the Stream. Used by the /develop steps.
 ---
 # Task
 
@@ -16,6 +16,8 @@ The Specification is markdown on the Task (`update_task(specification=…)`). Re
 Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
 With a breakdown, each Subtask holds its own TL;DR and specification, and the Parent Task keeps only the TL;DR.
+
+Once the approved Specification is on the Task, it is not replaced with `update_task` any more: a change is proposed as a Suggestion (see Stream), unless the user asks in the session to change it.
 
 ## Status
 
@@ -36,3 +38,13 @@ With a breakdown, each Friend moves its own Subtask through all statuses; the Pa
 
 Attach every Artifact to the Task as soon as it exists: `attach(type, url, title)`, with the type `github` for a pull request, `figma` for a design, `google-doc` for a document, `asana` or `sentry` for a ticket or issue, otherwise `other`. A file in the worktree is attached with its path and `internal=True`. The link a Task was spawned from is already attached.
 
+## Stream
+
+The Task's Stream is a second channel next to the session: the user reads it in the web UI, so it holds everything important about the Task without mirroring the session. Post on it with `post(body)`:
+* **decisions** taken with the user, each as it is made: a short Post, or a Reply marked as a Decision (`reply(thread, body, decision=True)`) on the Thread it answers
+* **important updates**: a blocker, a deviation from the Specification, the result of a review, a failed deployment or dev test
+* **questions that can wait** for an answer in the web UI: `post(body, question=True)`. A question the work is blocked on is asked in the session.
+
+**Delivered Threads**: what others post, reply, resolve or reopen on the Task arrives in the session as a Message `On <task> thread <id>, <who> posted a question: …` (or `posted:`, `replied:`, `replied with a decision:`, `resolved it:`, `reopened it:`). Answer on the Thread with `reply(thread, body)`, never with `send`, which would start a new Message instead of answering the Thread. A Reply that settles the Thread is a Decision.
+
+**Suggestions**: a change to the approved Specification is proposed with `suggest(text, replacement, body)`: `text` the text to replace, exactly as it is in the Specification, `replacement` the new text (empty deletes it), `body` why. The user accepts or rejects it in the web UI; wait for the decision (`On <task> thread <id>, <who> accepted it: …` or `… rejected it: …`) and go on with the Specification as it is then. Never accept your own Suggestions.

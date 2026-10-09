@@ -11,5 +11,4 @@ description: Review and test a change automatically until it is clean - draft PR
    * /acceptance_test, local
 3. Fix the findings worth fixing with /implementation. Copilot comments go through /review_comments without asking for approval.
 4. **Next rounds**: /two_axis_review and /acceptance_test again, without Copilot. Stop once a round finds nothing worth fixing, after 3 rounds at most.
-5. Push with /pull_request, mark the pull request ready, and sum up the important changes; whatever is still open goes to the user in /user_review.
-
+5. Push with /pull_request, mark the pull request ready, and sum up the important changes; whatever is still open goes to the user in /user_review. Post the review result on the Task (/task): what was fixed and what is still open.
