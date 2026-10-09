@@ -17,16 +17,16 @@ The conversation about the Task happens in the Agent's own session: present resu
 * **Delivered Threads** are answered with `reply`, never with `send` (see Stream).
 * Don't answer a Message just to acknowledge it.
 
-## Specification
+## TL;DR and Specification
 
-The Specification is markdown on the Task (`update_task(specification=…)`). Replace it as a whole; don't keep requirements anywhere else that might contradict it. It lives only on the Task, never in the repo.
+Both live on the Task, never in the repo, set with `update_task(tldr=…, specification=…)` or at `create_task(project, title, tldr, specification)`:
 
-1. **TL;DR** first: 2-4 sentences for human readers.
-2. **Specification** below it: the requirements, written for Agents.
+* **TL;DR**: 2-4 sentences for human readers, the `tldr` field of the Task; `task()` shows it above the Specification.
+* **Specification**: the requirements, written for Agents, as markdown. Replace it as a whole; don't keep requirements anywhere else that might contradict it.
 
 Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
-With a breakdown, each Subtask holds its own TL;DR and specification, and the Parent Task keeps only the TL;DR.
+With a breakdown, each Subtask holds its own TL;DR and Specification, and the Parent Task keeps only its TL;DR.
 
 Once the approved Specification is on the Task, it is not replaced with `update_task` any more: a change is proposed as a Suggestion (see Stream), unless the user asks in the session to change it.
 
@@ -85,7 +85,7 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 ## Handover
 
-An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
+An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, tldr, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
 
 ## Work in other Projects
 
