@@ -11,3 +11,5 @@ Entered from /develop, set the Task's status to `implementation` (/task); fixes 
 3. Check that the quality gates pass, then /commit.
 
 Tests run against the Agent's own database (/agent_database). The sub agents don't see this conversation: put everything they need into their prompts.
+
+When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/task), tell the user in the session and wait for the decision before going on.
