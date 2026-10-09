@@ -17,4 +17,4 @@ The Task's tier (/develop) decides the depth:
    * /acceptance_test, local
 3. Fix the findings worth fixing with /implementation. Copilot comments go through /review_comments without asking for approval.
 4. **Next rounds**: the Claude review and /acceptance_test again, without Copilot. Stop once a round finds nothing worth fixing, or after the tier's rounds.
-5. Push with /pull_request, mark the pull request ready, and sum up the important changes; whatever is still open goes to the user in /user_review. Post the review result on the Task (/task): what was fixed and what is still open.
+5. Push with /pull_request, mark the pull request ready, and sum up the important changes; whatever is still open goes to the user in /user_review. Post the review result on the Task (/atui): what was fixed and what is still open.

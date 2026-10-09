@@ -4,7 +4,7 @@ description: Implement an approved specification, or the fixes of a review, with
 ---
 # Implementation
 
-Entered from /develop, set the Task's status to `implementation` (/task); fixes from /review or /user_review keep the status. Follow the TDD rules.
+Entered from /develop, set the Task's status to `implementation` (/atui); fixes from /review or /user_review keep the status. Follow the TDD rules.
 
 Where it runs depends on the Task's tier (/develop):
 * `small`: in the main conversation; you write the tests and the code yourself, in the same steps.
@@ -19,4 +19,4 @@ With sub agents, the main conversation hands over and checks results; the sub ag
 
 Tests run against the Agent's own database (/agent_database). The sub agents don't see this conversation: put everything they need into their prompts.
 
-When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/task) and tell the user in the session.
+When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/atui) and tell the user in the session.

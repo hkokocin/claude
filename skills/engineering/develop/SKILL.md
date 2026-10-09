@@ -4,14 +4,14 @@ description: The dev process for a Task, from refinement to cleanup. The default
 ---
 # Develop
 
-Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /task describes: whatever matters beyond the session is posted on the Task as well as told in the session.
+Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: whatever matters beyond the session is posted on the Task as well as told in the session.
 
 1. **/refinement**: specification and tier, approved by the user. It may break the Task down into Subtasks.
 2. **/implementation**: TDD, where the tier says.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
 5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait.
-6. **/finish**: curl collection and Task status. A Friend then sends its Parent the Message its Instructions ask for; never before /finish, because the Parent may retire it as soon as the Message arrives.
+6. **/finish**: curl collection and Task status.
 7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well.
 
 Then wait until the user tells you that you may go.
@@ -31,14 +31,20 @@ Then wait until the user tells you that you may go.
 
 Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `opus`). Without a `tier` property (e.g. a session started by hand), use `large`.
 
-## Breakdown into Subtasks
+## Friends
 
-When /refinement broke the Task down, you don't run steps 2-6 yourself. For each Subtask, one at a time:
-1. Spawn a Friend on its Subtask, which /refinement created with the approved specification, and tell it in its Instructions where to start and what you need: `spawn("<project>/<number>", instructions="The Specification is approved; start /develop at /implementation. Once your change passed the dev test and you ran /finish, send me (<parent project>/<number>) one Message: the commit and anything I should know.")`. Where there is no dev test, say "is merged" instead. With the first Friend, set your own Task to `implementation` (/task).
-2. Wait for its Message that its change passed the dev test (or is merged, where there is none), then spawn the Friend for the next Subtask.
+`small` and `medium` Tasks run steps 2-7 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
 
-After the last Friend's change passed the dev test (or is merged), run /finish for the Parent Task, then /cleanup.
+**As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
+1. Create the Subtask with the approved Specification and its `tier` property (/refinement already did for a breakdown) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need (/atui). With the first Friend, set your own Task to `implementation`.
+2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
+3. Step 5, the dev test, for the merge commit. Then set the Subtask to `on-dev` and retire the Friend.
+4. With a breakdown, spawn the next Friend.
+
+After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.
+
+**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you tell your Parent once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
 
 ## Starting later
 
-An Agent starts where the Instructions in its Briefing say (e.g. a Friend's Subtask from a breakdown starts at /implementation); without Instructions it starts at /refinement.
+An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts at /implementation); without Instructions it starts at /refinement.
