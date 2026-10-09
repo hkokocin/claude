@@ -10,7 +10,7 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 2. **/implementation**: TDD, where the tier says.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
-5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait. Repos without a dev system (the user's own, owner `hkokocin`) have no dev test: the merge to main finishes the Task, which is then set to `done`.
+5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait. Where there is no dev system (/atui says which repos), there is no dev test: the merge to main finishes the Task, and whoever merged it sets `done`.
 6. **/finish**: curl collection and Task status.
 7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well.
 
@@ -38,7 +38,7 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
 1. Create the Subtask with the approved Specification and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need (/atui). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
-3. Step 5, the dev test, for the merge commit, where the Subtask's tier says. Then set the Subtask to `on-dev` (`done` where there is no dev system) and retire the Friend.
+3. Step 5, the dev test, for the merge commit, where the Subtask's tier says, then set the Subtask to `on-dev`; where there is no dev system, set it to `done` instead. Retire the Friend.
 4. With a breakdown, spawn the next Friend.
 
 After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.

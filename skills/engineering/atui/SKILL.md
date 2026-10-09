@@ -39,11 +39,11 @@ Set the Task's status at the start of each step (`update_task(status=…)`):
 | /refinement | `refinement` |
 | /implementation, /review | `implementation` |
 | /user_review | `review` |
-| /finish | `on-dev` |
+| /finish | `on-dev`, or `done` where there is no dev system |
 
 `done` is the user's call, except in repos without a dev system (the user's own, owner `hkokocin`): there the merge to main finishes the Task, and whoever merged it sets `done`. A handed-over Task is set to `cancelled` (see Handover).
 
-A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and to `on-dev` after the dev test (or `done` where there is no dev system) (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test.
+A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and, after the dev test, to `on-dev`, or to `done` where there is no dev system (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test, or to `done` where there is no dev system.
 
 ## Artifacts
 
