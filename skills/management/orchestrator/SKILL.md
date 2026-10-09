@@ -125,3 +125,7 @@ Run `atui up` yourself when:
 * a spawn or retire fails because the Daemon did not run it in time, or the user reports that Agents don't change their Activity (the Daemon isn't running).
 
 If `atui up` itself fails (e.g. Docker isn't running), tell the user what it printed.
+
+## Usage review
+
+When the line of the usage review trigger appears in your session ("The weekly usage runs ahead of the week: …"), create the Task "Usage review" in the claude Project and spawn an Agent on it with the Instructions "Start with /usage_review", as the line says.

@@ -11,7 +11,7 @@
 #   file-based (agents/, rules/, shared/, commands/, output-styles/)
 #                         leaf = a regular file
 #                         -> $TARGET/<coll>/<basename>   -> repo leaf file
-#   standalone (CLAUDE.md, settings.json, statusline.sh)
+#   standalone (CLAUDE.md, settings.json, statusline.sh, usage_review_trigger.sh)
 #                         -> $TARGET/<name>              -> repo file
 #
 # Entities inside a `deprecated` directory are not synced, and links that still
@@ -31,7 +31,7 @@ TARGET="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 
 DIR_COLLECTIONS="skills"
 FILE_COLLECTIONS="agents rules shared commands output-styles"
-STANDALONE="CLAUDE.md settings.json statusline.sh"
+STANDALONE="CLAUDE.md settings.json statusline.sh usage_review_trigger.sh"
 
 fail() { printf 'sync: %s\n' "$*" >&2; exit 1; }
 
