@@ -27,4 +27,4 @@ Show input, cache and output tokens apart; cache reads are cheap, the others are
 
 ## 3. Propose
 
-Propose changes to the tier table (/develop), the models or the skills that would have saved the most, each with the numbers behind it. Discuss them with the user one at a time. Every change the user agrees to becomes a Task in the `claude` Project (`create_task("claude", title, specification)`), with a self-contained Specification; you don't implement it yourself.
+Propose changes to the tier table (/develop), the models or the skills that would have saved the most, each with the numbers behind it. Discuss them with the user one at a time. Every change the user agrees to becomes a Task in the `claude` Project (`create_task("claude", title, tldr, specification)`), with a TL;DR and a self-contained Specification; you don't implement it yourself.

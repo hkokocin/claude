@@ -17,16 +17,16 @@ The conversation about the Task happens in the Agent's own session: present resu
 * **Delivered Threads** are answered with `reply`, never with `send` (see Stream).
 * Don't answer a Message just to acknowledge it.
 
-## Specification
+## TL;DR and Specification
 
-The Specification is markdown on the Task (`update_task(specification=…)`). Replace it as a whole; don't keep requirements anywhere else that might contradict it. It lives only on the Task, never in the repo.
+Both live on the Task, never in the repo, set with `update_task(tldr=…, specification=…)`, or when creating the Task with `create_task(project, title, tldr, specification)`:
 
-1. **TL;DR** first: 2-4 sentences for human readers.
-2. **Specification** below it: the requirements, written for Agents.
+* **TL;DR**: 2-4 sentences for human readers, the `tldr` field of the Task; `task()` shows it above the Specification.
+* **Specification**: the requirements, written for Agents, as markdown. Replace it as a whole; don't keep requirements anywhere else that might contradict it.
 
 Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
-With a breakdown, each Subtask holds its own TL;DR and specification, and the Parent Task keeps only the TL;DR.
+With a breakdown, each Subtask holds its own TL;DR and Specification, and the Parent Task keeps only its TL;DR.
 
 Once the approved Specification is on the Task, it is not replaced with `update_task` any more: a change is proposed as a Suggestion (see Stream), unless the user asks in the session to change it.
 
@@ -39,11 +39,11 @@ Set the Task's status at the start of each step (`update_task(status=…)`):
 | /refinement | `refinement` |
 | /implementation, /review | `implementation` |
 | /user_review | `review` |
-| /finish | `on-dev` |
+| /finish | `on-dev`, or `done` where there is no dev system |
 
-`done` is the user's call. A handed-over Task is set to `cancelled` (see Handover).
+`done` is the user's call, except in repos without a dev system (the user's own, owner `hkokocin`): there the merge to main finishes the Task, and whoever merged it sets `done`. A handed-over Task is set to `cancelled` (see Handover).
 
-A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and to `on-dev` after the dev test (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test.
+A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and, after the dev test, to `on-dev`, or to `done` where there is no dev system (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `on-dev` after the last Friend's change passed the dev test, or to `done` where there is no dev system.
 
 ## Artifacts
 
@@ -77,7 +77,7 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 **When**: `small` and `medium` Tasks are implemented in the Agent's own conversation. A `large` Task is always implemented by a Friend: one for the whole Task, or one per Subtask of a breakdown. Every Subtask is worked by a Friend. Work in another repo is always a Subtask (see Work in other Projects).
 
-**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and posts them on the Subtask as decisions. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then. The steps are in /develop.
+**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and posts them on the Subtask as decisions. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` (`done` where there is no dev system) and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then. The steps are in /develop.
 
 **The Friend** runs /implementation and /review, keeps the curl collection current, starts the app for the user review in its own tmux `app` window and sends its Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on (/develop). Then it waits for Messages from its Parent and answers them. It never talks to the user, and the user never talks to it.
 
@@ -85,7 +85,7 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 ## Handover
 
-An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
+An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, tldr, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
 
 ## Work in other Projects
 
