@@ -29,14 +29,14 @@ Then wait until the user tells you that you may go.
 | Review rounds | 1 | 2 at most | 3 at most |
 | Dev acceptance test | main conversation | Sonnet sub agent | Opus sub agent |
 
-Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `opus`). Without a `tier` property (e.g. a session started by hand), use `large`; without a Task there are no Friends, so it runs in your own conversation.
+Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `opus`). In a session started by hand, without a `tier` property, use `large`; an Agent whose Task has no `tier` asks for it (see Approval); without a Task there are no Friends, so it runs in your own conversation.
 
 ## Friends
 
 `small` and `medium` Tasks run steps 2-7 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
 
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
-1. Create the Subtask with the approved Specification and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need (/atui). With the first Friend, set your own Task to `implementation`.
+1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need (/atui). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
 3. Step 5, the dev test, for the merge commit, where the Subtask's tier says, then set the Subtask to `on-dev`; where there is no dev system, set it to `done` instead. Retire the Friend.
 4. With a breakdown, spawn the next Friend.
@@ -47,4 +47,10 @@ After the last Friend's change passed the dev test (or is merged, where there is
 
 ## Starting later
 
-An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts at /implementation); without Instructions it starts at /refinement.
+An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts at /implementation); without Instructions it starts at /refinement, or at /implementation when `task()` shows the Specification approved.
+
+## Approval
+
+An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for a decision on the Stream (`post(body, question=true)`) and waits.
+
+During the implementation a cleared approval (unapproved, or a new version of the Specification) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.
