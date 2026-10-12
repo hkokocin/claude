@@ -19,12 +19,12 @@ With sub agents, the main conversation hands over and checks results; the sub ag
 
 Tests run against the Agent's own database (/agent_database). The sub agents don't see this conversation: put everything they need into their prompts.
 
+When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/atui) and tell the user in the session.
+
 ## Fix rounds with sub agents
 
 Keep one `test-writer` and one `implement` sub agent per Task and continue them for the fixes of /review and /user_review, so they don't read everything again:
-* Note both agent ids in the conversation when you launch them, and on every hand-over the current HEAD sha for that agent.
+* Note both agent ids in the conversation when you launch them, and on every hand-over to an agent (launch or message) HEAD at that moment as its sha.
 * A fix round continues them with SendMessage (`to: "<agent id>"`) instead of a new launch: the `test-writer` gets the findings (and the Specification change, if any), the `implement` sub agent the failing tests and their output. The roles stay separate: the `test-writer` never writes production code, the `implement` sub agent never changes what a test checks.
-* Start every follow-up message with "Re-read `git diff <the sha noted for this agent>`", since the other agent changed files in between, and end it with "Report this round's result". A resumed agent may hand back its previous report: check the result yourself (tests, diff).
+* Start every follow-up message with "Re-read `git status` and `git diff <the sha noted for this agent>`" (new files are untracked), since the other agent changed files in between, and end it with "Report this round's result". A resumed agent may hand back its previous report: check the result yourself (tests, diff).
 * Launch fresh ones only when none exists for the Task (none launched in this session, or its id was lost to /clear, a restart or compaction) or the Specification was rewritten.
-
-When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/atui) and tell the user in the session.
