@@ -24,6 +24,8 @@ Both live on the Task, never in the repo, set with `update_task(tldr=…, specif
 * **TL;DR**: 2-4 sentences for human readers, the `tldr` field of the Task; `task()` shows it above the Specification.
 * **Specification**: the requirements, written for Agents, as markdown. Replace it as a whole; don't keep requirements anywhere else that might contradict it.
 
+The structure and format of the Specification are in /specification.
+
 Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
 With a breakdown, each Subtask holds its own TL;DR and Specification, and the Parent Task keeps only its TL;DR.
