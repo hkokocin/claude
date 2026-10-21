@@ -24,8 +24,6 @@ Package the current work into a commit, push it, and open a pull request.
 ## Step 3: Push & PR
 
 1. Push with `git push -u origin HEAD`.
-   - this triggers the project's quality gates (`pre-push` hook). Do NOT use `--no-verify`.
-   - the hook may run the full test suite. Set the command timeout to 5 minutes to avoid premature failure.
 2. Check if a PR already exists for this branch (`gh pr view`).
    - **PR exists**: report the PR URL. The push already updated it.
    - **No PR**: create one with `gh pr create`:
