@@ -126,7 +126,7 @@ Run `atui up` yourself when:
 * an atui tool or `atui` command fails with a connection error to `127.0.0.1:5318` (the Service is down): start it with `docker compose up -d` in the aservice checkout, then retry,
 * a spawn or retire fails because the Daemon did not run it in time, or the user reports that Agents don't change their Activity (the Daemon isn't running).
 
-If `atui up` itself fails (e.g. Docker isn't running), tell the user what it printed.
+If `atui up` or `docker compose up -d` fails (e.g. Docker isn't running), tell the user what it printed.
 
 ## Usage review
 
