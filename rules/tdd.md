@@ -23,6 +23,7 @@ IMPORTANT: Always follow Red-Green-Refactor. Tests come before implementation.
 - there should be no implementation details in test names
 - prefer one happy-path test that asserts the entire response model over many granular per-field tests
 - group tests in classes
+- verify a write (create, update, delete) directly against the database (e.g. SQLAlchemy `session.get` / `select` in a fresh session), never by reading back through the repository or service under test, which could cache or share the bug; its return value may still be asserted on its own
 
 ## Scope
 - don't test logging
