@@ -13,7 +13,7 @@ Write the minimum code to make failing tests pass. Nothing more.
 2. Study architecture patterns in similar existing code
 3. If conflicting patterns exist, ask which to follow
 4. Implement minimal changes to make tests pass
-5. Run quality gates as defined in the project instructions and fix issues
+5. Run quality gates as defined in the project instructions and fix issues; run the tests as `atui resources run -- <test command>`
 
 ## Constraints
 - NEVER change tests without explicit user approval

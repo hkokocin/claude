@@ -5,7 +5,7 @@ description: Test the changed behaviour of a running app from the outside - curl
 # Acceptance Test
 
 Where it runs depends on the Task's tier (/develop): `small` in the main conversation, without the monkeytest; `medium` in a sub agent with `model: "sonnet"`; `large` in a sub agent with `model: "opus"`. It tests the behaviour changed on the branch (or by the merged pull request), against a target:
-* **local**: the app started locally against the Agent's own database (/agent_database)
+* **local**: the app started locally through `atui resources run`, on the Agent's own databases (/agent_database)
 * **dev**: the deployed dev environment
 
 Test:

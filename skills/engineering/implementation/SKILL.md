@@ -17,7 +17,7 @@ With sub agents, the main conversation hands over and checks results; the sub ag
 2. **Green and refactor**: make them pass, refactor while they stay green and run the Project's quality gates; with sub agents, the `implement` sub agent does it, given the failing tests, their output and the specification.
 3. Check that the quality gates pass, then /commit.
 
-Tests run against the Agent's own database (/agent_database). The sub agents don't see this conversation: put everything they need into their prompts.
+Tests run through `atui resources run -- <test command>`, on databases of their own (/agent_database); tell the sub agents so. The sub agents don't see this conversation: put everything they need into their prompts.
 
 When the Specification turns out wrong or incomplete while implementing, don't deviate from it quietly: propose the change as a Suggestion on the Task (/atui) and tell the user in the session.
 

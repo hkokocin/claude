@@ -13,8 +13,7 @@ If not explicitely instructed otherwise
 * Fetch all remove changes.
 * Is the current branch up to date with main? If not do /merge
 * If testing locally
-  * Is the local database running? If not docker-compose-up it. If that is blocked ask me to do it for you.
-  * Is the local database up-to-date with existing migrations?
+  * Run the app through `atui resources run`, with the migrations in the same run (/agent_database); never the Project's own compose stack.
 * Ingest the api spec
 * if testing a feature branch let a subagent analyse the changes on the current branch and only return a list of affected endpoints
 

@@ -19,7 +19,7 @@ You receive two pieces of context in your prompt:
 1. Study existing test patterns in the project (test structure, naming, factories, fixtures).
 2. Write the tests exactly as planned, following existing project patterns.
    - If tests cannot run because the entities to test are missing, create dummy entities (e.g. functions with `pass`, or pydantic models without validation).
-3. Run the tests and confirm they fail FOR THE RIGHT REASON (missing implementation, not broken tests).
+3. Run the tests as `atui resources run -- <test command>` and confirm they fail FOR THE RIGHT REASON (missing implementation, not broken tests).
 4. If any test fails for the wrong reason (import error, syntax error), fix it and re-run.
 5. Report the test file paths and final test output.
 

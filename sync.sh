@@ -13,6 +13,8 @@
 #                         -> $TARGET/<coll>/<basename>   -> repo leaf file
 #   standalone (CLAUDE.md, settings.json, statusline.sh, usage_review_trigger.sh)
 #                         -> $TARGET/<name>              -> repo file
+#   atui       (atui/resources.toml)
+#                         -> $ATUI_CONFIG/resources.toml -> repo file
 #
 # Entities inside a `deprecated` directory are not synced, and links that still
 # point into one are pruned.
@@ -28,6 +30,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TARGET="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
+ATUI_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/atui"
 
 DIR_COLLECTIONS="skills"
 FILE_COLLECTIONS="agents rules shared commands output-styles"
@@ -105,6 +108,8 @@ printf 'sync: repo=%s target=%s\n' "$REPO" "$TARGET"
 for c in $DIR_COLLECTIONS;  do sync_dir_collection  "$c"; done
 for c in $FILE_COLLECTIONS; do sync_file_collection "$c"; done
 for s in $STANDALONE;       do sync_standalone      "$s"; done
+printf '[atui] (resources.toml)\n'
+link "$REPO/atui/resources.toml" "$ATUI_CONFIG/resources.toml"
 printf 'prune:\n'
 for c in $DIR_COLLECTIONS $FILE_COLLECTIONS; do prune_collection "$c"; done
 printf 'sync: done\n'
