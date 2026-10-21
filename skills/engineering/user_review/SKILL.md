@@ -9,7 +9,7 @@ Two cases: your own change, where you start the app yourself, or a Friend's chan
 1. Set the Task's status to `review` (/atui); for a Friend's change, its Subtask (`task="<project>/<number>"`).
 2. **Own change**: start the app locally on a free port. As an atui Agent, start it in a new window `app` of your tmux session (`tmux new-window -d -t "=$(tmux display-message -p '#S'):" -n app '<command>'`), so the user sees its logs.
    * backend: against the **dev** database; frontend: against the **dev** services
-   * a branch that brings migrations never touches dev: it runs against the Agent's own database (/agent_database), seeded with some data
+   * a branch that brings migrations never touches dev: it runs through `atui resources run -- <command>` on databases of its own (/agent_database), seeded with some data
 
    A Friend starts its app the same way, in its own session, before it sends its Message.
 3. Tell the user: the pull request, the URL, the curl file for backend work, what to try, what /review left open, and which database it runs on. For a Friend's change, relay its Message.

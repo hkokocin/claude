@@ -120,10 +120,10 @@ atui itself records Spawn (with the Parent) and Retire, messages a Friend's near
 
 ## Keeping atui running
 
-atui needs two things running in the background: the Service (Docker containers with the Service and its Postgres, at http://127.0.0.1:8000) and the Daemon (a user service that observes the Agents' Activity and runs the spawn, open and retire commands). `atui up` starts whatever of them isn't running, registers the `atui` MCP server with claude and is safe to run any time; `ccc` runs it on start.
+atui needs two things running in the background: the Service (Docker containers with the Service and its Postgres, aservice's compose project `atui`, at http://127.0.0.1:5318) and the Daemon (a user service that observes the Agents' Activity and runs the spawn, open and retire commands). `atui up` starts the Daemon, registers the `atui` MCP server with claude and is safe to run any time; `ccc` runs it on start. The Service's containers restart with Docker; `docker compose up -d` in the aservice checkout starts them.
 
 Run `atui up` yourself when:
-* an atui tool or `atui` command fails with a connection error to `127.0.0.1:8000` (the Service is down), then retry,
+* an atui tool or `atui` command fails with a connection error to `127.0.0.1:5318` (the Service is down): start it with `docker compose up -d` in the aservice checkout, then retry,
 * a spawn or retire fails because the Daemon did not run it in time, or the user reports that Agents don't change their Activity (the Daemon isn't running).
 
 If `atui up` itself fails (e.g. Docker isn't running), tell the user what it printed.

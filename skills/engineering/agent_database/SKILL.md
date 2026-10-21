@@ -1,16 +1,15 @@
 ---
 name: agent_database
-description: The Agent's own local database for automated tests, agentic tests and user reviews of branches with migrations. Used by the /develop steps and /cleanup.
+description: The Agent's own local databases for automated tests, agentic tests and user reviews - Leases of atui resources. Used by the /develop steps and /cleanup.
 ---
 # Agent Database
 
-Every Agent tests against a database of its own, so Agents of the same Project don't get in each other's way.
+Every test run and every app an Agent starts locally runs on databases of its own, so Agents, and the sub agents of one Agent, never get in each other's way. atui provides them (`atui resources`); the Project knows nothing about atui and only reads its environment.
 
-* **Name**: the Agent's name `<project>/<number>`, lowercase, with every character that is not a letter, digit or underscore replaced by `_` (Agent `agriverse/12` → `agriverse_12`). A session that is no atui Agent uses `<project>_<branch>`.
-* **Server**: reuse the Project's local server (Postgres, MongoDB, ...) if one is running; otherwise start it the way the Project's AGENTS.md or docker compose file describes. Never stop a server you reused.
-* **Create** the database if it doesn't exist, and run the migrations on it.
-* **Use it**: point the tests and the locally started app at it. How (env variable, settings) is Project-specific: follow the Project's AGENTS.md; if it doesn't say, find out, tell the user and add it to AGENTS.md.
-* **Seed** it with some realistic data before a user review on it; tests set up their own data.
-* **Other resources** that hold state (e.g. Redis keys, S3 mock buckets) follow the same naming when the Project needs them per Agent.
+* **Tests**: run the Project's test command as `atui resources run -- <test command>` (e.g. `atui resources run -- poetry run pytest`). A Project whose tests read a `.env` gets it sourced first, so atui's variables win: `set -a && source .env && set +a && atui resources run -- <test command>`. The run gets Leases of its own on shared local containers - a Postgres or Mongo database, a numbered Redis database, an s3mock bucket, named `<project>_<number>_<hex>` - and the Project's environment variables pointing at them. atui starts the containers on demand, on free ports, and releases the Leases afterwards, also when the run fails; the last release stops the container. Parallel sub agents each use their own `atui resources run`.
+* **App** for a user review or a local acceptance test: start it as `atui resources run -- <start command>`; its Leases live as long as the app. Migrate and seed it with some realistic data in the same run, e.g. `atui resources run -- sh -c '<migrate> && <seed> && <start>'`; tests set up their own data.
+* **Configuration**: the Project's Resources (compose services of the worktree, or images) and environment variables are in `~/.config/atui/resources.toml`, versioned in the claude repo (`atui/resources.toml`). A Project without a section: find out which compose services and environment variables its tests use, add the section, and tell the user.
+* Never run tests against a Project's own compose stack or a fixed local port: those clash with other Agents and the user's dev stacks.
+* `atui resources list` shows the running Resources and their Leases.
 
 The dev database and dev services are never migrated, seeded or cleaned up by an Agent.

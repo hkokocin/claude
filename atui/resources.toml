@@ -1,0 +1,66 @@
+# The Resources of each Project for `atui resources run` (atui's SETUP.md), linked to
+# ~/.config/atui/resources.toml by sync.sh. A section per Project, named like the directory of its
+# main checkout. The Projects' other variables (secrets, API keys) come from their own .env, sourced
+# before `atui resources run`.
+
+[atui.resources]
+postgres = { image = "postgres:18" }
+
+[atui.env]
+ATUI_TEST_DATABASE_URL = "postgresql+psycopg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+
+[aservice.resources]
+postgres = { service = "postgres" }
+
+[aservice.env]
+ASERVICE_TEST_DATABASE_URL = "postgresql+psycopg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+
+[awui.resources]
+postgres = { image = "postgres:18" }
+
+[awui.env]
+AWUI_TEST_DATABASE_URL = "postgresql://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+
+[agriverse.resources]
+postgres = { service = "db" }
+s3 = { service = "s3mock" }
+
+[agriverse.env]
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+SQLALCHEMY_DATABASE_MIGRATION_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+AWS_ENDPOINT_URL = "http://{s3.host}:{s3.port}"
+AWS_S3_BUCKET = "{s3.name}"
+
+# Redis is left out: the tests run with APE_CACHE_SETTINGS' NullCache.
+[ape.resources]
+postgres = { service = "lynx_db" }
+mongo = { service = "dingo_db" }
+
+[ape.env]
+LYNX_DB_URL = "postgresql://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+DINGO_DB_URL = "mongodb://{mongo.host}:{mongo.port}"
+APE_DB_NAME = "{mongo.name}"
+
+# Kafka is left out: the tests mock Faust's topics.
+[lizard.resources]
+postgres = { service = "db" }
+mongo = { service = "mongodb" }
+
+[lizard.env]
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+SQLALCHEMY_DATABASE_MIGRATION_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+TEST_DATABASE_NAME = "{postgres.name}"
+PLANTIX_MONGO_URL = "mongodb://{mongo.host}:{mongo.port}"
+PLANTIX_DB = "{mongo.name}"
+
+[dingo.resources]
+mongo = { service = "mongodb" }
+redis = { service = "redis" }
+s3 = { service = "s3mock" }
+
+[dingo.env]
+TEST_MONGODB_HOST = "mongodb://{mongo.host}:{mongo.port}"
+TEST_MONGODB_DATABASE = "{mongo.name}"
+REDIS_URL = "redis://{redis.host}:{redis.port}/{redis.database}"
+AWS_ENDPOINT_URL = "http://{s3.host}:{s3.port}"
+IMAGES_S3_BUCKET_NAME = "{s3.name}"
