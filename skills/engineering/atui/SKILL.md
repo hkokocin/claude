@@ -17,18 +17,18 @@ The conversation about the Task happens in the Agent's own session: present resu
 * **Delivered Threads** are answered with `reply`, never with `send` (see Stream).
 * Don't answer a Message just to acknowledge it.
 
-## TL;DR and Specification
+## Description and Specification
 
-Both live on the Task, never in the repo, set with `update_task(tldr=…, specification=…)`, or when creating the Task with `create_task(project, title, tldr, specification)`:
+Both live on the Task, never in the repo, set with `update_task(description=…, specification=…)`, or when creating the Task with `create_task(project, title, description, specification)`:
 
-* **TL;DR**: 2-4 sentences for human readers, the `tldr` field of the Task; `task()` shows it above the Specification.
+* **Description**: 2-4 sentences for human readers, the `description` field of the Task; `task()` shows it above the Specification.
 * **Specification**: the requirements, written for Agents, as markdown. Replace it as a whole; don't keep requirements anywhere else that might contradict it.
 
 The structure and format of the Specification are in /specification.
 
 Nothing else: where to start, what the Parent needs and that the Task was handed over go into the spawner's Instructions (/orchestrator).
 
-With a breakdown, each Subtask holds its own TL;DR and Specification, and the Parent Task keeps only its TL;DR.
+With a breakdown, each Subtask holds its own Description and Specification, and the Parent Task keeps only its Description.
 
 **Approval**: `task()` shows whether the Specification is approved. Once the user approved it in the session, record it with `approve()`, after the final Specification is on the Task; `unapprove()` withdraws it. The user may approve in the web UI instead; the Task's Agent then gets an approval Message, which counts the same. A Subtask written from an approved Specification is created approved: `create_task(..., approved=true)`; one created before the user approved is approved by its Parent afterwards with `approve(task="<project>/<number>")`. Any new version of the Specification clears the approval.
 
@@ -62,7 +62,7 @@ Whether a Task needs an Asana task depends on the owner of its repo (`gh repo vi
 
 A Task spawned from an Asana link already has it attached. Otherwise /refinement creates it before the Specification is approved, asking the user for the Asana project when it isn't clear, and attaches it with type `asana`.
 
-After approval, the Asana task's description holds the TL;DR and the Specification (`update_tasks`). Keep it in sync: an accepted Suggestion or a change the user asks for in the session is written to the Asana task as well.
+After approval, the Asana task's description holds the Task's Description and the Specification (`update_tasks`). Keep it in sync: an accepted Suggestion or a change the user asks for in the session is written to the Asana task as well.
 
 ## Stream
 
@@ -89,7 +89,7 @@ A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the P
 
 ## Handover
 
-An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, tldr, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
+An Agent that finds its Task belongs to another Project creates a Subtask there (`create_task(<other project>, title, description, specification)`) with its Task and everything it learned, spawns a Friend on it on Opus (`model="opus"`) with Instructions saying that the Task was handed over and where to start, sets its own Task to `cancelled` (`update_task(status="cancelled")`) and calls `request_retire()` without waiting for the user. A Friend that got a Task handed over is not bound by the Friends flow: it works with the user from /refinement on like any Agent, since its Parent is gone. If your own Task was handed over to you, ask the user before handing it over again.
 
 ## Work in other Projects
 
