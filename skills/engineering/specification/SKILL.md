@@ -4,7 +4,7 @@ description: The structure and formatting of an atui Task Specification - sectio
 ---
 # Specification
 
-How a Specification (/atui, TL;DR and Specification) is built and formatted. /refinement writes it from the decisions on the Stream.
+How a Specification (/atui, Description and Specification) is built and formatted. /refinement writes it from the decisions on the Stream.
 
 ## Principles
 
@@ -42,7 +42,7 @@ Then, in this order. Leave out sections that do not apply; never leave them empt
 12. `## Done`: the deliverables: code with tests, migration, curl collection, CONTEXT.md, the draft for the project's API documentation, anything else.
 13. `## Tier`: small | medium | large.
 
-A Subtask's TL;DR (2-4 sentences) ends with its position: "Fifth of nine subtasks of \"<parent title>\"."
+A Subtask's Description (2-4 sentences) ends with its position: "Fifth of nine subtasks of \"<parent title>\"."
 
 ## Layout of a parent Task with a breakdown
 
@@ -55,7 +55,7 @@ The parent's Specification is the shared design; it has no Goal, Tests or Done o
 5. `### <Policy>` sections for anything decided once for all Subtasks (migration policy, scoping rules).
 6. `### Conventions`: repo rules to follow (AGENTS.md), the API conventions of the project's API documentation, the formatting rules below, the deliverables every Subtask owes.
 
-The parent's TL;DR says that its Specification holds the shared design and lists the Subtasks in order.
+The parent's Description says that its Specification holds the shared design and lists the Subtasks in order.
 
 ## Formatting
 
