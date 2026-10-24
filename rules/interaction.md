@@ -16,3 +16,7 @@
 ## Effort and estimates
 * Never estimate work in human coding time (hours, days). An agent writes the code.
 * When asked "how complex" or "is it worth it", describe the complexity of the result: lines, moving parts, async steps, tests, risks. That is the only cost that matters.
+
+## Links
+* Whenever you mention an external resource (a pull request, issue, CI run, Asana task, Sentry issue, doc, an awui Task or Thread, …), give its URL as a markdown link so I can open it with one click. Never an ID or number alone.
+* If you don't know the URL, say so instead of guessing one.
