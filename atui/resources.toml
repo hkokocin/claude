@@ -64,3 +64,14 @@ TEST_MONGODB_DATABASE = "{mongo.name}"
 REDIS_URL = "redis://{redis.host}:{redis.port}/{redis.database}"
 AWS_ENDPOINT_URL = "http://{s3.host}:{s3.port}"
 IMAGES_S3_BUCKET_NAME = "{s3.name}"
+
+# The tests create their own databases (groundhog_test, groundhog_test_gw<n>) on this server; POSTGRES_USER needs CREATEDB.
+[groundhog.resources]
+postgres = { service = "db" }
+
+[groundhog.env]
+POSTGRES_HOST = "{postgres.host}"
+POSTGRES_PORT = "{postgres.port}"
+POSTGRES_USER = "postgres"
+POSTGRES_PASSWORD = "postgres"
+POSTGRES_DB = "{postgres.name}"
