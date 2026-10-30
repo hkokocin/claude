@@ -51,6 +51,6 @@ An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts
 
 ## Approval
 
-An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for a decision on the Stream (`post(body, question=true)`) and waits.
+An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
 
 During the implementation a cleared approval (unapproved, or a new version of the Specification) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.
