@@ -4,7 +4,7 @@ description: The dev process for a Task, from refinement to cleanup. The default
 ---
 # Develop
 
-Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: whatever matters beyond the session is posted on the Task as well as told in the session.
+Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: Questions, Decisions, results and important updates go on the Stream; the working conversation stays in the session.
 
 1. **/refinement**: specification and tier, approved by the user. It may break the Task down into Subtasks.
 2. **/implementation**: TDD, where the tier says.

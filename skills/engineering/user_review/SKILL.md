@@ -13,5 +13,5 @@ Two cases: your own change, where you start the app yourself, or a Friend's chan
 
    A Friend starts its app the same way, in its own session, before it sends its Message.
 3. Tell the user: the pull request, the URL, the curl file for backend work, what to try, what /review left open, and which database it runs on. For a Friend's change, relay its Message.
-4. Wait for the user's approval. Changes they ask for are posted on the Task as decisions (/atui) and go through /implementation and a local /acceptance_test again; for a Friend's change, send them to the Friend as a Message and post them on its Subtask, and tell the user once the Friend reports them pushed.
+4. Wait for the user's approval. Changes they ask for are recorded on the Stream (/atui, Stream) and go through /implementation and a local /acceptance_test again; for a Friend's change, send them to the Friend as a Message and post them on its Subtask, and tell the user once the Friend reports them pushed.
 5. On approval: /squash_and_merge_pr, then stop the app. A Friend's app stops when you retire the Friend after the dev test (/cleanup).
