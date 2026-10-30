@@ -4,7 +4,7 @@ description: The dev process for a Task, from refinement to cleanup. The default
 ---
 # Develop
 
-Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: whatever matters beyond the session is posted on the Task as well as told in the session.
+Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: Questions, Decisions, results and important updates go on the Stream; the working conversation stays in the session.
 
 1. **/refinement**: specification and tier, approved by the user. It may break the Task down into Subtasks.
 2. **/implementation**: TDD, where the tier says.
@@ -51,6 +51,6 @@ An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts
 
 ## Approval
 
-An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for a decision on the Stream (`post(body, question=true)`) and waits.
+An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
 
 During the implementation a cleared approval (unapproved, or a new version of the Specification) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.
