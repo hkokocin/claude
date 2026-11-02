@@ -1,10 +1,10 @@
 ---
 name: atui
-description: How an atui Agent works with its Task - the conversation, Messages, the Specification, the status per step, Artifacts, Asana, the Stream, Friends and Handover. Used by the /develop steps and by every Agent that spawns a Friend.
+description: How an atui Agent works with its Task - the conversation, Messages, the Specification, the status per step, Artifacts, the Stream, Friends and Handover. Used by the /develop steps and by every Agent that spawns a Friend.
 ---
 # atui
 
-The Task is the atui Task the Agent was spawned on (`task()` shows it, with its Branch, Properties, Artifacts and Subtasks); a Friend's Task is its Subtask. It goes through the tools of the `atui` MCP server, which default to the Agent's own Task. Without a Task (e.g. a session started by hand), skip everything here except Asana.
+The Task is the atui Task the Agent was spawned on (`task()` shows it, with its Branch, Properties, Artifacts and Subtasks); a Friend's Task is its Subtask. It goes through the tools of the `atui` MCP server, which default to the Agent's own Task. Without a Task (e.g. a session started by hand), skip everything here.
 
 Checking in, reporting Phases and asking to be retired are described in the Briefing and not repeated here.
 
@@ -52,17 +52,6 @@ A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `r
 ## Artifacts
 
 Attach every Artifact to the Task as soon as it exists: `attach(type, url, title)`, with the type `github` for a pull request, `figma` for a design, `google-doc` for a document, `asana` or `sentry` for a ticket or issue, otherwise `other`. A file in the worktree is attached with its path and `internal=True`. The link a Task was spawned from is already attached.
-
-## Asana
-
-Whether a Task needs an Asana task depends on the owner of its repo (`gh repo view --json owner -q .owner.login`):
-* `PEAT-AI`: an Asana task must exist, unless the user explicitly dismisses it.
-* `hkokocin`: no Asana task is ever created.
-* any other owner: ask the user.
-
-A Task spawned from an Asana link already has it attached. Otherwise /refinement creates it before the Specification is approved, asking the user for the Asana project when it isn't clear, and attaches it with type `asana`.
-
-After approval, the Asana task's description holds the Task's Description and the Specification (`update_tasks`). Keep it in sync: an accepted Suggestion or a change the user asks for in the session is written to the Asana task as well.
 
 ## Stream
 

@@ -15,7 +15,6 @@ Run a `/grilling` session, using the `/domain-modeling` skill. A simple Task may
 * Once the session is finished propose whether the adr is worth keeping or if the insights should be written to the Task's Specification only.
 * If we keep the adr then mention it in the Task's Specification.
 * Replace the Specification as a whole. Don't just add a note that might disagree with it or hide requirements.
-* **Asana**: check whether the Task needs an Asana task (/atui, Asana). If it does and none is attached, create it before the Specification is approved, asking the user for the Asana project when it isn't clear, and attach it with type `asana`. After approval, write the Description and the Specification into its description.
 
 ## Tier
 
