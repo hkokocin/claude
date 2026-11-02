@@ -10,7 +10,7 @@ Squash-merge the current branch's PR into main with a clean, release-note-qualit
 
 1. Run `gh pr view --json number,title,body,headRefName,baseRefName` to get the current branch's PR. If an argument is given, use that PR number.
 2. If no PR exists for this branch, stop and tell the user.
-3. The user must have approved the merge in this session. Their consent in the session is the review approval, as is their Choice of "Merge" on the merge Decision of an atui Agent (/user_review), which arrives in the session; a GitHub review approval is not required. Without consent in the session, stop and ask.
+3. The user must have approved the merge in this session. Their consent in the session is the review approval, as is their Choice of "Merge" on the merge Decision on an atui Task's Stream (/user_review), which arrives in the session; a GitHub review approval is not required. Without consent in the session, stop and ask.
 
 ## Step 2: Check Mergeability
 
