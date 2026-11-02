@@ -1,6 +1,7 @@
 # Asana Rules
 
-These rules speak of "the work": a piece of work with a description, a specification, artifacts and a status, e.g. an atui Task with its Description, Specification, Artifacts and status. They hold with or without atui. Use the Asana MCP tools (`update_tasks`, `add_comment`, `get_project` for sections and custom fields).
+* "The work" is a piece of work with a description, a specification, artifacts and a status, e.g. an atui Task with its Description, Specification, Artifacts and status. These rules hold with or without atui.
+* Use the Asana MCP tools: `update_tasks`, `add_comment`, `get_project` for sections and custom fields.
 
 ## Which repos
 
@@ -19,6 +20,6 @@ Whenever an Asana task exists for the work, whoever changes the work keeps the A
 * **Description**: the work's description and its approved specification, written as a whole after approval and again after every accepted change (e.g. an accepted Suggestion, or a change the user asks for in the session).
 * **Artifacts**: every pull request, design, document or issue attached to the work is added to the Asana task as a link (an attachment or a comment with the link), once.
 * **Status**: on every change of the work's status, the Asana task follows:
-  * it moves to the section, or sets the status field, of its Asana project that matches the status, when the project has one;
-  * it is marked completed once the work is done: `on-dev` counts as in review, `done` and `cancelled` as completed;
-  * a comment names each change.
+  * it moves to the section, or sets the status field, of its Asana project that matches the status, when the project has one; `on-dev` counts as in review;
+  * it is marked completed once the work is `done` or `cancelled`;
+  * a comment on the Asana task names each status change.
