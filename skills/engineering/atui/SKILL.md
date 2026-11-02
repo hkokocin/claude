@@ -56,7 +56,7 @@ Attach every Artifact to the Task as soon as it exists: `attach(type, url, title
 ## Stream
 
 The Task's Stream is where the user keeps the overview of the Task in the web UI, so it holds everything important about the Task without mirroring the session. Every Thread the Agent posts has a title: `post(body, title=…)`. On it go:
-* **Decisions** for the user: every choice is asked as a Decision, never as a plain question listing options. The body gives the context as you would give it in the CLI and the question; the options are each a title and its trade-off, with the recommendation marked: `post(body, title=…, question=True, options=[{"title": …, "detail": …, "recommended": True}, …], multiple=…)`, `multiple=True` when several may be chosen. The user chooses on the options; the Choice arrives as a delivered Thread (`chose:`). Nobody resolves a Decision, the Agent neither: choosing is its end. The user may choose again (Change); the newest Choice counts. The approval of a pull request is asked as one too: "Merge <PR title>?" (see Approval requests). A choice the user made in the session is recorded on its Decision with `choose(thread, options)`, the 0-based indexes of the chosen options. When the user settles a Decision in its Replies with an answer none of its options names, append that answer as an option with `edit(thread, options=[…])`, the whole list with its options unchanged and the new one last, shaped as in `post`, record it with `choose`, and say so in your Reply on that Thread.
+* **Decisions** for the user: every choice is asked as a Decision, never as a plain question listing options. The body gives the context as you would give it in the CLI and the question; the options are each a title and its trade-off, with the recommendation marked: `post(body, title=…, question=True, options=[{"title": …, "detail": …, "recommended": True}, …], multiple=…)`, `multiple=True` when several may be chosen. The user chooses on the options; the Choice arrives as a delivered Thread (`chose:`). Nobody resolves a Decision, the Agent neither: choosing is its end (only `github` resolves its approval requests). The user may choose again (Change); the newest Choice counts. The approval of a pull request is asked as one too: "Merge <PR title>?" (see Approval requests). A choice the user made in the session is recorded on its Decision with `choose(thread, options)`, the 0-based indexes of the chosen options. When the user settles a Decision in its Replies with an answer none of its options names, append that answer as an option with `edit(thread, options=[…])`, the whole list with its options unchanged and the new one last, shaped as in `post`, record it with `choose`, and say so in your Reply on that Thread.
 * **Questions** without options: `post(body, title=…, question=True)`. One the work is blocked on is also named in the session.
 * **Results**, and what was decided with the user, each as it is made: a short Post, or the Answer on the Thread it settles.
 * **Important updates**: a blocker, a deviation from the Specification, the result of a review, a failed deployment or dev test.
@@ -83,14 +83,14 @@ A message is due only when it carries something the user doesn't know yet: a res
 * a review or comment by someone else: take it up as /review_comments says while in /review or /user_review; otherwise tell the user in the session.
 * failed checks: look at the failing job and fix it while in /implementation, /review or /user_review; otherwise tell the user in the session.
 * green checks, a review requested, a push, an edit, ready for review: note it only.
-* merged or closed outside your session: tell the user in the session and go on as /finish says after a merge.
+* merged outside your session: tell the user in the session and go on as /finish says after a merge; closed without a merge: tell the user and wait.
 
-A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it.
+A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it. The approval request is a Decision from `github` too, but no event Thread (see Approval requests).
 
 **Approval requests**: aservice asks for the user's approval of the Task's pull request itself once it becomes ready for review: a Decision from `github`, "Merge <pull request title>?", with the options Merge and Request changes, on every Task the pull request is attached to. Its Choices and Replies reach the Task's Agent and its Parent's Agent too. Agents post no merge Decision of their own while aservice does (/user_review).
-* A Choice of Merge is the user's approval: the Agent that merges runs /squash_and_merge_pr: the Task's own Agent, or the Parent for a Friend's Subtask.
+* A Choice of Merge is the user's approval: the Agent that merges (the Task's own Agent, or the Parent for a Friend's Subtask) runs /squash_and_merge_pr.
 * Request changes: the user's Reply on it says what; it goes through /implementation as /user_review says, for a Friend's Subtask passed on by the Parent as a Message to the Friend (see Friends). Once the fix is pushed, say so on the request's Thread; the user chooses again on the same Decision.
-* Resolved by `github`: the pull request was merged or closed on GitHub; go on as /finish says after a merge.
+* Resolved by `github`: the pull request was merged or closed on GitHub; after a merge go on as /finish says, after a close tell the user and wait.
 
 ## Friends
 
