@@ -16,7 +16,7 @@ How a Specification (/atui, Description and Specification) is built and formatte
 
 ## Sources and Artifacts
 
-* Attach every source (document, sheet, PDF, ticket, design, issue) to the Task **and to every Subtask** as an Artifact (`attach`, /atui) before referencing it.
+* Attach every source (document, sheet, PDF, ticket, design, issue) to the Task **and to every Subtask** as an Artifact (`attach`, /atui) before referencing it. A Subtask's own pull request, ticket or design is no source: it stays on the Subtask (/atui, Artifacts).
 * In the text, a source is always a markdown link on a short noun: `[tracking sheet](url)`, `[Gherkin spec](url)`, `[Asana task](url)`. Never a bare URL, never an ID alone.
 * Requirements cite their place in the source: scenario id and page (`ADM-GEO-01..05, p. 3`), sheet tab, doc section.
 
