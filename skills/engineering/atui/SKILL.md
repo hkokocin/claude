@@ -114,7 +114,7 @@ A **Design** is a Task's design of one screen, named after it (e.g. "Task Page";
 | `proposed draft A.` / `published version 2.` | Nothing: another Agent's doing, e.g. a Parent's. |
 | `approved version 2.` / `unapproved version 2.` | Nothing beyond what /develop says about Approval. |
 
-**Changes on a Design's Threads**: a Thread on a Design or a Draft arrives as an ordinary delivered Thread (see Stream). Neither the Message nor `thread()` names the Design. So go by its content: a Post about how a screen looks is about that screen's Design. Where it is unclear which Design is meant, ask on the Thread. `task()` tells whether the Design is still drafting or accepted. Take it up as any Post:
+**Changes on a Design's Threads**: a Thread on a Design or a Draft arrives as an ordinary delivered Thread (see Stream). The Message doesn't name the Design; `thread(id)` does (`design: <name> · Draft <letter>`). `task()` tells whether the Design is still drafting or accepted. Take it up as any Post:
 * on an accepted Design, a change the user asks for is made in a new version: write it to a new file, starting from the current version (`design(design, version=<n>)`). Publish it and reply on the Thread with the version and what changed;
 * on a Draft, answer on its Thread. A Draft is never changed: the user replaces or explores it to get new ones, and what the Thread asks goes into those.
 
