@@ -38,7 +38,7 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
 1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need, and with the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
-3. Step 5, the dev test, for the merge commit, where the Subtask's tier says, then set the Subtask to `on-dev`; where there is no dev system, set it to `done` instead. Retire the Friend.
+3. Step 5, the dev test, for the merge commit, where the Subtask's tier says; once it passed, set the Subtask to `done` (right after the merge where there is no dev system). Retire the Friend.
 4. With a breakdown, spawn the next Friend.
 
 After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.
