@@ -33,14 +33,15 @@ Then, in this order. Leave out sections that do not apply; never leave them empt
 3. `## Requirements (customer)`: bullets; each cites its source; a bullet that overrides the source carries `Decision: …`.
 4. `## Data model`: `` ```python model `` block(s) for the ORM / pydantic shape, `` ```sql model `` block(s) with the DDL of every new or changed table; pure functions named with their signatures.
 5. `## Repository and service` or `## Behaviour`: what each layer does, numbered steps where order matters, what disappears.
-6. `## API` (or `## API changes`): one section per endpoint in the endpoint template below; a changed endpoint lists only what changes; the heading carries the section number of the project's API documentation when it has one (`### 14.1 Admin: Create Geography`), new numbers continue it.
-7. `## Errors`: new, changed and removed error codes with their status.
-8. `## Migration`: what the migration creates, backfills, drops; the policy that applies (e.g. NOT NULL from the start, destructive allowed).
-9. `## Tests`: unit, repository, API; factories; the one happy path that asserts the whole response.
-10. `## Glossary`: the CONTEXT.md terms added, reworded or retired.
-11. `## ADR`: the ADR to write, or "Not needed" with the reason.
-12. `## Done`: the deliverables: code with tests, migration, curl collection, CONTEXT.md, the draft for the project's API documentation, anything else.
-13. `## Tier`: small | medium | large.
+6. `## Designs`: on a Task that changes a UI, one bullet per Design (/atui, Designs): its name in bold and the screen it shows, e.g. `- **Task Page**: the Task with its Stream and Artifacts.` The approved versions are not named: a new version would otherwise change the Specification. A Subtask lists the Designs of its Parent that it builds, saying they are on the Parent.
+7. `## API` (or `## API changes`): one section per endpoint in the endpoint template below; a changed endpoint lists only what changes; the heading carries the section number of the project's API documentation when it has one (`### 14.1 Admin: Create Geography`), new numbers continue it.
+8. `## Errors`: new, changed and removed error codes with their status.
+9. `## Migration`: what the migration creates, backfills, drops; the policy that applies (e.g. NOT NULL from the start, destructive allowed).
+10. `## Tests`: unit, repository, API; factories; the one happy path that asserts the whole response.
+11. `## Glossary`: the CONTEXT.md terms added, reworded or retired.
+12. `## ADR`: the ADR to write, or "Not needed" with the reason.
+13. `## Done`: the deliverables: code with tests, migration, curl collection, CONTEXT.md, the draft for the project's API documentation, anything else.
+14. `## Tier`: small | medium | large.
 
 A Subtask's Description (2-4 sentences) ends with its position: "Fifth of nine subtasks of \"<parent title>\"."
 
@@ -52,8 +53,9 @@ The parent's Specification is the shared design; it has no Goal, Tests or Done o
 2. `### Why`: the customer's intent, the sources as markdown links, the reading rule (requirements over solutions), decisions made with the customer that override the sources.
 3. `### Subtasks (implementation and merge order)`: numbered list `<project>/<number> <title>`.
 4. One `###` section per shared concept: model blocks, rules in bullets.
-5. `### <Policy>` sections for anything decided once for all Subtasks (migration policy, scoping rules).
-6. `### Conventions`: repo rules to follow (AGENTS.md), the API conventions of the project's API documentation, the formatting rules below, the deliverables every Subtask owes.
+5. `### Designs`: the Designs of the Task, as in a Task's `## Designs`, each with the Subtask that builds it.
+6. `### <Policy>` sections for anything decided once for all Subtasks (migration policy, scoping rules).
+7. `### Conventions`: repo rules to follow (AGENTS.md), the API conventions of the project's API documentation, the formatting rules below, the deliverables every Subtask owes.
 
 The parent's Description says that its Specification holds the shared design and lists the Subtasks in order.
 
