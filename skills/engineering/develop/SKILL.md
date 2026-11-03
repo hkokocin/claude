@@ -6,7 +6,7 @@ description: The dev process for a Task, from refinement to cleanup. The default
 
 Run the steps in order. Each step is a skill; follow it, then go on with the next one. As an atui Agent, report each step as a Phase (`phase(phase="<step>")`) when you enter it. Keep the Task and its Stream up to date as /atui describes: Questions, Decisions, results and important updates go on the Stream; the working conversation stays in the session.
 
-1. **/refinement**: specification and tier, approved by the user. It may break the Task down into Subtasks.
+1. **/refinement**: specification, Designs (on a Task that changes a UI) and tier, approved by the user. It may break the Task down into Subtasks.
 2. **/implementation**: TDD, where the tier says.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
@@ -36,7 +36,7 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 `small` and `medium` Tasks run steps 2-7 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
 
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
-1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need (/atui). With the first Friend, set your own Task to `implementation`.
+1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need, and with the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
 3. Step 5, the dev test, for the merge commit, where the Subtask's tier says, then set the Subtask to `on-dev`; where there is no dev system, set it to `done` instead. Retire the Friend.
 4. With a breakdown, spawn the next Friend.
@@ -51,6 +51,10 @@ An Agent starts where the Instructions in its Briefing say (e.g. a Friend starts
 
 ## Approval
 
-An Agent starts /implementation once the Specification of its Task is approved: right after it recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
+An Agent starts /implementation once the Specification and every Design of its Task are approved.
+* **The Specification** is approved right after the Agent recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved.
+* **A Design** is approved right after the Agent recorded the user's approval itself with `approve_design(design)`, on its approval Message (`On <task> design "<name>", <who> approved version <n>.`), or when `task()` shows it "approved v<n>". A Friend's Designs are the ones named in its Instructions.
 
-During the implementation a cleared approval (unapproved, or a new version of the Specification) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.
+Until both are approved, the Agent stays in /refinement. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
+
+During the implementation a cleared approval (unapproved, or a new version of the Specification or of a Design) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.

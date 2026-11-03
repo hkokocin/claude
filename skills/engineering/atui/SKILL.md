@@ -92,13 +92,40 @@ A Friend tells its Parent instead of the user. Never reply or react to an event 
 * Request changes: the user's Reply on it says what; it goes through /implementation as /user_review says, for a Friend's Subtask passed on by the Parent as a Message to the Friend (see Friends). Once the fix is pushed, say so on the request's Thread; the user chooses again on the same Decision.
 * Resolved by `github`: the pull request was merged or closed on GitHub; after a merge go on as /finish says, after a close tell the user and wait.
 
+## Designs
+
+A **Design** is a Task's design of one screen, named after it (e.g. "Task Page"; unique per Task). It starts with up to three **Drafts**, letters A, B and C. A letter that was asked for and has no Draft yet is **pending**. Once the user accepts a Draft, it becomes **version 1**. The Agent publishes further versions, and the user approves one of them (**Approval**). /refinement proposes the Designs; `task()` shows each one with its Drafts and pending letters, or its version and Approval.
+
+* **Propose a Draft**: `propose_draft(design, letter, title, path)` creates the Design with its first Draft. `title` is a few words naming the idea of the layout. `path` is the absolute path of the HTML file. A variant of an explored Draft also gets `variant_of="<letter>"`. A letter that already has a current Draft, or a Design already accepted, is refused.
+* **Publish a version** of an accepted Design: `publish_design_version(design, path)`. A new version clears the Approval.
+* **Threads on a Design**: `post(body, title=…, design="<name>")`, or `draft="<letter>"` too, for a Thread on one Draft, e.g. what a Draft tries out.
+* **A Draft or version** is one self-contained HTML page, built with the project's design system: its colours, type, spacing and components, taken from the project's code (CSS variables, Tailwind config, component styles). The Service serves it with a sandbox CSP and no network. So the page inlines all of its CSS and scripts, and its fonts and images as `data:` URLs; anything it loads from elsewhere doesn't show. It holds realistic content from the domain, no lorem ipsum.
+* **Files**: write Drafts and versions to your scratchpad, never into the repo, one file per Draft or version, e.g. `<scratchpad>/designs/task-page/v2.html`.
+* **Read a Draft or version**: `design(design, version=<n>)` or `design(design, draft="<letter>")` saves its HTML to a file and returns the path, e.g. to start the next version from the current one. A Friend reads its Parent's Designs with `task="<parent project>/<number>"`.
+
+**Messages about a Design**: what the user does on a Design reaches you as `On <task> design "<name>", <who> <what>`. Answer each by doing it, not with a Message or a Reply:
+
+| `<what>` | What you do |
+|---|---|
+| `asked to replace draft B.` | Propose a new Draft for B with an idea of its own, distinct from the remaining Drafts and from the replaced one. |
+| `explored draft A: draft variants of it for B and C.` | Propose a variant of A for each pending letter, with `variant_of="A"`. Each keeps A's idea and varies it in its own way (e.g. density, navigation, emphasis). |
+| `reopened version 2: draft new drafts for B and C.` | The reopened version is now a Draft of its letter again. Treat it like a Replace of B and C: a new, distinct Draft for each pending letter. |
+| `accepted draft A; it is version 1.` | Nothing. |
+| `approved version 2.` / `unapproved version 2.` | Nothing beyond what /develop says about Approval. |
+
+**Changes on a Design's Threads**: a Thread on a Design or a Draft arrives as a delivered Thread (see Stream). The Message doesn't name the Design. When the Thread doesn't say which Design it is about either, ask on it. Take it up as any Post:
+* on an accepted Design, a change the user asks for is made in a new version: write it to a new file, starting from the current version (`design(design, version=<n>)`). Publish it and reply on the Thread with the version and what changed;
+* on a Draft, answer on its Thread. A Draft is never changed: the user replaces or explores it to get new ones, and what the Thread asks goes into those.
+
+**Approval** of a Design works as the Specification's does. The user approves its current version in the Design mode of the web UI, and you get `approved version N.`, which counts the same. Once the user approved it in the session, record it with `approve_design(design)`. `unapprove_design(design)` withdraws it. A new version clears the Approval.
+
 ## Friends
 
 A Friend is an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task (`create_task` and `spawn`, see Spawning an Agent in /orchestrator). The user never talks to a Friend; the Parent does.
 
 **When**: `small` and `medium` Tasks are implemented in the Agent's own conversation. A `large` Task is always implemented by a Friend: one for the whole Task, or one per Subtask of a breakdown. Every Subtask is worked by a Friend. Work in another repo is always a Subtask (see Work in other Projects).
 
-**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification, approved (`create_task(..., approved=true)`), and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and records them on the Subtask's Stream. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` (`done` where there is no dev system) and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then; a part the user locked in during the refinement gets its Friend right away (/refinement). The steps are in /develop.
+**The Parent** runs /refinement with the user, creates the Subtask(s) with the approved Specification, approved (`create_task(..., approved=true)`), and the `tier` property, and spawns the Friend on Opus with Instructions to start at /implementation and what it needs: `spawn("<project>/<number>", model="opus", instructions="The Specification is approved; start /develop at /implementation. Once /review is clean, send me (<parent project>/<number>) the one Message /develop describes, then wait for my Messages.")`. Where the Friend builds a screen of a Design, the Instructions also name each such Design and its approved version. The Designs stay on the Parent's Task, and the Friend reads them from there (see Designs). On the Friend's Message it sets the Subtask to `review` and presents the Message to the user in its own session (/user_review), relays the user's change requests to the Friend as Messages and records them on the Subtask's Stream. On the user's approval it squash-merges (/squash_and_merge_pr), runs the dev test, sets the Subtask to `on-dev` (`done` where there is no dev system) and retires the Friend; the Orchestrator removes the Friend's resources with /cleanup, as for every retired Agent. With a breakdown, the next Friend is spawned only then; a part the user locked in during the refinement gets its Friend right away (/refinement). The steps are in /develop.
 
 **The Friend** runs /implementation and /review, keeps the curl collection current, starts the app for the user review in its own tmux `app` window and sends its Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on (/develop). Then it waits for Messages from its Parent and answers them. It never talks to the user, and the user never talks to it.
 
