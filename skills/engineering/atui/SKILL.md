@@ -45,7 +45,7 @@ Set the Task's status at the start of each step (`update_task(status=…)`):
 | /user_review | `review` |
 | /finish | `done` |
 
-The Agent that finishes the work sets `done`, in every repo: after the dev test passed, or right after the merge in repos without a dev system (the user's own, owner `hkokocin`), where there is no dev test. A handed-over Task is set to `cancelled` (see Handover).
+The Agent that finishes the work sets `done`, in every repo, once the dev test passed. Repos without a dev system (the user's own, owner `hkokocin`) have no dev test: there it is set right after the merge. A handed-over Task is set to `cancelled` (see Handover).
 
 A Friend sets its Subtask to `implementation`; its Parent sets the Subtask to `review` when it presents the Friend's pull request and to `done` after the dev test passed, or after the merge where there is no dev system (`update_task(status=…, task="<project>/<number>")`). The Parent Task moves to `refinement`, to `implementation` when the first Friend starts, and to `done` after the last Friend's change passed the dev test, or after its merge where there is no dev system.
 

@@ -10,7 +10,7 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 2. **/implementation**: TDD, where the tier says.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
-5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait. Where there is no dev system (/atui says which repos), there is no dev test: the merge to main finishes the Task, and whoever merged it sets `done`.
+5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait. Where there is no dev system (/atui says which repos), there is no dev test: the merge to main finishes the Task, and /finish sets `done`.
 6. **/finish**: curl collection and Task status.
 7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well.
 
