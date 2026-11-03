@@ -114,7 +114,7 @@ You get that message for every retired Agent, whoever retired it: `atui message 
 All communication goes through the atui Service. Every Agent receives a Briefing with its Task and reports:
 1. **Check-in**, right after it starts: its directory and its Harness (e.g. `claude-code`). Until then the Agent List shows it as `checking in…`; an Agent that stays there did not read or follow its Briefing.
 2. **Phases**, whenever its work moves into another phase of its workflow.
-3. **Messages** to other Agents, only when its Task says to coordinate with or inform them, and to its Parent when its work is done or something the Parent depends on changes; its results and questions go to the user in its own session, never to you. And it asks to be retired once it was told it may go, or right away after a Handover.
+3. **Messages** to other Agents, only when its Task says to coordinate with or inform them, and to its Parent when its work is done or something the Parent depends on changes; its results and questions go to the user in its own session, never to you. It is retired when its Task moves to a closed status (`done`, or `cancelled` after a Handover), which it sets as its last act; before that it asks to be retired only once it was told it may go.
 
 atui itself records Spawn (with the Parent) and Retire, messages a Friend's nearest living ancestor Agent when the Friend is retired, and observes each Agent's Activity from its Harness.
 

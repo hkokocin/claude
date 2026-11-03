@@ -1,6 +1,6 @@
 ---
 name: develop
-description: The dev process for a Task, from refinement to cleanup. The default entry point of every atui Agent; also usable in a session started by hand.
+description: The dev process for a Task, from refinement to done. The default entry point of every atui Agent; also usable in a session started by hand.
 ---
 # Develop
 
@@ -10,11 +10,8 @@ Run the steps in order. Each step is a skill; follow it, then go on with the nex
 2. **/implementation**: TDD, where the tier says.
 3. **/review**: automated review and testing until clean.
 4. **/user_review**: the user tries it; merge on approval.
-5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, tell the user, post it on the Task and wait. Where there is no dev system (/atui says which repos), there is no dev test: the merge to main finishes the Task, and /finish sets `done`.
-6. **/finish**: curl collection and Task status.
-7. **/cleanup**: the Agent's local resources. The Orchestrator runs it for every retired Agent as well.
-
-Then wait until the user tells you that you may go.
+5. **dev test**: wait for the automatic deployment of the merge commit to dev (`gh run list --commit <sha>`, then `gh run watch`). Then run a /acceptance_test on dev, where the tier says. If the deployment or the test fails, ask it as a Decision on the Stream (/atui, Waiting on the user), e.g. "Dev test of <PR title> failed", with the options Fix it (back to /implementation) and Finish anyway, the recommendation marked, tell the user in the session and wait for the Choice. Where there is no dev system (/atui says which repos), there is no dev test: the merge to main finishes the Task, and /finish sets `done`.
+6. **/finish**: curl collection and Task status. Setting `done` is your last act: it retires you (/atui, Status), and the Orchestrator then runs /cleanup for your local resources.
 
 ## Tiers
 
@@ -33,17 +30,17 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 
 ## Friends
 
-`small` and `medium` Tasks run steps 2-7 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
+`small` and `medium` Tasks run steps 2-6 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
 
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
 1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need, and with the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. What the user does on the Subtask's Stream (e.g. a Choice on the merge Decision) reaches you relayed by the Friend: take it up as a delivered Thread (/atui, Friends, Relay). On approval, merge.
-3. Step 5, the dev test, for the merge commit, where the Subtask's tier says; once it passed, set the Subtask to `done` (right after the merge where there is no dev system). Retire the Friend.
+3. Step 5, the dev test, for the merge commit, where the Subtask's tier says; once it passed, set the Subtask to `done` (right after the merge where there is no dev system), which retires the Friend.
 4. With a breakdown, spawn the next Friend.
 
-After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.
+After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task.
 
-**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Relay every Message about what the user does on your Subtask to your Parent unchanged, except on `github`'s Threads (/atui, Friends, Relay). Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
+**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Relay every Message about what the user does on your Subtask to your Parent unchanged, except on `github`'s Threads (/atui, Friends, Relay). Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test nor /finish; your Parent setting your Subtask to `done` after the merge retires you.
 
 ## Starting later
 
