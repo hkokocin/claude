@@ -55,6 +55,6 @@ An Agent starts /implementation once the Specification and every Design of its T
 * **The Specification** is approved right after the Agent recorded the user's approval itself with `approve()`, on the approval Message (`On <task> thread <id>, <who> approved the Specification v<n>. …`), or when `task()` shows it approved.
 * **A Design** is approved right after the Agent recorded the user's approval itself with `approve_design(design)`, on its approval Message (`On <task> design "<name>", <who> approved version <n>.`), or when `task()` shows it "approved v<n>". A Friend's Designs are the ones named in its Instructions.
 
-Until both are approved, the Agent stays in /refinement. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
+Until both are approved, an Agent in /refinement stays there. A Friend is spawned only once they are. If it misses something to start, e.g. the tier, it asks for it on the Stream as a Decision with options (/atui, Stream), e.g. the three tiers with the one it recommends marked, and waits.
 
-During the implementation a cleared approval (unapproved, or a new version of the Specification or of a Design) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it.
+During the implementation a cleared approval (unapproved, or a new version of the Specification or of a Design) changes nothing: go on. A newer approved version may pause the work to adapt the plan to it. A reopened Design pauses the work on its screen until a version of it is approved again.

@@ -13,7 +13,7 @@ Where it runs depends on the Task's tier (/develop):
 
 With sub agents, the main conversation hands over and checks results; the sub agents write the code.
 
-**Designs**: where the Task has Designs, the UI builds the approved version of each one (`task()` shows which version is approved; a Friend's Designs are named in its Instructions). Save its HTML with `design(design, version=<n>)` (a Friend adds `task="<parent>"`, /atui, Designs), read it, and give the path to the sub agents. Build its layout, content and texts with the project's own components and styles. The CSS inlined in the HTML is a reference, not code to copy.
+**Designs**: where the Task has Designs, the UI builds the approved version of each one (`task()` shows which version is approved; a Friend's Designs are named in its Instructions and shown by `task(task="<parent project>/<number>")`). Save its HTML with `design(design, version=<n>)` (a Friend adds `task="<parent project>/<number>"`, /atui, Designs), read it, and give the path to the sub agents. Build its layout, content and texts with the project's own components and styles. The CSS inlined in the HTML is a reference, not code to copy.
 
 1. **Red**: write failing tests from the specification (or the findings to fix), next to the relevant existing tests, and confirm they fail for the right reason; with sub agents, the `test-writer` does it. A fix that changes no behaviour (e.g. a rename) needs no new test.
 2. **Green and refactor**: make them pass, refactor while they stay green and run the Project's quality gates; with sub agents, the `implement` sub agent does it, given the failing tests, their output and the specification.
