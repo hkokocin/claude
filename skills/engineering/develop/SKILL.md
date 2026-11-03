@@ -43,7 +43,7 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 
 After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.
 
-**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Then wait for your Parent's Messages, and relay to your Parent every Message about what the user does on your Subtask (/atui, Friends, Relay): a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
+**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Relay every Message about what the user does on your Subtask to your Parent unchanged, except on `github`'s Threads (/atui, Friends, Relay). Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
 
 ## Starting later
 

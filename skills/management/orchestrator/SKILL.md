@@ -34,7 +34,7 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 * **Phase**: where an Agent's Task stands in its workflow (refinement, implementation, ...), reported by the Agent.
 * **Activity**: whether an Agent is working or waiting on the user, and why (approval, question, done). atui observes it; nobody reports it.
 * **Parent**: who an Agent reports to: the living Agent of its Task's Parent Task, else the Orchestrator. It follows from the Task tree; once a Parent is retired, its place is taken by its nearest living ancestor.
-* **Friend**: an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task. The user never talks to a Friend: its Parent refines with the user, presents the Friend's pull request and merges it (/atui). Friends may spawn Friends of their own.
+* **Friend**: an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task. The user never talks to a Friend: its Parent refines with the user, presents the Friend's pull request and merges it; the Friend relays what the user does on its Subtask to the Parent (/atui). Friends may spawn Friends of their own.
 * **Handover**: an Agent that finds its Task belongs to another Project hands it to a Friend there and retires itself (/atui).
 * **Agent List**: the list next to you in the command center. It shows every Agent with Phase, Activity and times as a tree: Friends indented below their Parent, waiting Agents first on each level.
 
@@ -63,7 +63,7 @@ A Task that already exists (e.g. a Subtask from a breakdown, or a Task whose Age
 
 Work out project, title and Specification yourself, create the Task and spawn, then tell the user in one line what you spawned (`<project>/<number>`: what it's about). Only ask when you can't determine the Project, or when you can't read what the Task is about. A failing spawn returns the reason; report it instead of retrying blindly.
 
-The Orchestrator never asks for a report back. The Agent presents its results and asks its questions to the user in its own session and waits there; the user sees it waiting in the Agent List and reacts in that session. The conversation about a Task never runs through you. A Parent does get its Friend's one Message: the Friend sends it once its pull request is ready for the user review, and then only answers the Parent's Messages (/atui, Friends); the Orchestrator gets no such messages.
+The Orchestrator never asks for a report back. The Agent presents its results and asks its questions to the user in its own session and waits there; the user sees it waiting in the Agent List and reacts in that session. The conversation about a Task never runs through you. A Parent does get its Friend's one Message: the Friend sends it once its pull request is ready for the user review, and then only answers the Parent's Messages and relays what the user does on its Subtask (/atui, Friends, Relay); the Orchestrator gets no such messages.
 
 **Friends, Handover and work in other Projects** (Agents only): see /atui.
 
