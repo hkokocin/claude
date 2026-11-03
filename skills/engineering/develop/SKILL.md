@@ -37,13 +37,13 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 
 **As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
 1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need, and with the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.
-2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. On approval, merge.
+2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. What the user does on the Subtask's Stream (e.g. a Choice on the merge Decision) reaches you relayed by the Friend: take it up as a delivered Thread (/atui, Friends, Relay). On approval, merge.
 3. Step 5, the dev test, for the merge commit, where the Subtask's tier says; once it passed, set the Subtask to `done` (right after the merge where there is no dev system). Retire the Friend.
 4. With a breakdown, spawn the next Friend.
 
 After the last Friend's change passed the dev test (or is merged, where there is none), run /finish for your own Task, then /cleanup.
 
-**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
+**As a Friend**: run /implementation and /review, keep the curl collection current (/curl), start the app as /user_review describes, and send your Parent one Message: the pull request URL, the app URL, the curl file, what to try, what /review left open and which database the app runs on. Relay every Message about what the user does on your Subtask to your Parent unchanged, except on `github`'s Threads (/atui, Friends, Relay). Then wait for your Parent's Messages: a change request goes through /implementation and a local /acceptance_test, pushed with /pull_request, and you answer your Parent's Message once it is pushed. You never talk to the user, and run neither /user_review, the dev test, /finish nor /cleanup; your Parent retires you after the merge.
 
 ## Starting later
 
