@@ -32,7 +32,7 @@ Pass the model per launch with the Agent tool's `model` parameter (`sonnet`, `op
 
 `small` and `medium` Tasks run steps 2-6 in your own conversation. A `large` Task is implemented by Friends, as are all Subtasks of a breakdown (/atui, Friends):
 
-**As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time:
+**As the Parent**, after /refinement, for the whole Task or for each Subtask, one at a time (under Autopilot, as /autopilot changes it):
 1. Create the Subtask with the approved Specification, approved (`create_task(..., approved=true)`), and its `tier` property (/refinement does) and spawn the Friend on Opus, with Instructions to start at /implementation and what you need, and with the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.
 2. On the Friend's Message: /user_review, with the Friend's app; change requests go to the Friend as Messages. What the user does on the Subtask's Stream (e.g. a Choice on the merge Decision) reaches you relayed by the Friend: take it up as a delivered Thread (/atui, Friends, Relay). On approval, merge.
 3. Step 5, the dev test, for the merge commit, where the Subtask's tier says; once it passed, set the Subtask to `done` (right after the merge where there is no dev system), which retires the Friend.
