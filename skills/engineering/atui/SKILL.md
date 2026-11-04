@@ -96,8 +96,8 @@ A message is due only when it carries something the user doesn't know yet: a res
 
 A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it. The approval request is a Decision from `github` too, but no event Thread (see Approval requests).
 
-**System events**: an event Thread from `atui` tells that the machine went to sleep, woke up, went offline or came back online. Only waking up and coming back online are delivered: `On <task> thread <id>, atui posted: The machine woke up …` or `… is back online …`. Going to sleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
-* look again at what you were waiting on or working with, since GitHub events of the gap are lost: your pull request (reviews, comments, checks, merge state), CI runs and the deployment;
+**System events**: an event Thread from `atui` tells that the machine went to sleep, woke up, went offline or came back online. Only woke and online are delivered, as `On <task> thread <id>, atui posted: The machine woke up …` or `… is back online …`; asleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
+* look again at what you were waiting on or working with, since GitHub events of the gap are lost: the Task's pull request (reviews, comments, checks, merge state), CI runs and the deployment;
 * restart background waits that broke (`gh run watch`, Monitors);
 * then carry on with the step you were in.
 
