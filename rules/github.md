@@ -1,6 +1,6 @@
 # Github Rules
 
 * **ALWAYS** use the /squash_and_merge_pr skill when merging pull requests.
-* **NEVER** merge pull requests without the user's consent in the session.
+* **NEVER** merge pull requests without the user's consent in the session. Under Autopilot (/autopilot), the user's approval of the Parent Task's Specification is that consent for its Friends' pull requests.
 * The user's consent in the session is the review approval. A GitHub review approval is not required; merge with `gh pr merge --squash --admin`. Never use `--admin` to bypass CI checks.
 * When creating pull requests the description shall follow the instructions in ~/.claude/shared/commit_message.md

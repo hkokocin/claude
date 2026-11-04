@@ -4,6 +4,8 @@ description: Let the user try the change on a locally running instance and merge
 ---
 # User Review
 
+Under Autopilot (/autopilot), the Parent reviews and merges a Friend's change itself instead.
+
 Two cases: your own change, where you start the app yourself, or a Friend's change (/atui, Friends), where the Friend started the app and sent you its Message.
 
 1. Set the Task's status to `review` (/atui); for a Friend's change, its Subtask (`task="<project>/<number>"`).

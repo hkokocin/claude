@@ -97,7 +97,7 @@ A message is due only when it carries something the user doesn't know yet: a res
 A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it. The approval request is a Decision from `github` too, but no event Thread (see Approval requests).
 
 **Approval requests**: aservice asks for the user's approval of the Task's pull request itself once it becomes ready for review: a Decision from `github`, "Merge <pull request title>?", with the options Merge and Request changes, on every Task the pull request is attached to. Its Choices and Replies reach the Task's Agent and its Parent's Agent too; on a Friend's Subtask, what the user does on every other Thread reaches the Parent through the Friend's relay (see Friends, Relay). Agents post no merge Decision of their own while aservice does (/user_review).
-* A Choice of Merge is the user's approval: the Agent that merges (the Task's own Agent, or the Parent for a Friend's Subtask) runs /squash_and_merge_pr.
+* A Choice of Merge is the user's approval: the Agent that merges (the Task's own Agent, or the Parent for a Friend's Subtask) runs /squash_and_merge_pr. Under Autopilot the Parent chooses Merge on its Friends' requests itself (/autopilot).
 * Request changes: the user's Reply on it says what; it goes through /implementation as /user_review says, for a Friend's Subtask passed on by the Parent as a Message to the Friend (see Friends). Once the fix is pushed, say so on the request's Thread; the user chooses again on the same Decision.
 * Resolved by `github`: the pull request was merged or closed on GitHub; after a merge go on as /finish says, after a close tell the user and wait.
 
