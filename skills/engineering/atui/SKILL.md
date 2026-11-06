@@ -96,10 +96,12 @@ A message is due only when it carries something the user doesn't know yet: a res
 
 A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it. The approval request is a Decision from `github` too, but no event Thread (see Approval requests).
 
-**System events**: an event Thread from `atui` tells what happened to the machine or to the Agent's session: the machine went to sleep, woke up, went offline or came back online, or atui restored the session after the machine restarted. Only woke, online and restored are delivered, as `On <task> thread <id>, atui posted: The machine woke up …`, `… is back online …` or `… posted: atui restored the session of **<agent>** after the machine restarted. …`, restored only to the Agent that was restored; asleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
-* look again at what you were waiting on or working with, since GitHub events of the gap are lost: the Task's pull request (reviews, comments, checks, merge state), CI runs and the deployment; on restored also at your last reported Phase and your step, to tell whether you were interrupted;
+**System events**: an event Thread from `atui` tells what happened to the machine or to the Agent's session: the machine went to sleep, woke up, went offline or came back online, or atui restored the session after the machine restarted. Only woke, online and restored are delivered, as `On <task> thread <id>, atui posted: The machine woke up …`, `… is back online …` or `… atui posted: atui restored the session of **<agent>** after the machine restarted. …`. Restored goes only to the Agent that was restored; asleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
+* look again at what you were waiting on or working with, since GitHub events of the gap are lost: the Task's pull request (reviews, comments, checks, merge state), CI runs and the deployment;
 * restart background waits that broke (`gh run watch`, Monitors);
-* then carry on with the step you were in. On restored, only if you were interrupted: otherwise end your turn without a message. An Agent waiting on the user keeps waiting.
+* then carry on with the step you were in.
+
+On restored, first tell whether you were interrupted, from that same look and your last reported Phase and step; a background wait that broke counts. If you were, go on as above. Otherwise end your turn without a message; an Agent waiting on the user keeps waiting.
 
 Never reply or react to the event Thread, a restored one included. What you found that the user needs to know goes on the Stream as usual. A Friend handles it the same way and doesn't relay it, since it comes from `atui`.
 
