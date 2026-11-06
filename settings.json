@@ -113,7 +113,7 @@
     "asana@claude-plugins-official": true,
     "sentry@claude-plugins-official": true,
     "pyright-lsp@claude-plugins-official": true,
-    "github@claude-plugins-official": true,
+    "github@claude-plugins-official": false,
     "code-review@claude-plugins-official": true,
     "terraform-code-generation@hashicorp": false,
     "terraform-module-generation@hashicorp": false,
