@@ -96,12 +96,14 @@ A message is due only when it carries something the user doesn't know yet: a res
 
 A Friend tells its Parent instead of the user. Never reply or react to an event Thread just to acknowledge it. The approval request is a Decision from `github` too, but no event Thread (see Approval requests).
 
-**System events**: an event Thread from `atui` tells that the machine went to sleep, woke up, went offline or came back online. Only woke and online are delivered, as `On <task> thread <id>, atui posted: The machine woke up …` or `… is back online …`; asleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
+**System events**: an event Thread from `atui` tells what happened to the machine or to the Agent's session: the machine went to sleep, woke up, went offline or came back online, or atui restored the session after the machine restarted. Only woke, online and restored are delivered, as `On <task> thread <id>, atui posted: The machine woke up …`, `… is back online …` or `… atui posted: atui restored the session of **<agent>** after the machine restarted. …`. Restored goes only to the Agent that was restored; asleep and offline are on the Stream for the user only. On a delivered one, catch up and carry on:
 * look again at what you were waiting on or working with, since GitHub events of the gap are lost: the Task's pull request (reviews, comments, checks, merge state), CI runs and the deployment;
 * restart background waits that broke (`gh run watch`, Monitors);
 * then carry on with the step you were in.
 
-Never reply or react to the event Thread. What you found that the user needs to know goes on the Stream as usual. A Friend handles it the same way and doesn't relay it, since it comes from `atui`.
+On restored, first tell whether you were interrupted, from that same look and your last reported Phase and step; a background wait that broke counts. If you were, go on as above. Otherwise end your turn without a message; an Agent waiting on the user keeps waiting.
+
+Never reply or react to the event Thread, a restored one included. What you found that the user needs to know goes on the Stream as usual. A Friend handles it the same way and doesn't relay it, since it comes from `atui`.
 
 **Approval requests**: aservice asks for the user's approval of the Task's pull request itself once it becomes ready for review: a Decision from `github`, "Merge <pull request title>?", with the options Merge and Request changes, on every Task the pull request is attached to. Its Choices and Replies reach the Task's Agent and its Parent's Agent too; on a Friend's Subtask, what the user does on every other Thread reaches the Parent through the Friend's relay (see Friends, Relay). Agents post no merge Decision of their own while aservice does (/user_review).
 * A Choice of Merge is the user's approval: the Agent that merges (the Task's own Agent, or the Parent for a Friend's Subtask) runs /squash_and_merge_pr. Under Autopilot the Parent chooses Merge on its Friends' requests itself (/autopilot).
