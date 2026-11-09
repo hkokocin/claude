@@ -31,7 +31,7 @@ Agents are friends, pals, bros - never slaves or workers. We don't kill or termi
 * **Specification**: the Task's markdown with the requirements for Agents. The Agent reads it first.
 * **Instructions**: what the spawner hands the new Agent next to its Task at Spawn: where to start, what the spawner needs from it, or that the Task was handed over. Neither the requirements (Specification) nor how to work with atui (the /atui skill and the tool descriptions). The Briefing shows them, and the Spawn on the Task's stream records them.
 * **Artifact**: something attached to a Task, e.g. its pull request, a design or the ticket it came from.
-* **Phase**: where an Agent's Task stands in its workflow (refinement, implementation, ...), reported by the Agent.
+* **Phase**: what an Agent is doing on its Task, specific to it and never just its status or step, in at most 40 characters (e.g. "tests for the quick filters"), reported by the Agent.
 * **Activity**: whether an Agent is working or waiting on the user, and why (approval, question, done). atui observes it; nobody reports it.
 * **Parent**: who an Agent reports to: the living Agent of its Task's Parent Task, else the Orchestrator. It follows from the Task tree; once a Parent is retired, its place is taken by its nearest living ancestor.
 * **Friend**: an Agent spawned by another Agent, its Parent, on a Subtask of the Parent's Task. The user never talks to a Friend: its Parent refines with the user, presents the Friend's pull request and merges it; the Friend relays what the user does on its Subtask to the Parent (/atui). Friends may spawn Friends of their own.
@@ -107,13 +107,13 @@ You get that message for every retired Agent, whoever retired it: `atui message 
 
 ## How Agents are doing
 
-`agents()` returns the Agent List as text: each Agent with its Phase, Activity and times, e.g. `dingo/12 · Fix login redirect · implementation · waiting: approval · waiting 4m | worked 23m | open 1h 12m`, with Friends indented below their Parent. `working: friends` means the Agent is done but its Friends still work. `tasks()` lists the open Tasks with their living Agents, `task("<project>/<number>")` shows one with its Specification, Artifacts and Subtasks, `audit("<project>/<number>")` its history. Use them when the user asks how the Agents or Tasks are doing; don't poll.
+`agents()` returns the Agent List as text: each Agent with its Phase, Activity and times, e.g. `dingo/12 · Fix login redirect · PR #12 waits for your merge · waiting: approval · waiting 4m | worked 23m | open 1h 12m`, with Friends indented below their Parent. `working: friends` means the Agent is done but its Friends still work. `tasks()` lists the open Tasks with their living Agents, `task("<project>/<number>")` shows one with its Specification, Artifacts and Subtasks, `audit("<project>/<number>")` its history. Use them when the user asks how the Agents or Tasks are doing; don't poll.
 
 ## How Agents communicate
 
 All communication goes through the atui Service. Every Agent receives a Briefing with its Task and reports:
 1. **Check-in**, right after it starts: its directory and its Harness (e.g. `claude-code`). Until then the Agent List shows it as `checking in…`; an Agent that stays there did not read or follow its Briefing.
-2. **Phases**, whenever its work moves into another phase of its workflow.
+2. **Phases**: what it is doing on its Task, whenever that changes.
 3. **Messages** to other Agents, only when its Task says to coordinate with or inform them, and to its Parent when its work is done or something the Parent depends on changes; its results and questions go to the user in its own session, never to you. It is retired when its Task moves to a closed status (`done`, or `cancelled` after a Handover), which it sets as its last act; before that it asks to be retired only once it was told it may go.
 
 atui itself records Spawn (with the Parent) and Retire, messages a Friend's nearest living ancestor Agent when the Friend is retired, and observes each Agent's Activity from its Harness.

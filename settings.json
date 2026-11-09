@@ -80,7 +80,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'REMINDER: Follow TDD. If you are an atui Agent: before continuing, re-read your Task with task(), and the step and skill that your last reported Phase names, then continue at that step.'"
+            "command": "echo 'REMINDER: Follow TDD. If you are an atui Agent: before continuing, re-read your Task with task(), and the skill of the step you were in (the status of your Task and your last reported Phase tell which), then continue at that step.'"
           }
         ]
       },
