@@ -101,7 +101,7 @@ A Friend tells its Parent instead of the user. Never reply or react to an event 
 * restart background waits that broke (`gh run watch`, Monitors);
 * then carry on with the step you were in.
 
-On restored, first tell whether you were interrupted, from that same look and your last reported Phase and step; a background wait that broke counts. If you were, go on as above. Otherwise end your turn without a message; an Agent waiting on the user keeps waiting.
+On restored, first tell whether you were interrupted, from that same look, your last reported Phase and the status of your Task; a background wait that broke counts. If you were, go on as above. Otherwise end your turn without a message; an Agent waiting on the user keeps waiting.
 
 Never reply or react to the event Thread, a restored one included. What you found that the user needs to know goes on the Stream as usual. A Friend handles it the same way and doesn't relay it, since it comes from `atui`.
 
