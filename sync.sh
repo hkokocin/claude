@@ -15,11 +15,11 @@
 #                         -> $TARGET/<name>              -> repo file
 #   standalone (settings.json, statusline.sh, usage_review_trigger.sh)
 #                         -> $TARGET/<name>              -> repo file
+#   atui       (atui/resources.toml)
+#                         -> $ATUI_CONFIG/resources.toml -> repo file
 #
 # The repo root's own CLAUDE.md and AGENTS.md are this repo's project
 # instructions and are not synced.
-#   atui       (atui/resources.toml)
-#                         -> $ATUI_CONFIG/resources.toml -> repo file
 #
 # Entities inside a `deprecated` directory are not synced, and links that still
 # point into one are pruned.

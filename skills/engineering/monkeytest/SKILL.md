@@ -1,6 +1,6 @@
 ---
 name: monkeytest
-description: Monkeytest the given service
+description: Use to explore a running service like an unpredictable user - random and edge-case inputs on the changed endpoints or screens - to find crashes and wrong behaviour that the known use cases miss.
 ---
 # Monkeytest
 

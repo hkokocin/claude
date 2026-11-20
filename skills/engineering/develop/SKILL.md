@@ -1,6 +1,6 @@
 ---
 name: develop
-description: The dev process for a Task, from refinement to done. The default entry point of every atui Agent; also usable in a session started by hand.
+description: The dev process for a Task, from refinement to done: which step comes next, the tiers, and how a Parent works with its Friends. Use as the entry point of every atui Agent, and in a session started by hand when the user wants a change built end to end.
 ---
 # Develop
 

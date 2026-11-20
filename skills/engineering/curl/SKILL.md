@@ -1,6 +1,6 @@
 ---
 name: curl
-description: Update the curl collection for this project so it can be used for testing and debugging the API changes made on the current branch.
+description: Use when a branch changes or adds API endpoints: updates the project's curl collection so the changes can be tried and debugged by hand.
 ---
 # Curl Collection
 

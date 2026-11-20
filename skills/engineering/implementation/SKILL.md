@@ -1,6 +1,6 @@
 ---
 name: implementation
-description: Implement an approved specification, or the fixes of a review, with TDD - in the main conversation or in two sub agents, depending on the Task's tier.
+description: Use when an approved Specification, or the findings of a review, are to be built: TDD in the main conversation or in the test-writer and implement sub agents, depending on the Task's tier.
 ---
 # Implementation
 

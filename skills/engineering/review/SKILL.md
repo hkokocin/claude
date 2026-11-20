@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review and test a change automatically until it is clean - draft PR, Claude reviews and acceptance tests, a Copilot review for large Tasks, as deep and as many rounds as the Task's tier says.
+description: Use when a change is implemented and needs automated review and testing before the user sees it: draft PR, Claude reviews and acceptance tests, a Copilot review for large Tasks, as deep and as many rounds as the Task's tier says.
 ---
 # Review
 

@@ -83,3 +83,83 @@ Status: 422 — <ERROR_CODE> (<when>)
 * Every status is its own paragraph line, `Status: <code> — <code or reason> (<when>)`, never a bullet; two 422s with different codes are two lines. An error carrying `details` gets its example under its own status line.
 * An object defined in another section is referenced on the 200 line: `Status: 200 — Object of 14.1.` or ``Status: 200 — `data` is a list of the object of 14.1.``
 * Removed errors: `Removed: 422 — <ERROR_CODE>`.
+
+### Reference examples
+
+Written by the user (atui Task agriverse/13). A create endpoint:
+
+````
+### 14.1 Admin: Create Geography
+Role: CATALOG, ADMIN
+
+Creates a geography on one of the three tiers.
+#### Request
+```http
+POST /admin/v1/geographies
+```
+```json
+{
+  "name": "Lucknow",
+  "tier": "REGION",
+  "parent_id": "geo-uuid-up"
+}
+```
+- `parent_id` is required for REGION and TERRITORY and must be a geography of the tier directly above; forbidden for STATE.
+- `minimum_order_value` is optional and allowed for STATE only.
+#### Response
+
+Status: 200
+```json
+{
+  "data": {
+    "id": "geo-uuid-lko",
+    "name": "Lucknow",
+    "tier": "REGION",
+    "parent_id": "geo-uuid-up",
+    "path": [
+      {
+        "id": "geo-uuid-up",
+        "name": "Uttar Pradesh",
+        "tier": "STATE"
+      }
+    ],
+    "created_at": "2026-10-20T10:00:00Z",
+    "updated_at": "2026-10-20T10:00:00Z"
+  }
+}
+```
+- `path` lists the ancestors from the state down; empty for a STATE.
+- `minimum_order_value` is omitted when null.
+
+Status: 404 — parent not found
+
+Status: 409 — GEOGRAPHY_NAME_EXISTS ("'Lucknow' already exists under 'Uttar Pradesh'")
+
+Status: 422 — GEOGRAPHY_PARENT_TIER_MISMATCH (parent missing, not of the tier directly above, or given for a STATE)
+
+Status: 422 — MINIMUM_ORDER_VALUE_NOT_ALLOWED (set on a non-STATE)
+````
+
+A list endpoint:
+
+````
+### 14.2 Admin: List Geographies
+Role: ADMIN, CATALOG, ORDERS, FINANCE, HUB, MARKETING
+
+Flat list sorted by name ascending, then id; the admin UI builds the tree from `parent_id`.
+#### Request
+```http
+GET /admin/v1/geographies
+```
+Query parameters:
+- `tier` (optional)
+- `parent_id` (optional)
+- `query` (optional, search by name)
+- `page`, `page_size`
+#### Response
+Headers:
+- Total-Count
+- Total-Pages
+
+Status: 200 — `data` is a list of the object of 14.1.
+````

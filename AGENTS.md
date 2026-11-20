@@ -13,7 +13,7 @@ To try a config without touching the live one, run `sync.sh` with `CLAUDE_CONFIG
 ## Committing
 
 - At the start of a task (also after /clear): if `git status` shows uncommitted changes, offer a commit message for them before going on.
-- When a change is done, or the user sounds satisfied with it ("looks good", "perfect"), commit it without asking and show the commit message.
+- When a change is done, or the user sounds satisfied with it ("looks good", "perfect"), commit it without asking and show the commit message. Commit messages follow `shared/commit_message.md`.
 
 ## Expected setup
 
