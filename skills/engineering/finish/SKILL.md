@@ -1,8 +1,10 @@
 ---
 name: finish
-description: Wrap up a merged change - curl collection and Task status.
+description: Use once a change is merged and passed the dev test, where there is one, to update the curl collection and set the Task done.
 ---
 # Finish
 
+When it starts: /develop, Steps.
+
 1. Backend work: make the curl collection match the merged endpoints (/curl).
-2. Last: set the Task's status to `done` (/atui): after the dev test passed, or after the merge where there is no dev system. A Parent Task only moves once its last Friend's change passed the dev test (or is merged, where there is none). Everything else comes before it: `done` retires you (/atui, Status).
+2. Last, once everything else is done and pushed: set the Task to `done`; it retires you (/atui, Status).

@@ -1,6 +1,6 @@
 ---
 name: excalidraw
-description: Visualise the components involved in the current task as an Excalidraw diagram. Pass a description of what to diagram or omit for auto-detection.
+description: Use when the user wants the components of the current task drawn as an Excalidraw diagram; takes an optional subject.
 ---
 # Excalidraw Diagram
 
@@ -9,7 +9,7 @@ Generate an Excalidraw diagram that visualises the architecture or components re
 ## Steps
 
 1. **Determine scope** -- Use `$ARGUMENTS` if provided, otherwise infer from recent conversation context (files touched, components discussed).
-2. **Explore** -- Read the relevant source files to understand relationships (imports, calls, data flow). Keep exploration focused.
+2. **Explore** -- Read the relevant source files for their relationships (imports, calls, data flow), focused.
 3. **Design the diagram** -- Decide on layout, shapes, labels, and arrows. Prefer left-to-right or top-to-bottom flow. Group related elements.
 4. **Generate** -- Write a valid `.excalidraw` JSON file to the project root (or a path specified in `$ARGUMENTS`). Follow the format spec in `@excalidraw_format.md`.
 5. **Report** -- Print the file path and a one-line summary of what was diagrammed.
@@ -35,7 +35,7 @@ All elements use these defaults unless overridden:
 
 ### Sizing shapes to fit text
 
-Excalidraw has only 5px built-in padding, so the shape must be sized large enough or text visibly clips at the edge. Use these formulas:
+Excalidraw has only 5px built-in padding, so size shapes with these formulas or text clips:
 
 **Estimate text width** (Helvetica, `fontSize: 20`):
 ```
@@ -43,7 +43,7 @@ char_width ≈ fontSize * 0.6        # 12px per char at fontSize 20
 text_width ≈ longest_line_chars * char_width
 ```
 
-Use `0.6` as a safe multiplier for mixed case. For ALL CAPS or wide characters, bump to `0.7`. For multi-line text, use the longest line's character count.
+Use `0.6` for mixed case, `0.7` for ALL CAPS or wide characters; for multi-line text, the longest line.
 
 **Shape dimensions**:
 ```
@@ -58,28 +58,28 @@ shape_height = line_count * fontSize * 1.25 + 40   # 20px padding top/bottom
 | `"drop_invalid_header_fields = true"` | 33 | 396 | 456 |
 | `"CURRENT — Falcon Dedicated ALB"` | 30 | 360 | 420 |
 
-**Ellipses and diamonds** need extra space because the inscribed text rectangle is smaller than the bounding box. Multiply **both width and height** of the rectangle formulas above by:
+**Ellipses and diamonds**: multiply **both width and height** of the rectangle formulas by:
 - **1.42** (≈ √2) for ellipses
 - **2.0** for diamonds
 
 ## Layout Discipline
 
-Poor layout is the main failure mode. Stick to these rules:
+Poor layout is the main failure mode:
 
-- **Work on a grid**. Place shapes at column/row intersections with consistent spacing (e.g. columns at x = 80, 340, 600, 860; rows at y = 80, 220, 360, 500).
-- **Minimum gap between any two shapes: 60px** (measured edge-to-edge, not centre-to-centre). Less than that and the rendered image looks cramped.
-- **Never place two shapes in overlapping bounding boxes**. Compute each shape's rectangle `[x, y, x+width, y+height]` and verify no two rectangles intersect.
-- **Arrow labels need space**. A label on an arrow is rendered as a small text block near the arrow's midpoint. If there's a shape near the midpoint, the label will sit on top of it. Either lengthen the arrow or move the label text into the source/target shape instead.
-- **Grouped regions**: if using a large transparent rectangle to visually group elements, make sure its bounds fully contain the group and don't clip other unrelated shapes.
+- **Work on a grid**: shapes at column/row intersections with consistent spacing (e.g. columns at x = 80, 340, 600, 860; rows at y = 80, 220, 360, 500).
+- **Minimum gap between any two shapes: 60px**, edge to edge.
+- **No overlapping bounding boxes**: check that no two rectangles `[x, y, x+width, y+height]` intersect.
+- **Arrow labels need space**: a label sits near the arrow's midpoint, on top of any shape there. Lengthen the arrow or move the label into the source/target shape.
+- **Grouped regions**: a transparent rectangle grouping elements fully contains the group and clips no unrelated shape.
 
 ## Constraints
 
-- Output MUST be a valid `.excalidraw` file that opens in https://excalidraw.com or the VS Code extension.
+- The output is a valid `.excalidraw` file that opens in https://excalidraw.com or the VS Code extension.
 - Use simple shapes: rectangles for services/modules, diamonds for decisions, ellipses for data stores, arrows for relationships.
-- Every shape MUST have a bound text label.
+- Every shape has a bound text label.
 - Keep diagrams readable: max ~15 elements, font size >= 16.
 - Use colour sparingly to group related elements (pick from the default palette below).
-- Arrow labels should describe the relationship (e.g. "calls", "reads from", "publishes to"). Keep them short (<= 15 chars) — long labels are a strong signal to restructure instead.
+- Arrow labels describe the relationship (e.g. "calls", "reads from", "publishes to") in at most 15 chars; a longer one calls for restructuring.
 
 ## Default Colour Palette
 
@@ -93,7 +93,7 @@ Use these for `backgroundColor` when grouping:
 
 ## Common Pitfalls
 
-Before finalizing the diagram, walk through this list mentally:
+Check before finishing:
 
 | Pitfall | Fix |
 |---|---|
@@ -106,7 +106,7 @@ Before finalizing the diagram, walk through this list mentally:
 
 ## Updating the Format Spec
 
-The format spec in `excalidraw_format.md` is a local snapshot. If diagrams fail to load, fetch the latest types from these URLs:
+`excalidraw_format.md` is a local snapshot. If diagrams fail to load, fetch the latest types from:
 - `https://raw.githubusercontent.com/excalidraw/excalidraw/master/packages/element/src/types.ts`
 - `https://raw.githubusercontent.com/excalidraw/excalidraw/master/packages/common/src/constants.ts`
 - `https://raw.githubusercontent.com/excalidraw/excalidraw/master/packages/excalidraw/data/types.ts`

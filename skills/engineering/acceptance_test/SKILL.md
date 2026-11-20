@@ -1,17 +1,21 @@
 ---
 name: acceptance_test
-description: Test the changed behaviour of a running app from the outside - curl for backend, a real browser for frontend, the known use cases and a monkeytest. Runs locally in /review and on dev after the deployment.
+description: Use in /review locally and on dev after a deployment, to test the changed behaviour of the running app from the outside.
 ---
 # Acceptance Test
 
-Where it runs depends on the Task's tier (/develop): `small` in the main conversation, without the monkeytest; `medium` in a sub agent with `model: "sonnet"`; `large` in a sub agent with `model: "opus"`. It tests the behaviour changed on the branch (or by the merged pull request), against a target:
-* **local**: the app started locally through `atui resources run`, on the Agent's own databases (/agent_database)
-* **dev**: the deployed dev environment
+Test the behaviour changed on the branch (or by the merged pull request) the way a client sees it.
+
+Where it runs depends on the Task's tier (/develop): `small` in the main conversation, without the monkeytest; `medium` in a sub agent on `sonnet`; `large` in a sub agent on `opus`.
+
+Targets:
+* **local**: the app started on the Agent's own databases (/agent_database).
+* **dev**: the deployed dev environment. No monkeytest there, others use its data; remove any data the test creates.
 
 Test:
-* backend: with curl; write the requests into the collection with /curl as you go
-* frontend: in a real browser (chrome-devtools)
+* backend with curl, writing the requests into the collection with /curl as you go
+* frontend in a real browser (chrome-devtools)
 * the known use cases from the specification
-* local only, not for `small`: a /monkeytest of the changed endpoints. On dev it is skipped, since it would leave junk in data others use; data the test creates on dev is removed again.
+* local, not `small`: a /monkeytest of the changed endpoints
 
 Report what failed, with the request or steps to reproduce it.

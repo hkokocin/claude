@@ -1,33 +1,13 @@
 ---
 name: merge
-description: Merge the latest main into the current branch. Analyses conflicts, groups them by feature, presents resolution suggestions, then executes after approval.
+description: Use when the current branch is behind main or its pull request has conflicts, to merge main with approved resolutions.
 ---
 # Merge Main
 
-Merge the latest version of `origin/main` into the current feature branch. Refuse to run on main.
+Merge the latest `origin/main` into the current feature branch, never on main itself. Merge only: no rebase or force-push.
 
-## Workflow
+1. **Merge.** Without conflicts, commit the merge and stop; no test run is needed.
+2. **Analyse conflicts.** Group the conflicting hunks by logical change (the same feature, refactor or fix, across files) and name each group by its domain concept (e.g. "User authentication rework"), not by file or line. Recommend a resolution per group (ours, theirs or a combination) with the reason in domain language. Wait for the user's approval.
+3. **Finalise.** Resolve as approved, review the involved files for coherence, run the quality gates (linter, type checker, full test suite) and fix issues, then commit the merge.
 
-### Step 1: Merge
-
-1. Fetch origin and merge `origin/main` into the current branch.
-2. If no conflicts: commit the merge and stop. Do NOT run tests.
-
-### Step 2: Analyse Conflicts
-
-1. Read all conflicted files.
-2. **Group conflict hunks by logical change** — hunks from the same feature, refactor, or fix belong together, even across files. Name groups by domain concept (e.g. "User authentication rework"), not by file or line number.
-3. For each group, recommend a resolution (ours, theirs, or combination) and explain why in domain language.
-4. **Wait for approval** before resolving.
-
-### Step 3: Finalise (only after conflict resolution)
-
-1. Resolve conflicts per the approved plan.
-2. Review all involved files and ensure that the final merged code is coherent and consistent. Make any necessary adjustments to ensure the code works together as intended.
-3. Run quality gates: linter, type checker, full test suite. Fix issues.
-4. Commit the merge.
-
-## Constraints
-- NEVER force-push or rewrite history.
-- NEVER modify tests without telling the user.
-- If the merge introduces unfixable failures, stop and report.
+Tell the user about every test you change. If the merge leaves failures you can't fix, stop and report.

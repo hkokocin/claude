@@ -1,53 +1,33 @@
 ---
 name: curl
-description: Update the curl collection for this project so it can be used for testing and debugging the API changes made on the current branch.
+description: Use when a branch adds or changes API endpoints, to update the project's curl collection for trying them by hand.
 ---
-# Curl Collection (TEST Phase)
+# Curl Collection
 
-## Goal
+Create or update the curl commands for the API endpoints changed on the current branch.
 
-Create or update curl commands that exercise the API endpoints changed on the current branch.
-
-## Workflow
-
-1. Read the branch diff to identify new/modified API endpoints.
-2. Find the project's collection dir in `~/projects/testing/curl/<project>/` (project name = repo name).
-3. Find or create the `.sh` file for the resource (see structure below).
-4. Write curl commands following the format rules.
-
-## Directory structure
+## Layout
 
 ```
 ~/projects/testing/curl/
-├── .env                        # Shared secrets
-├── auth.sh                     # Auth helpers (exports AUTH_TOKEN)
-└── <project>/                  # One dir per project = repo name
-    ├── <resource>.sh           # If API has no versioning
-    └── <version>/              # If API is versioned (v1/, v2/, v3/)
+├── .env                 # shared secrets
+├── auth.sh              # auth helpers, exports AUTH_TOKEN
+└── <project>/           # repo name
+    ├── <resource>.sh    # API without versioning
+    └── <version>/       # only if the API uses version prefixes (v1/, v2/)
         └── <resource>.sh
 ```
 
-One file per resource group (e.g. `treatments.sh`, `surveys.sh`). Create subdirs for API versions only when the project's API uses version prefixes.
+One file per resource group (e.g. `treatments.sh`). Variables: `${HOST}` is the base URL without trailing slash and without version (e.g. `https://api.dingo.ag`); `${AUTH_TOKEN}` comes from `auth.sh`.
 
-## Variables
+## Format
 
-| Variable | Purpose | Example |
-|---|---|---|
-| `${HOST}` | Base URL, no trailing slash, no version | `https://api.dingo.ag` |
-| `${AUTH_TOKEN}` | Bearer token from `auth.sh` | — |
-
-## Format rules
-
-- Each command starts with a `### comment` describing the call
-- One blank line before the `###`, one blank line after `| jq`
-- Always pipe to `jq` (`jq .` for full output, or a filter expression)
-- Include all query parameters, comment out optional ones
-- GET query params: use `-G` + `--data-urlencode` (readable & properly encoded)
-- POST/PUT/PATCH bodies: use `--data '{...}'` with `-H "Content-Type: application/json"`
-- Quote all variable interpolations: `"${HOST}"`, `"${AUTH_TOKEN}"`
-- 4-space indent for continuation lines
-
-### GET
+Write every command like the examples:
+* a `### comment` describing the call, blank lines around the command
+* piped to `jq` (`jq .` or a filter)
+* every query parameter, the optional ones commented out; GET parameters as `-G` with `--data-urlencode`
+* bodies as `--data '{...}'` with a JSON content type
+* variables quoted, continuation lines indented by 4 spaces
 
 ```bash
 ### List treatments with filters
@@ -59,11 +39,7 @@ curl -X GET "${HOST}/v3/treatments" \
     --data-urlencode "crop_id=COTTON" \
     # --data-urlencode "is_optional=true" \
 | jq .
-```
 
-### POST
-
-```bash
 ### Submit survey response
 
 curl -X POST "${HOST}/v1/responses" \

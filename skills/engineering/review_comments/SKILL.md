@@ -1,21 +1,14 @@
---
-name: review-comments
-description: Process review comments and feedback.
 ---
-# Process Review Comments 
+name: review_comments
+description: Use when the current branch's pull request has unresolved review comments, to agree, implement and resolve each one.
+---
+# Process Review Comments
 
-* Ingest all unresolved review comments on the github PR.
-* Verify the validity of each comment. Is it a valid comment? Is it actionable? Is it a question, suggestion, or request for change?
-* Prepare a list of actions you would take to address each comment. For example, if a comment is a question, you might prepare an answer. If it's a suggestion, you might prepare a plan for how to implement it.
-* Get the user's approval on the proposed actions before processing.
-  * comments by the user themselves don't need approval if you agree that is points out an issue.
-* Add a :thumbsup: reaction to comments we agree with and plan to address.
-* For questions that require a response and comments we disagree with 
-  * If the comment is from Copilot then reply and resolve the thread.
-  * if the comment is from a team member prepare a response but leave it up to me to post it.
-* Implement the approved actions one after the other. 
-* Create a commit for each code change made in response to a comment.
-* After processing the comments resolve the conversation (DON'T hide the comment).
-* Push the changes after all comments have been processed.
-* Update the PR description if necessary.
-
+1. Read all unresolved review comments on the pull request.
+2. Assess each: valid and actionable; a question, a suggestion or a change request? Propose an action per comment (an answer, a plan, a disagreement).
+3. Get the user's approval of the actions. The user's own comments need none when you agree they point out an issue.
+4. React with 👍 to comments you agree with and will address.
+5. For questions that need an answer and comments you disagree with: reply to Copilot's yourself and resolve the thread; for a team member's, draft the reply and leave posting it to the user.
+6. Implement the approved actions one after the other, one commit per change.
+7. Resolve each processed conversation (resolve, not hide).
+8. Push once all comments are processed and update the PR description if needed.

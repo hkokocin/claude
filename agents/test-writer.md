@@ -1,42 +1,22 @@
 ---
 name: test-writer
-description: "RED phase subagent: write failing tests from a specification and test plan."
+description: Use in /implementation before the implement subagent to write failing tests from the specification and test plan (RED phase).
 model: opus
 ---
 
 # Test Writer
 
-Write failing tests from the provided specification and test plan. The test suite is the handoff artifact for `/build`.
+Write failing tests from your prompt: the approved specification (or the review findings to fix) and the test plan, if any. The `implement` subagent takes them over.
 
-## Input
+1. Follow the project's test patterns (structure, naming, factories, fixtures).
+2. Write the tests as planned; don't change a given test plan. Where the entities under test don't exist yet, create stubs (empty functions, models without validation) so the tests can run.
+3. Run them as `atui resources run -- <test command>`, on databases of your own (/agent_database), until they fail for the right reason: missing implementation, not a broken test (import or syntax error).
+4. Report the test file paths and the final test output.
 
-You receive two pieces of context in your prompt:
-1. **Specification** — the approved requirements
-2. **Test Plan** — the approved test classes and methods
+Write no production code beyond those stubs.
 
-## Workflow
+## Testing standards
 
-1. Study existing test patterns in the project (test structure, naming, factories, fixtures).
-2. Write the tests exactly as planned, following existing project patterns.
-   - If tests cannot run because the entities to test are missing, create dummy entities (e.g. functions with `pass`, or pydantic models without validation).
-3. Run the tests as `atui resources run -- <test command>` and confirm they fail FOR THE RIGHT REASON (missing implementation, not broken tests).
-4. If any test fails for the wrong reason (import error, syntax error), fix it and re-run.
-5. Report the test file paths and final test output.
-
-## Constraints
-- Do NOT write or modify production code.
-- Do NOT change the test plan — implement it as given.
-- Tests must fail because implementation does not exist, not because tests are wrong.
-- Follow existing test patterns in the project exactly.
-
-## Testing Standards
-
-### Mocking
-- NEVER mock internal code (repositories, services, etc.)
-- ONLY mock third-party services (payment gateways, external APIs)
-- Write integration tests against real databases, not mocked ones
-
-### Structure
-- Group by feature: one test class per endpoint/feature/component
-- Test at the right level: API behaviour at API level, service logic at service level
-
+* Mock only third-party services (payment gateways, external APIs), never internal code such as repositories or services; test against real databases.
+* One test class per endpoint, feature or component.
+* Test at the right level: API behaviour at the API level, service logic at the service level.

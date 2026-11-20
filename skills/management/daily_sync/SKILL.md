@@ -1,24 +1,24 @@
 ---
 name: daily-sync
-description: Generate a daily standup summary from Claude conversations supported by data from Asana, GitHub, and Google Calendar.
+description: Use when the user asks for the standup or what was done since yesterday, from Claude sessions, GitHub, Asana and Calendar.
 ---
 
 # Daily Sync
 
-## Step 1: Date range
+## 1. Date range
 
-"Yesterday" = 10:00 yesterday to 10:00 today. On Monday, start 10:00 last Friday.
+"Yesterday" is 10:00 yesterday to 10:00 today; on Monday it starts 10:00 last Friday.
 
-## Step 2: Gather data (query all sources in parallel)
+## 2. Gather data (all sources in parallel)
 
-* Claude conversations — the main source.
-* GitHub activity of "hkokocin": pull requests (own or reviewed), deployment actions.
-* Asana: tasks in the "my tasks" board and tasks finished by me.
-* Google Calendar meetings — exclude the daily sync and any event with no participants but me.
+* Claude conversations: the main source.
+* GitHub activity of `hkokocin`: pull requests (own or reviewed), deployment actions.
+* Asana: tasks in "my tasks" and tasks I finished.
+* Google Calendar meetings, except the daily sync ("Daily Backend Sync") and events with no participant but me.
 
-## Step 3: Compile the summary
+## 3. Compile the summary
 
-Print exactly this shape to chat:
+Print exactly this shape:
 
 ```
 YESTERDAY:
@@ -34,34 +34,24 @@ BLOCKERS:
 * [TASK_STATE] <title> (DEVELOPMENT_STATE)
 ```
 
-**Sections**
-* YESTERDAY: one bullet per meaningful session, past tense, ordered by team relevance (your judgment).
-* TODAY: synthesize next actions from WIP signals — uncommitted changes, unpushed branches, open PRs without merges, sessions that ended mid-task, open todos. Phrase action-oriented ("Open PR for the X refactor").
-* BLOCKERS: unresolved external dependencies — failing CI on an open PR, waiting on review, missing access, decisions owed by someone else. Be blunt. Open PRs alone are not blockers. Omit if none.
-* Omit any section with no bullets.
-
-**Meetings**
-* Append meetings at the end of YESTERDAY and TODAY with the `[MEETING]` prefix.
-* Exclude the "Daily Backend Sync".
+**Sections** (omit one without bullets)
+* YESTERDAY: one bullet per meaningful session, past tense, ordered by relevance to the team.
+* TODAY: next actions from work in progress (uncommitted changes, unpushed branches, unmerged PRs, sessions that ended mid-task, open todos), phrased as actions ("Open PR for the X refactor").
+* BLOCKERS: unresolved external dependencies (failing CI on an open PR, waiting on review, missing access, decisions owed by someone else). Be blunt. An open PR alone is no blocker.
+* Meetings go last in YESTERDAY and TODAY, prefixed `[MEETING]`.
 
 **Bullets**
-* One bullet per task, prefixed with `[repo]` (e.g. `* [Groundhog] Added targetings CRUD endpoints`). Group work on the same project together.
-* Keep them short and scannable. Describe outcomes with concrete verbs — no transcripts, no hedging ("worked on improving"). Strip noise (side questions, quick research).
-* Topic first; deployments and similar go last.
-* If an Asana task exists, use its title. For a subtask, make the parent task the root bullet and the task a sub-bullet (only go up one level).
+* One per task, prefixed with the project (`* [Groundhog] Added targetings CRUD endpoints`); work on the same project grouped.
+* Short outcomes with concrete verbs, no hedging ("worked on improving"), no noise (side questions, quick research). Topic first, deployments and the like last.
+* An existing Asana task gives the title. A subtask goes as a sub-bullet under its parent task (one level up only).
 
-**TASK_STATE checkbox**
-* `[ ]` Todo · `[O]` Doing · `[X]` Done
-* A subtask is done when its PR is merged
-* A root task is done when its deployed to production
+**TASK_STATE**: `[ ]` todo, `[O]` doing, `[X]` done. A subtask is done when its PR is merged, a root task when it is deployed to production.
 
-**DEVELOPMENT_STATE** — append to each bullet except parent tasks:
-* `(IMPL)` being implemented; no PR or draft PR
-* `(PR)` implementation done; non-draft PR exists
-* `(DEV)` deployed to dev
-* `(PROD)` deployed to prod
-* Merged PRs are automatically deployed to dev.
-* Check GitHub actions to find out if Deploy to Prod happened for a task.
+**DEVELOPMENT_STATE**, on every bullet except parent tasks:
+* `(IMPL)`: being implemented; no PR or a draft PR
+* `(PR)`: implementation done; non-draft PR
+* `(DEV)`: deployed to dev; a merged PR deploys to dev automatically
+* `(PROD)`: deployed to prod; the GitHub actions show whether Deploy to Prod ran
 
 ### Sample
 
@@ -87,6 +77,6 @@ BLOCKERS:
 * Six pull requests are open and waiting on review (Groundhog targetings, Ape cache fix, three deploy-workflow changes, Dingo scheduled deploy) — nothing merges until those are looked at.
 ```
 
-## Step 4: Archive
+## 4. Archive
 
-Write the same markdown to `~/Documents/notes/standup/<YYYY-MM-DD>.md` (create the directory if missing, overwrite today's file).
+Write the same markdown to `~/Documents/notes/standup/<YYYY-MM-DD>.md`, replacing today's file if there is one.
