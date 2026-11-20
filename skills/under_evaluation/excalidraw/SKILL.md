@@ -74,9 +74,9 @@ Poor layout is the main failure mode. Stick to these rules:
 
 ## Constraints
 
-- Output MUST be a valid `.excalidraw` file that opens in https://excalidraw.com or the VS Code extension.
+- The output is a valid `.excalidraw` file that opens in https://excalidraw.com or the VS Code extension.
 - Use simple shapes: rectangles for services/modules, diamonds for decisions, ellipses for data stores, arrows for relationships.
-- Every shape MUST have a bound text label.
+- Every shape has a bound text label.
 - Keep diagrams readable: max ~15 elements, font size >= 16.
 - Use colour sparingly to group related elements (pick from the default palette below).
 - Arrow labels should describe the relationship (e.g. "calls", "reads from", "publishes to"). Keep them short (<= 15 chars) — long labels are a strong signal to restructure instead.

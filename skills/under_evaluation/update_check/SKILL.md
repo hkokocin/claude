@@ -1,6 +1,6 @@
---
-name: update check
-description: Check for library updates and investigate if they will cause compatibility issue.
+---
+name: update_check
+description: Use when dependencies were updated or are about to be - reads the release notes from the current to the new version for breaking changes and deprecations and assesses what they mean for the code.
 ---
 # Update Check
 

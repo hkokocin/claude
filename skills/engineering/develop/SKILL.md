@@ -26,6 +26,8 @@ Each step sets its own status (/atui, Status). Where the Task has an Asana task,
 
 ## Instructions
 
+As an atui Agent, load /atui before the first step, also when you start at a later one: it says how you work with your Task, beginning with reading its open Threads. Report your Phase whenever it changes; a wait on the user is marked as /atui, Waiting on the user says. Keep the Task and its Stream up to date (/atui).
+
 Run the steps in order; each is a skill.
 
 1. **/refinement**: Specification, Designs (where the Task changes a UI) and tier, approved by the user; may break the Task down into Subtasks.
@@ -34,8 +36,6 @@ Run the steps in order; each is a skill.
 4. **/user_review**: the user tries the change; merge on approval.
 5. **Dev test** (below).
 6. **/finish**: curl collection and `done`, the last act.
-
-As an atui Agent, report your Phase whenever it changes; a wait on the user is marked as /atui, Waiting on the user says. Keep the Task and its Stream up to date (/atui).
 
 ### Dev test
 
