@@ -1,6 +1,6 @@
 ---
 name: finish
-description: Use after a change is merged (and passed the dev test, where there is one) to wrap up: update the curl collection and set the Task to done.
+description: "Use after a change is merged (and passed the dev test, where there is one) to wrap up: update the curl collection and set the Task to done."
 ---
 # Finish
 

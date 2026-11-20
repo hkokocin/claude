@@ -1,6 +1,6 @@
 ---
 name: user_review
-description: Use when a reviewed change is ready for the user to try: run it locally, present it, take change requests and merge on approval - the Agent's own change, or a Friend's that the Parent presents.
+description: "Use when a reviewed change is ready for the user to try: run it locally, present it, take change requests and merge on approval - the Agent's own change, or a Friend's that the Parent presents."
 ---
 # User Review
 

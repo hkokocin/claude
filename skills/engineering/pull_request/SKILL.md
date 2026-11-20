@@ -1,6 +1,6 @@
 ---
 name: pull_request
-description: Use to commit, push and open or update the pull request of the current branch: determines the type (Feature/Fix/Chore), writes the message and a description with the implementation context.
+description: "Use to commit, push and open or update the pull request of the current branch: determines the type (Feature/Fix/Chore), writes the message and a description with the implementation context."
 ---
 # Pull Request
 

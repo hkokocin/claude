@@ -1,6 +1,6 @@
 ---
 name: merge
-description: Use when the latest main is to be merged into the current branch, e.g. when the branch is behind or a pull request has conflicts: analyses conflicts, groups them by feature, proposes resolutions and merges after approval.
+description: "Use when the latest main is to be merged into the current branch, e.g. when the branch is behind or a pull request has conflicts: analyses conflicts, groups them by feature, proposes resolutions and merges after approval."
 ---
 # Merge Main
 

@@ -1,6 +1,6 @@
 ---
 name: refinement
-description: Use when a Task or plan needs its requirements pinned down before building: a relentless interview that turns it into an approved Specification, with Designs for UI changes, the tier, docs (ADRs, glossary) and, for complex Tasks, a breakdown into Subtasks.
+description: "Use when a Task or plan needs its requirements pinned down before building: a relentless interview that turns it into an approved Specification, with Designs for UI changes, the tier, docs (ADRs, glossary) and, for complex Tasks, a breakdown into Subtasks."
 ---
 # Refinement
 

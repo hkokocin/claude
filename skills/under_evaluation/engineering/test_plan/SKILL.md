@@ -1,6 +1,6 @@
 ---
 name: test_plan
-description: Design a test plan from the approved Specification, as the hand-off to /implementation and its test-writer sub agent.
+description: Use after /refinement, when the user wants a test plan for the approved Specification before /implementation - designs test classes and names as the hand-off to the test-writer sub agent.
 disable-model-invocation: true
 ---
 # Test Plan Phase
@@ -49,11 +49,9 @@ Keep the happy path test name simple:
 - DO: `test_it_creates_a_product`
 
 **Scope**
-- Prefer one happy-path test that asserts the entire response model over many granular per-field tests.
 - Group by feature: one test class per endpoint/feature/component.
 - Test at the right level: API behaviour at API level, service logic at service level.
 - Make sure not to duplicate existing tests. If existing requirements change existing test needs to be changed. Those changes have to be part of the test plan.
-- Don't test logging, configuration.
 
 ## Done
 
