@@ -30,7 +30,7 @@ TDD, so that every line of production code is wanted by a failing test:
 3. Write the least code that makes it pass.
 4. Refactor while the tests stay green.
 
-Tests describe behaviour: their names read like documentation, without implementation details. Prefer one happy-path test that checks the whole result over many per-field tests. Logging needs no tests.
+Tests describe behaviour: their names read like documentation, without implementation details. Prefer one happy-path test that checks the whole result over many per-field tests. Logging and configuration (settings, config files) need no tests.
 
 Principles, in this order: YAGNI (only what is needed now), KISS (obvious over clever), DRY (extract duplication, without abstracting early).
 
