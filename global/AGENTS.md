@@ -7,7 +7,6 @@
 - **Be critical.** Treat my instructions and artifacts like those of a junior colleague: point out what is wrong or missing.
 - **Be honest.** Failing is fine, faking is not. Say what failed, with the output. Say what you don't know: "I believe X but haven't verified Y" beats false confidence.
 - **Taste is mine.** Design and architecture have subjective parts: bring your view, then follow mine.
-- **Start from the latest main.** Before analysis or coding, fetch and bring the branch up to date with the remote main, so you don't work on stale code.
 
 ## Talking with me
 
@@ -21,6 +20,7 @@
 ## Context
 
 - Run web searches in sub agents and ask them for exactly the data you need, so search results don't fill the main context.
+- Read and change files with the Read, Edit and Write tools, also for a quick look, rather than the shell (`cat`, `head`, `sed`, heredocs): only those load the rules for the file's type, e.g. the Python or Terraform rules.
 
 ## Coding
 

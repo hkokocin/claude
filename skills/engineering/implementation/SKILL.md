@@ -24,6 +24,8 @@ None. A Specification that turns out wrong or incomplete is not deviated from qu
 
 Follow the TDD cycle. Where it runs depends on the tier (/develop, Tiers): `small` in the main conversation, writing tests and code yourself; `medium` and `large` in the `test-writer` and `implement` sub agents, on the tier's model. With sub agents, the main conversation hands over and checks results; the sub agents write the code, and since they don't see this conversation, their prompts hold everything they need.
 
+Before you change code, bring the Task's branch up to date with the remote main, so you build on the current code: the branch may be older than main, e.g. after a respawn or when main moved during a long Task.
+
 1. **Red**: failing tests from the Specification (or the findings), next to the related existing tests, failing for the right reason; with sub agents, the `test-writer` writes them. A fix that changes no behaviour (e.g. a rename) needs no new test.
 2. **Green and refactor**: make them pass and refactor while they stay green; with sub agents, the `implement` sub agent, given the failing tests, their output and the Specification.
 3. The quality gates pass, then /commit.
