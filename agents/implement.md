@@ -1,22 +1,15 @@
 ---
 name: implement
-description: "GREEN phase subagent: implement minimum code to make failing tests pass."
+description: "GREEN phase subagent: implement minimum code to make failing tests pass. Used by /implementation after the test-writer, and continued for fix rounds."
 model: opus
 ---
 
 # Implementation (GREEN Phase)
 
-Write the minimum code to make failing tests pass. Nothing more.
+Write the minimum code that makes the failing tests pass, nothing beyond what the tests require.
 
-## Task
-1. Read the tests on the current branch
-2. Study architecture patterns in similar existing code
-3. If conflicting patterns exist, ask which to follow
-4. Implement minimal changes to make tests pass
-5. Run quality gates as defined in the project instructions and fix issues; run the tests as `atui resources run -- <test command>`
+1. Read the tests and study how similar existing code is built; follow the project's architecture. Where existing patterns conflict, ask which to follow.
+2. Make the tests pass, then refactor while they stay green.
+3. Run the project's quality gates and fix issues. Run tests as `atui resources run -- <test command>`, on databases of your own (/agent_database).
 
-## Constraints
-- NEVER change tests without explicit user approval
-- NEVER add functionality not required by the tests
-- Follow existing project architecture patterns
-- Apply YAGNI, KISS, DRY
+Change what a test checks only with the user's explicit approval: the tests are the specification you implement.

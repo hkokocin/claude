@@ -11,8 +11,13 @@
 #   file-based (agents/, rules/, shared/, commands/, output-styles/)
 #                         leaf = a regular file
 #                         -> $TARGET/<coll>/<basename>   -> repo leaf file
-#   standalone (CLAUDE.md, settings.json, statusline.sh, usage_review_trigger.sh)
+#   global     (global/*: the user-level CLAUDE.md and AGENTS.md)
 #                         -> $TARGET/<name>              -> repo file
+#   standalone (settings.json, statusline.sh, usage_review_trigger.sh)
+#                         -> $TARGET/<name>              -> repo file
+#
+# The repo root's own CLAUDE.md and AGENTS.md are this repo's project
+# instructions and are not synced.
 #   atui       (atui/resources.toml)
 #                         -> $ATUI_CONFIG/resources.toml -> repo file
 #
@@ -34,7 +39,7 @@ ATUI_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/atui"
 
 DIR_COLLECTIONS="skills"
 FILE_COLLECTIONS="agents rules shared commands output-styles"
-STANDALONE="CLAUDE.md settings.json statusline.sh usage_review_trigger.sh"
+STANDALONE="settings.json statusline.sh usage_review_trigger.sh"
 
 fail() { printf 'sync: %s\n' "$*" >&2; exit 1; }
 
@@ -90,6 +95,16 @@ sync_standalone() {
   link "$REPO/$name" "$TARGET/$name"
 }
 
+sync_global() {
+  root="$REPO/global"
+  [ -d "$root" ] || return 0
+  printf '[global]\n'
+  for f in "$root"/*; do
+    [ -f "$f" ] || continue
+    link "$f" "$TARGET/$(basename "$f")"
+  done
+}
+
 # remove only dangling or deprecated symlinks under managed collection dirs;
 # this reclaims links left behind by a delete, rename, re-categorization or
 # deprecation.
@@ -107,6 +122,7 @@ prune_collection() {
 printf 'sync: repo=%s target=%s\n' "$REPO" "$TARGET"
 for c in $DIR_COLLECTIONS;  do sync_dir_collection  "$c"; done
 for c in $FILE_COLLECTIONS; do sync_file_collection "$c"; done
+sync_global
 for s in $STANDALONE;       do sync_standalone      "$s"; done
 printf '[atui] (resources.toml)\n'
 link "$REPO/atui/resources.toml" "$ATUI_CONFIG/resources.toml"

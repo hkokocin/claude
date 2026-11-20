@@ -2,21 +2,12 @@
 name: monkeytest
 description: Monkeytest the given service
 ---
-
 # Monkeytest
 
-If not explicitely instructed otherwise
-* always target local env
-* always test the endpoints that where changed on the current feature branch
+Unless told otherwise, target the local environment and the endpoints changed on the current branch.
 
-## Preparation
-* Fetch all remove changes.
-* Is the current branch up to date with main? If not do /merge
-* If testing locally
-  * Run the app through `atui resources run`, with the migrations in the same run (/agent_database); never the Project's own compose stack.
-* Ingest the api spec
-* if testing a feature branch let a subagent analyse the changes on the current branch and only return a list of affected endpoints
-
-## Run Tests
-* Monkeytest the endpoints in scope
-
+1. Bring the branch up to date with main (/merge).
+2. Locally, start the app with its migrations on the Agent's own databases (/agent_database), not on the Project's own compose stack.
+3. Read the API spec.
+4. On a feature branch, let a sub agent find the endpoints the branch changed and return only that list.
+5. Monkeytest the endpoints in scope.
