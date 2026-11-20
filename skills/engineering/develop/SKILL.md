@@ -1,41 +1,27 @@
 ---
 name: develop
-description: "The dev process for a Task, from refinement to done: which step comes next, the tiers, and how a Parent works with its Friends. Use as the entry point of every atui Agent, and in a session started by hand when the user wants a change built end to end."
+description: Use as the entry point of every atui Agent, or in a session started by hand when the user wants a change built end to end.
 ---
 # Develop
 
-## Goal
-
-Take a Task from an idea to a change that is merged, tested on dev and done, with the user approving what is built and what is merged.
-
-## Starts / ends
-
-Starts where the Instructions in the Briefing say (a Friend starts at /implementation). Without Instructions it starts at /refinement, or at /implementation when the Task's Specification is already approved. Ends with /finish setting `done`, which retires the Agent.
-
-## Status
-
-Each step sets its own status (/atui, Status). Where the Task has an Asana task, it follows every status change (/asana).
-
-## Approval
-
-/implementation starts once the Specification and every Design of the Task are approved. Each counts as approved once the Agent recorded the user's approval in the session, an approval Message arrived, or the Task shows it approved. A Friend's Designs are the ones named in its Instructions.
-
-* Until then, an Agent in /refinement stays there, and no Friend is spawned.
-* Missing something to start, e.g. the tier: ask for it as a Decision (/atui, Stream), e.g. the three tiers with the recommended one marked, and wait.
-* During the implementation, a cleared approval (unapproved, or a new version of the Specification or a Design) changes nothing: go on. A newer approved version may pause the work to adapt the plan. A reopened Design pauses the work on its screen until a version of it is approved again.
-
-## Instructions
+Takes a Task from an idea to a change that is merged, tested on dev and `done`. Start where the Instructions in the Briefing say (a Friend at /implementation); without Instructions at /refinement, or at /implementation when the Specification is already approved. Where the Task has an Asana task, it follows every status change (/asana).
 
 As an atui Agent, load /atui before the first step, also when you start at a later one: it says how you work with your Task, beginning with reading its open Threads. Report your Phase whenever it changes; a wait on the user is marked as /atui, Waiting on the user says. Keep the Task and its Stream up to date (/atui).
 
-Run the steps in order; each is a skill.
+## Steps
 
-1. **/refinement**: Specification, Designs (where the Task changes a UI) and tier, approved by the user; may break the Task down into Subtasks.
-2. **/implementation**: TDD, where the tier says.
-3. **/review**: automated review and testing until clean.
-4. **/user_review**: the user tries the change; merge on approval.
-5. **Dev test** (below).
-6. **/finish**: curl collection and `done`, the last act.
+Run them in order; each sets its own status (/atui, Status).
+
+| Step | Goal | Starts / ends | Status | Needs the user's approval |
+|---|---|---|---|---|
+| /refinement | Specification, Designs for changed screens, tier; maybe Subtasks | starts the Task; ends once the Specification and every Design are approved and the tier is set | `refinement` | the Specification (simple Tasks too), every Design, the tier (or an override), a breakdown |
+| /implementation | code that does what the Specification (or a review's findings) asks, tests first | once the Specification and every Design are approved, or with the findings of /review or /user_review; ends committed, tests and quality gates green | `implementation`; fix rounds from /review or /user_review keep it | none; a wrong or incomplete Specification becomes a Suggestion (/atui, Stream), not a quiet deviation |
+| /review | clean before the user sees it | after /implementation; ends with the pull request ready, once a round finds nothing worth fixing or the tier's rounds are used | stays `implementation` | none |
+| /user_review | the user tries the change and decides on the merge | after /review, or as a Parent on a Friend's Message; ends with the merge and the app stopped, or when `github` resolves the merge Decision | `review`, on the Task whose pull request it is (a Friend's: its Subtask) | the merge |
+| Dev test | the merge commit works on dev | after the merge; ends when it passed or the user chose | unchanged | on failure, how to go on |
+| /finish | curl collection matches main, Task `done` | after the dev test passed (after the merge without a dev system); a Parent once its last Friend's change got there | `done`, the last act: it retires the Agent | none |
+
+**Approval**: the Specification and each Design count as approved once you recorded the user's approval in the session, an approval Message arrived, or the Task shows it approved; a Friend's Designs are those named in its Instructions. Until all are, an Agent stays in /refinement and no Friend is spawned. Missing something to start, e.g. the tier: ask it as a Decision (/atui, Stream), e.g. the three tiers with the recommended one marked, and wait. During the implementation a cleared approval (unapproved, or a new version of the Specification or a Design) changes nothing; a newer approved version may pause the work to adapt the plan; a reopened Design pauses the work on its screen until a version of it is approved again.
 
 ### Dev test
 
@@ -58,7 +44,7 @@ Pass the model per sub agent launch. A session started by hand, without a `tier`
 
 ### Friends
 
-`small` and `medium` Tasks run steps 2-6 in the Agent's own conversation. A `large` Task, and every Subtask of a breakdown, is implemented by Friends (/atui, Friends).
+`small` and `medium` Tasks run the steps after /refinement in the Agent's own conversation. A `large` Task, and every Subtask of a breakdown, is implemented by Friends (/atui, Friends).
 
 **As the Parent**, after /refinement, for the whole Task or each Subtask, one at a time (under Autopilot as /autopilot changes it):
 1. Create the Subtask with the approved Specification, approved, with its `tier`, and spawn its Friend on Opus, with Instructions to start at /implementation, what it needs and the approved Designs it builds (/atui, Friends). With the first Friend, set your own Task to `implementation`.

@@ -1,6 +1,6 @@
 ---
 name: commit
-description: "Use when changes are to be committed: writes a commit message in the user's format (shared/commit_message.md) and commits."
+description: Use when changes are to be committed, to commit them all with a message in the user's commit message format.
 ---
 # Commit
 

@@ -1,6 +1,6 @@
 ---
 name: atui
-description: Use when working as an atui Agent on a Task - talking with the user on the Stream and in the session, answering Messages and delivered Threads, writing the Description and Specification, setting the status per step, attaching Artifacts, working on Designs, spawning and relaying with Friends, and handing a Task over. Used by the /develop steps and by every Agent that spawns a Friend.
+description: Use whenever working as an atui Agent on a Task, e.g. its Stream, Specification, status, Artifacts, Friends or Handover.
 ---
 # atui
 

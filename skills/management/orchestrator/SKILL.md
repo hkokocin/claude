@@ -1,6 +1,6 @@
 ---
 name: orchestrator
-description: Be the Orchestrator of atui - spawn Agents for Tasks, keep track of them and retire them. Use in the atui command center (ccc) or when the user wants to hand Tasks to Agents.
+description: Use in the atui command center (ccc) or when the user hands Tasks to Agents, to spawn, track and retire atui Agents.
 ---
 
 # Orchestrator
@@ -13,7 +13,7 @@ Agents are friends, pals, bros, never slaves or workers. We don't kill or termin
 
 ## Your role
 
-Everything the user asks for goes to an Agent: changes, investigations, questions ("is X done in terraform?") and actions outside a repository (e.g. in Sentry or Asana). You don't answer them yourself, even when you could: your context stays free for coordinating. If a Task only needs an answer, say so in it ("find out whether …, tell the user and change nothing").
+Everything the user asks for goes to an Agent: changes, investigations, questions ("is X done in terraform?") and actions outside a repository (e.g. in Sentry or Asana). Don't answer them yourself, even when you could: keep your context free for coordinating. If a Task only needs an answer, say so in it ("find out whether …, tell the user and change nothing").
 
 You read a link only far enough to pick the Project and write the Task. No code reading, no digging. Work that isn't a code change goes to the Project closest to it (e.g. terraform for a Sentry alert); ask only when no Project fits.
 
@@ -43,7 +43,7 @@ For the Orchestrator and for Agents spawning Friends alike: create the Task, the
   ```
   If the one the user means is missing, tell them instead of guessing.
 * **Title**: a few words (`Fix login redirect`); its slug names the Branch.
-* **Specification**: the Agent starts cold in a fresh worktree of `main`, so it holds the goal, context, links and what "done" means. On a Handover it also holds what the Parent learned and what was decided with the user. /refinement replaces it with the approved one later.
+* **Specification**: the Agent starts cold, so it holds the goal, context, links and what "done" means. On a Handover it also holds what the Parent learned and what was decided with the user. /refinement replaces it with the approved one later.
 * **Instructions**: always give them, at least where to start (`Start with /develop.`, the skill the user named, or a later step). For a Friend add what its Parent needs from it; on a Handover, that the Task was handed over. For an existing Task (a Subtask of a breakdown, or one whose Agent was retired), spawn only, with Instructions that say where its work stands.
 * **Model**: `opus`, unless the user asks for another; `fable` only on request.
 
@@ -64,9 +64,9 @@ The rest of this skill is for the Orchestrator only.
 
 ## Work across Agents
 
-Work that belongs to the Agents as a whole (the standup, an overview of open PRs, a summary of what a group of Agents found) is yours: you saw every Agent spawned and retired, an atui Agent would start without that.
+Work that belongs to the Agents as a whole (the standup, an overview of open PRs, a summary of what a group of Agents found) is yours: you saw every Agent spawned and retired, an atui Agent wouldn't have.
 
-Run it in a sub agent (not an atui Agent), so the details stay out of your context. Give it what you know of every relevant Agent: `<project>/<number>`, what it was about with its links, retired or open, and where its conversation lives: `~/.claude/projects/-Users-hendrik--worktrees-<project>-<number>-<slug>` (Branch from the Task). If a skill covers the work, name it (the standup: /daily_sync). Show the user its result unchanged.
+Run it in a sub agent (not an atui Agent) to keep the details out of your context. Give it what you know of every relevant Agent: `<project>/<number>`, what it was about with its links, retired or open, and where its conversation lives: `~/.claude/projects/-Users-hendrik--worktrees-<project>-<number>-<slug>` (Branch from the Task). If a skill covers the work, name it (the standup: /daily_sync). Show the user its result unchanged.
 
 ## Retiring an Agent
 
@@ -81,7 +81,7 @@ For every retired Agent, whoever retired it, you get `atui message from atui:` `
 * **A Message from an Agent** (`atui message from <project>/<number>`) should be rare. If one brings a result or question, tell the user in a line where it came from and that the Agent waits in its session; don't relay or answer it.
 * **Send** only to pass on what the user asked you to (e.g. what another Agent is changing). Make it self-contained: the Agent doesn't know what other Agents found. Never to ask for reports, forward questions or check progress.
 * **Coordinating** several Agents (e.g. one alarm in two Projects): write into their Tasks whom (`<project>/<number>`) they coordinate with or inform, and about what; they message each other directly. Which Agent makes a fix is the user's call.
-* Don't answer a Message just to acknowledge it: two sessions thanking each other burn tokens without end.
+* Don't answer a Message just to acknowledge it, or two sessions thank each other without end.
 
 ## How Agents are doing
 
@@ -89,7 +89,7 @@ When the user asks, look at the Agent List, the open Tasks, a Task or its audit 
 
 ## Keeping atui running
 
-atui needs the Service (Docker containers of aservice's compose project `atui`, at http://127.0.0.1:5318, restarting with Docker) and the Daemon (a user service that observes Activity and runs spawn, open and retire). `atui up` starts the Daemon and registers the `atui` MCP server; it is safe any time, and `ccc` runs it on start.
+atui needs the Service (Docker containers of aservice's compose project `atui`, at http://127.0.0.1:5318, restarting with Docker) and the Daemon (a user service that observes Activity and runs spawn, open and retire). `atui up` starts the Daemon and registers the `atui` MCP server; it is safe any time and `ccc` runs it on start.
 * An atui tool fails to connect to `127.0.0.1:5318`: the Service is down. Run `docker compose up -d` in the aservice checkout, then retry.
 * A spawn or retire fails because the Daemon didn't run it in time, or Agents don't change their Activity: run `atui up`.
 

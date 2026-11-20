@@ -1,28 +1,10 @@
 ---
 name: implementation
-description: "Use when an approved Specification, or the findings of a review, are to be built: TDD in the main conversation or in the test-writer and implement sub agents, depending on the Task's tier."
+description: Use when an approved Specification, or the findings of a review, are to be built with TDD, where the Task's tier says.
 ---
 # Implementation
 
-## Goal
-
-Code that does what the approved Specification (or a review's findings) asks, proven by tests written first.
-
-## Starts / ends
-
-Starts once the Specification and every Design are approved (/develop, Approval), or with the findings of /review or /user_review. Ends when the tests and the Project's quality gates pass and the change is committed (/commit).
-
-## Status
-
-`implementation` when entered from /develop; fix rounds from /review or /user_review keep the status.
-
-## Approval
-
-None. A Specification that turns out wrong or incomplete is not deviated from quietly: propose the change as a Suggestion (/atui, Stream) and tell the user in the session.
-
-## Instructions
-
-Follow the TDD cycle. Where it runs depends on the tier (/develop, Tiers): `small` in the main conversation, writing tests and code yourself; `medium` and `large` in the `test-writer` and `implement` sub agents, on the tier's model. With sub agents, the main conversation hands over and checks results; the sub agents write the code, and since they don't see this conversation, their prompts hold everything they need.
+When it starts and what a wrong Specification needs: /develop, Steps. Follow the TDD cycle. Where it runs depends on the tier (/develop, Tiers): `small` in the main conversation, writing tests and code yourself; `medium` and `large` in the `test-writer` and `implement` sub agents, on the tier's model. With sub agents, the main conversation hands over and checks results; the sub agents write the code and, not seeing this conversation, get everything they need in their prompts.
 
 Before you change code, bring the Task's branch up to date with the remote main, so you build on the current code: the branch may be older than main, e.g. after a respawn or when main moved during a long Task.
 
@@ -34,7 +16,7 @@ Tests run as `atui resources run -- <test command>`, so each run gets databases 
 
 **Designs**: the UI builds the approved version of each Design of the Task (a Friend: those named in its Instructions, read from the Parent's Task, /atui, Designs). Save its HTML, read it and pass the path to the sub agents. Build its layout, content and texts with the project's own components and styles; the CSS inlined in the HTML is a reference, not code to copy.
 
-### Fix rounds with sub agents
+## Fix rounds with sub agents
 
 Keep one `test-writer` and one `implement` sub agent per Task and continue them for the fixes of /review and /user_review, so they don't read everything again:
 * Note both agent ids when you launch them, and on every hand-over to an agent (launch or message) the HEAD sha at that moment.

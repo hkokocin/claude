@@ -1,6 +1,6 @@
 ---
 name: monkeytest
-description: Use to explore a running service like an unpredictable user - random and edge-case inputs on the changed endpoints or screens - to find crashes and wrong behaviour that the known use cases miss.
+description: Use to probe a running service's changed endpoints or screens with random and edge-case input for bugs use cases miss.
 ---
 # Monkeytest
 

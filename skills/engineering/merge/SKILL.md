@@ -1,13 +1,13 @@
 ---
 name: merge
-description: "Use when the latest main is to be merged into the current branch, e.g. when the branch is behind or a pull request has conflicts: analyses conflicts, groups them by feature, proposes resolutions and merges after approval."
+description: Use when the current branch is behind main or its pull request has conflicts, to merge main with approved resolutions.
 ---
 # Merge Main
 
-Merge the latest `origin/main` into the current feature branch; not on main itself. History stays as it is: merge, no rebase or force-push.
+Merge the latest `origin/main` into the current feature branch, never on main itself. Merge only: no rebase or force-push.
 
 1. **Merge.** Without conflicts, commit the merge and stop; no test run is needed.
-2. **Analyse conflicts.** Group the conflicting hunks by logical change (the same feature, refactor or fix, across files) and name each group by its domain concept (e.g. "User authentication rework"), not by file or line. Recommend a resolution per group (ours, theirs or a combination) and explain why in domain language. Wait for the user's approval.
-3. **Finalise.** Resolve as approved, review the involved files so the merged code is coherent, run the quality gates (linter, type checker, full test suite) and fix issues, then commit the merge.
+2. **Analyse conflicts.** Group the conflicting hunks by logical change (the same feature, refactor or fix, across files) and name each group by its domain concept (e.g. "User authentication rework"), not by file or line. Recommend a resolution per group (ours, theirs or a combination) with the reason in domain language. Wait for the user's approval.
+3. **Finalise.** Resolve as approved, review the involved files for coherence, run the quality gates (linter, type checker, full test suite) and fix issues, then commit the merge.
 
 Tell the user about every test you change. If the merge leaves failures you can't fix, stop and report.

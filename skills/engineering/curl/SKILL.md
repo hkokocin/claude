@@ -1,10 +1,10 @@
 ---
 name: curl
-description: "Use when a branch changes or adds API endpoints: updates the project's curl collection so the changes can be tried and debugged by hand."
+description: Use when a branch adds or changes API endpoints, to update the project's curl collection for trying them by hand.
 ---
 # Curl Collection
 
-Create or update the curl commands for the API endpoints changed on the current branch, so the user can test and debug them.
+Create or update the curl commands for the API endpoints changed on the current branch.
 
 ## Layout
 

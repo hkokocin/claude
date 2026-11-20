@@ -1,6 +1,6 @@
 ---
 name: daily-sync
-description: Generate a daily standup summary from Claude conversations supported by data from Asana, GitHub, and Google Calendar. Use when the user asks for the standup or what was done since yesterday.
+description: Use when the user asks for the standup or what was done since yesterday, from Claude sessions, GitHub, Asana and Calendar.
 ---
 
 # Daily Sync

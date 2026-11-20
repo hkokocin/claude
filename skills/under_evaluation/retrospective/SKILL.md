@@ -1,14 +1,13 @@
 ---
 name: retrospective
-description: Use when the user wants to improve the skills and instructions from experience - finds where the agent was corrected or needed several round trips in recent conversations and proposes changes to AGENTS.md, skills, agents and rules.
+description: Use when the user wants to improve skills and instructions from recent corrections and round trips in past conversations.
 ---
 
 # Retrospective
 
-## Improve
-* Analyse the conversations of the last two weeks (transcripts under `~/.claude/projects/`) for occasions where
+* Analyse the conversations of the last two weeks (transcripts under `~/.claude/projects/`) for where
   * the user corrected the agent
-  * changes took (several) roundtrips
-* How could the agentic setup be improved to prevent such roundtrips? Look at CLAUDE.mds, skills, agents, rules - global as well as project local.
-* Present your findings of problems and suggest solutions
+  * changes took several round trips
+* Find how the setup (CLAUDE.md/AGENTS.md, skills, agents, rules; global and project) could prevent them.
+* Present the problems with proposed solutions.
 
