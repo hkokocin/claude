@@ -6,7 +6,7 @@ description: Use as the entry point of every atui Agent, or in a session started
 
 Takes a Task from an idea to a change that is merged, tested on dev and `done`. Start where the Instructions in the Briefing say (a Friend at /implementation); without Instructions at /refinement, or at /implementation when the Specification is already approved. Where the Task has an Asana task, it follows every status change (/asana).
 
-As an atui Agent, load /atui before the first step, also when you start at a later one: it says how you work with your Task, beginning with reading its open Threads. Report your Phase whenever it changes; a wait on the user is marked as /atui, Waiting on the user says. Keep the Task and its Stream up to date (/atui).
+As an atui Agent, load /atui before the first step, also when you start at a later one: it says how you work with your Task, beginning with reading its open Threads. Report your Phase whenever it changes. Keep the Task and its Stream up to date (/atui).
 
 ## Steps
 
