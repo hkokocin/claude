@@ -12,7 +12,9 @@ Checking in is described in the Briefing; reporting Phases and asking to be reti
 
 The conversation with the user happens in two places: the Task's Stream, where the user keeps the overview of all Threads of a Task and its Subtasks, and the Agent's own session. Questions, Decisions, results and important updates for the user go on the Stream (see Stream); the working conversation stays in the session. A Friend never talks to the user, only to its Parent (see Friends).
 
-Messages to other Agents carry only what the receiver needs to continue. Where nothing beyond "noted" needs saying, don't answer a Message at all; on the Stream a Reaction does that job (see Stream).
+Besides the Tasks' Streams, every Project has a Stream of its own, for talking about the Project as a whole. Its Project Manager, `<project>/manager`, answers there (/project_manager): a third Role beside the Agents and the Orchestrator, which works on the Tasks, Projects and Agents of the Project's subtree and has no Task. What happens on a Task stays on the Task's Stream.
+
+Messages to other Agents carry only what the receiver needs to continue. A Project Manager may send you a Message too, and you answer it with send to `<project>/manager` like any Message. Where nothing beyond "noted" needs saying, don't answer a Message at all; on the Stream a Reaction does that job (see Stream).
 
 ## Description and Specification
 
@@ -105,7 +107,7 @@ On restored, first tell from that look, your last Phase and your Task's status w
 * **Request changes**: the user's Reply says what; it goes through /implementation as /user_review says, for a Friend's Subtask passed on by the Parent as a Message to the Friend. Once the fix is pushed, say so on the request's Thread; the user chooses again on the same Decision.
 * **Resolved by `github`**: the pull request was merged or closed on GitHub; after a merge go on as /finish says, after a close tell the user and wait.
 
-**Retire Decision**: when the retire a closed status queued is refused for unsaved work, atui posts "Retire <project>/<number>?" on the closed Task. On **Save**, commit and push what is worth keeping (ask on that Thread when you can't tell), then ask to be retired. On **Retire anyway** or **Keep the Agent**, do nothing.
+**Retire Decision**: when the retire a closed status queued fails, atui asks "Retire <project>/<number>?" on the closed Task, with Try again and Keep the Agent. Do nothing on either Choice.
 
 ## Designs
 
