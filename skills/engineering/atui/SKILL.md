@@ -27,7 +27,7 @@ Nothing else goes there: where to start, what the Parent needs and that the Task
 
 With a breakdown, each Subtask holds its own Description and Specification, and the Parent Task keeps only its Description.
 
-**Approval**: once the user approved the Specification in the session, record the approval, after the final Specification is on the Task. An approval the user gives in the web UI arrives as an approval Message and counts the same. A Subtask written from an approved Specification is created approved; one created before the user approved is approved by its Parent afterwards. Any new version of the Specification clears the approval.
+**Approval**: ask for it by requesting the approval of the Specification, not with a Post of your own: atui asks the user on the Stream for its newest version and resolves the question once that version is approved. Once the user approved the Specification in the session, record the approval, after the final Specification is on the Task. An approval the user gives in the web UI arrives as an approval Message and counts the same. A Subtask written from an approved Specification is created approved; one created before the user approved is approved by its Parent afterwards. Any new version of the Specification clears the approval.
 
 Once approved, the Specification changes only through a Suggestion (see Stream), unless the user asks in the session to change it, or it is a Subtask's under Autopilot (/autopilot).
 
@@ -70,11 +70,11 @@ The Stream is where the user keeps the overview of the Task in the web UI. It ho
 
 **How posts read**: short, outcome first, with a link to the result; other Threads referenced by title or link. Use structure where it helps: tables for comparisons that aren't options, bullets over prose, mermaid for flows (it renders on the Stream).
 
-**Reading the Stream**: read the open Threads of your Task when you start, after a compaction and after a restore, and take up what is still due.
+**Reading the Stream**: read the open Posts of your Task when you start (the Briefing says how), after a compaction and after a restore, and take up what is still due.
 
-**Waiting on the user**: a turn that waits on the user ends with an open question or Decision on the Stream saying what for, and the session names it too, for as long as the work can't go on without it, e.g. a failed deployment or dev test (/develop), a missing tier, a blocked merge. If nothing on the Stream asks it yet, post it before you wait. Your Phase then starts with 🙋 and says what the user is to do ("🙋 Merge PR #65?"). Any other wait has no marker and names what it waits on ("CI run of PR #65", "Friend claude/33"); waiting on a Friend or another Agent is no wait on the user. A Friend asks its Parent instead.
+**Waiting on the user**: a turn that waits on the user ends with an open question or Decision on the Stream saying what for, and the session names it too, for as long as the work can't go on without it, e.g. a failed deployment or dev test (/develop), a missing tier, a blocked merge. If nothing on the Stream asks it yet, post it before you wait: atui tells from the Stream that you wait on the user. Your Phase names what you wait on ("Merge of PR #65", "CI run of PR #65", "Friend claude/33"); waiting on a Friend or another Agent is no wait on the user. A Friend asks its Parent instead.
 
-**Resolving**: resolve your own question once it is answered or acted on (e.g. "Specification ready for approval" once approved), and a user's Post once its request is done. Decisions are not resolved (see above). Don't answer a resolve.
+**Resolving**: resolve your own question once it is answered or acted on, and a user's Post once its request is done. Decisions are not resolved (see above). Don't answer a resolve.
 
 **Delivered Threads**: what others do on the Task arrives in the session as a Message about the Thread. Where an answer is due, give it as a Reply on that Thread; a Reply that settles a question is its Answer. `approved:` is the user's ✅ on a message: it approves what that message proposes, as if the user had said so. A Parent gets the Threads of its Friend's Subtask relayed by the Friend and takes them up the same way (see Friends, Relay).
 
@@ -133,7 +133,7 @@ A **Design** is a Task's design of one screen, named after it (e.g. "Task Page")
 * on an accepted Design, a requested change is made in a new version, started from the current one in a new file; publish it and reply with the version and what changed;
 * a Draft is never changed: answer on its Thread; the user replaces or explores it to get new ones, and what the Thread asks goes into those.
 
-**Approval** of a Design works as the Specification's: an approval in the web UI arrives as `approved version N.` and counts the same; one given in the session is recorded by you.
+**Approval** of a Design works as the Specification's: request it for the Design, and an approval in the web UI arrives as `approved version N.` and counts the same; one given in the session is recorded by you.
 
 ## Friends
 
