@@ -2,6 +2,8 @@
 
 This repo holds the user's Claude Code config. `sync.sh` projects it into `~/.claude` with symlinks: entities live here in category directories (`skills/<category>/<name>/`, `rules/`, `agents/`, `shared/`), the user-level `CLAUDE.md` and `AGENTS.md` in `global/`. Edit them here, never through `~/.claude`. A new, moved or deleted entity takes effect with the next sync.
 
+The dev process (/atui:develop and its steps, /atui:orchestrator, /atui:project_manager, the `test-writer` and `implement` sub agents) is not here: it ships with atui as its Claude Code plugin (`plugin/` in hkokocin/atui) and is changed there.
+
 ## Syncing
 
 `sync.sh` links `~/.claude` to the checkout it runs in, and a worktree's links dangle once the worktree is removed. So sync only from the main checkout `~/projects/tools/claude`:

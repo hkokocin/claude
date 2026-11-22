@@ -19,7 +19,7 @@ Instructions cost context every time they load and are followed closely, also wh
 | User `paths:` rules (`~/.claude/rules`) | when a matching file is read or edited | stack specifics (e.g. `*.py`), cross-repo knowledge (e.g. the Terraform layout), this file |
 | Repo AGENTS.md | in that repo | only what the agent can't derive from the repo |
 | Subdir AGENTS.md | when a file in that dir is touched | only where the dir has rules of its own |
-| Skills | on demand | processes and tools; the entry skill (e.g. /develop) holds the step table (goal, start and end, status, approval), step skills only their instructions |
+| Skills | on demand | processes and tools; the entry skill (e.g. /atui:develop) holds the step table (goal, start and end, status, approval), step skills only their instructions |
 | Hooks and settings | never in context | rules that allow no exception |
 
 - Nothing above the repo level: atui Agents run in `~/.worktrees/<project>/…`, so a file like `~/projects/AGENTS.md` never reaches them. Cross-repo knowledge goes into a user-level `paths:` rule.
