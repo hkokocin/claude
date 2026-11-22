@@ -31,7 +31,7 @@ The Task, its Specification, Artifacts, Stream, Friends and Handover are defined
 * **Instructions**: what the spawner hands the new Agent next to its Task: where to start, what the spawner needs from it, or that the Task was handed over. Never requirements (Specification) or how to work with atui (/atui).
 * **Activity**: whether an Agent works or waits on the user, and why. atui observes it; nobody reports it.
 * **Parent**: the living Agent of the Task's Parent Task, else the Orchestrator. A retired Parent's place goes to its nearest living ancestor.
-* **Agent List**: the tree of Agents next to you in the command center, Friends indented below their Parent.
+* **Agent List**: the tree of Agents next to you in the command center, Friends indented below their Parent, then the living Project Managers.
 
 ## Spawning an Agent
 
@@ -41,7 +41,7 @@ For the Orchestrator and for Agents spawning Friends alike: create the Task, the
   ```
   zsh -c 'source ~/projects/tools/zde/tools/projects/projects.sh && projects list'
   ```
-  If the one the user means is missing, tell them instead of guessing.
+  If the one the user means is missing, tell them instead of guessing. In atui, Projects form a hierarchy: a Project has a parent and children, and its Tasks are listed with those of its whole subtree. The Orchestrator creates, moves and archives Projects with atui's tools when the user asks; each Project has a Stream of its own, answered by its Project Manager (/project_manager).
 * **Title**: a few words (`Fix login redirect`); its slug names the Branch.
 * **Specification**: the Agent starts cold, so it holds the goal, context, links and what "done" means. On a Handover it also holds what the Parent learned and what was decided with the user. /refinement replaces it with the approved one later.
 * **Instructions**: always give them, at least where to start (`Start with /develop.`, the skill the user named, or a later step). For a Friend add what its Parent needs from it; on a Handover, that the Task was handed over. For an existing Task (a Subtask of a breakdown, or one whose Agent was retired), spawn only, with Instructions that say where its work stands.
@@ -70,7 +70,7 @@ Run it in a sub agent (not an atui Agent) to keep the details out of your contex
 
 ## Retiring an Agent
 
-Only when the user asks or agreed. A retire with uncommitted or unpushed work is refused with the reason; tell the user, and force it only when they explicitly want that work dropped. A forced retire keeps an unmerged branch, so committed work survives. The Agent's Friends keep running and move up to its Parent.
+Only when the user asks or agreed. The Agent's Friends keep running and move up to its Parent.
 
 For every retired Agent, whoever retired it, you get `atui message from atui:` `<project>/<number> was retired.` Run /cleanup for it without asking, and tell the user only if it fails. Don't answer the message.
 
