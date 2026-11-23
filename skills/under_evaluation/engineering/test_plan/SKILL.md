@@ -1,16 +1,16 @@
 ---
 name: test_plan
-description: Use after /refinement when the user wants a test plan for the approved Specification, as the test-writer's hand-off.
+description: Use after /atui:refinement when the user wants a test plan for the approved Specification, as the test-writer's hand-off.
 disable-model-invocation: true
 ---
 # Test Plan Phase
 
-Design a test plan for the Specification approved in /refinement. With the Specification it fully describes the target behaviour: the `test-writer` and `implement` sub agents (/implementation) work from them alone.
+Design a test plan for the Specification approved in /refinement. With the Specification it fully describes the target behaviour: the `test-writer` and `implement` sub agents (/atui:implementation) work from them alone.
 
 ## Step 0: Gather Context
 
-1. Take the approved Specification from the atui Task (/atui); in a session without a Task, from the conversation.
-2. Without an approved Specification, stop and tell the user to run /refinement first.
+1. Take the approved Specification from the atui Task; in a session without a Task, from the conversation.
+2. Without an approved Specification, stop and tell the user to run /atui:refinement first.
 
 ## Step 1: Draft the Test Plan
 
@@ -51,4 +51,4 @@ Keep the happy path test name simple:
 
 ## Done
 
-Once the test plan is approved, report that it is ready for /implementation.
+Once the test plan is approved, report that it is ready for /atui:implementation.
