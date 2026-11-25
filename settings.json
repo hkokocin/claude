@@ -3,7 +3,10 @@
     "CLAUDE_CODE_MCP_TOOL_IDLE_TIMEOUT": "10000",
     "CLAUDE_CODE_SUBAGENT_MODEL": "opus"
   },
-  "attribution": { "commit": "", "pr": "" },
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
   "permissions": {
     "allow": [
       "Read(~/docs/**)",
@@ -57,7 +60,9 @@
       "Bash(terraform show:*)",
       "Bash(terraform state list:*)",
       "Bash(terraform validate:*)",
-      "Bash(set -a && source .env && poetry run:*)"
+      "Bash(set -a && source .env && poetry run:*)",
+      "Bash(aws elbv2 describe-*\\)\nBash\\(aws s3 ls *\\)\nBash\\(aws s3 cp s3://*elb* -\\)\nBash\\(aws athena start-query-execution *\\)\nBash\\(aws athena get-query-execution *\\)\nBash\\(aws athena get-query-results *\\)\nBash\\(aws ec2 describe-*)",
+      "Bash(aws * --profile *-readonly)"
     ],
     "deny": [
       "Read(**/.env)",
@@ -118,7 +123,16 @@
     "terraform-code-generation@hashicorp": false,
     "terraform-module-generation@hashicorp": false,
     "figma@claude-plugins-official": true,
-    "chrome-devtools-mcp@claude-plugins-official": true
+    "chrome-devtools-mcp@claude-plugins-official": true,
+    "atui@atui": true
+  },
+  "extraKnownMarketplaces": {
+    "atui": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/hendrik/.local/share/atui/plugin"
+      }
+    }
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",

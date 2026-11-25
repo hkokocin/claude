@@ -5,21 +5,31 @@
 
 [atui.resources]
 postgres = { image = "postgres:18" }
+s3 = { image = "adobe/s3mock:5.2.3" }
 
 [atui.env]
 ATUI_TEST_DATABASE_URL = "postgresql+psycopg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+ATUI_TEST_STORAGE_URL = "http://{s3.host}:{s3.port}"
+ATUI_TEST_STORAGE_BUCKET = "{s3.name}"
 
 [aservice.resources]
 postgres = { service = "postgres" }
+s3 = { image = "adobe/s3mock:5.2.3" }
 
 [aservice.env]
 ASERVICE_TEST_DATABASE_URL = "postgresql+psycopg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+ASERVICE_TEST_STORAGE_URL = "http://{s3.host}:{s3.port}"
+ASERVICE_TEST_STORAGE_BUCKET = "{s3.name}"
 
 [awui.resources]
 postgres = { image = "postgres:18" }
+s3 = { image = "adobe/s3mock:5.2.3" }
+browser = { image = "mcr.microsoft.com/playwright:v1.64.0-noble" }
 
 [awui.env]
 AWUI_TEST_DATABASE_URL = "postgresql://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+AWUI_TEST_STORAGE_URL = "http://{s3.host}:{s3.port}"
+AWUI_TEST_STORAGE_BUCKET = "{s3.name}"
 
 [agriverse.resources]
 postgres = { service = "db" }
@@ -75,3 +85,15 @@ POSTGRES_PORT = "{postgres.port}"
 POSTGRES_USER = "postgres"
 POSTGRES_PASSWORD = "postgres"
 POSTGRES_DB = "{postgres.name}"
+
+# Kafka is left out: only test_on_issue_endpoint needs it. The test databases are named <lease>_test and <lease>_template, so the Lease drops them.
+[onca.resources]
+postgres = { service = "db" }
+redis = { service = "redis" }
+
+[onca.env]
+SQLALCHEMY_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+SQLALCHEMY_DATABASE_MIGRATION_URL = "postgresql+asyncpg://postgres:postgres@{postgres.host}:{postgres.port}/{postgres.name}"
+REDIS_URL = "redis://{redis.host}:{redis.port}/{redis.database}"
+TEST_DATABASE_NAME = "{postgres.name}_test"
+TEST_TEMPLATE_DATABASE_NAME = "{postgres.name}_template"
